@@ -6,14 +6,14 @@ const db = require("./models");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-    cors({
-        origin: [
-            process.env.WHITELISTED_DOMAIN &&
-                process.env.WHITELISTED_DOMAIN.split(","),
-        ],
-    })
-);
+app.use(cors());
+//     cors({
+//         origin: [
+//             process.env.WHITELISTED_DOMAIN &&
+//                 process.env.WHITELISTED_DOMAIN.split(","),
+//         ],
+//     })
+// );
 
 app.use(express.json());
 
@@ -31,6 +31,12 @@ app.get("/api/greetings", (req, res, next) => {
         message: "Hello, Student !",
     });
 });
+
+//routes
+const { userRouters } = require("./routes/index");
+
+//users
+app.use("/api", userRouters);
 
 // ===========================
 
