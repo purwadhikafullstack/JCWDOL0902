@@ -23,8 +23,16 @@ import {
           email: document.getElementById("email").value,
           password: document.getElementById("password").value
         };
+
+        if(!data.email || !data.password) Swal.fire({
+          icon: "success",
+          title: "Invalid Email and/or Password",
+          showConfirmButton: false,
+          timer: 1500
+        });
+
         const result = await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/auth/login`,
+          `${process.env.REACT_APP_API_BASE_URL}/userAuth/login`,
           data
         );
   
