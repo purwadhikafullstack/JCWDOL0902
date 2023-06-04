@@ -1,27 +1,23 @@
-import axios from "axios";
-import logo from "./logo.svg";
-import "./App.css";
-import { useEffect, useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ErrorPage } from "./pages/ErrorPage";
+import { HomePage } from "./pages/HomePage";
+import { VerificationPage } from "./pages/VerificationPage";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <HomePage />,
+        errorElement: <ErrorPage />,
+    },
+    { path: "/activation/:id", element: <VerificationPage /> },
+]);
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
-    </div>
-  );
+    return (
+        <main>
+            <RouterProvider router={router} />
+        </main>
+    );
 }
 
 export default App;
