@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const path = require("path");
 const { hashPassword, hashMatch } = require("../helpers/hashpassword");
 const transporter = require("../helpers/transporter");
 const fs = require("fs").promises;
