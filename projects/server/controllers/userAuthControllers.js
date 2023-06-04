@@ -7,7 +7,11 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
-      if (!email || !password) throw "Invalid Email and/or Password";
+      if (!email || !password)
+        throw {
+          status: false,
+          message: "Invalid Email and/or Password",
+        };
 
       const userExist = await user.findOne({
         where: {

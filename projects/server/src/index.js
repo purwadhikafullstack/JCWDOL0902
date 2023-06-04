@@ -6,16 +6,18 @@ const db = require("./models");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-    cors({
-        origin: [
-            process.env.WHITELISTED_DOMAIN &&
-                process.env.WHITELISTED_DOMAIN.split(","),
-        ],
-    })
-);
+// app.use(
+//     cors({
+//         origin: [
+//             process.env.WHITELISTED_DOMAIN &&
+//                 process.env.WHITELISTED_DOMAIN.split(","),
+//         ],
+//     })
+// );
 
 app.use(express.json());
+app.use(cors());
+
 
 //#region API ROUTES
 
@@ -33,7 +35,7 @@ app.get("/api/greetings", (req, res, next) => {
 });
 
 const { userAuthRouters } = require("../routers");
-app.use("/userAuth", userAuthRouters);
+app.use("/api/userAuth", userAuthRouters);
 
 // ===========================
 
