@@ -32,6 +32,9 @@ app.get("/api/greetings", (req, res, next) => {
     });
 });
 
+const { userAuthRouters } = require("../routers");
+app.use("/userAuth", userAuthRouters);
+
 // ===========================
 
 // not found
