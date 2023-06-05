@@ -6,7 +6,8 @@ const db = require("./models");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
-// app.use(
+
+app.use(cors());
 //     cors({
 //         origin: [
 //             process.env.WHITELISTED_DOMAIN &&
@@ -16,7 +17,6 @@ const app = express();
 // );
 
 app.use(express.json());
-app.use(cors());
 
 
 //#region API ROUTES
@@ -34,8 +34,15 @@ app.get("/api/greetings", (req, res, next) => {
     });
 });
 
+
+//routes
+const { userRouters } = require("./routes/index");
 const { userAuthRouters } = require("../routers");
+
+//users
 app.use("/api/userAuth", userAuthRouters);
+app.use("/api", userRouters);
+
 
 // ===========================
 

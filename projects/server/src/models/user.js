@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            this.belongsTo(models.user_address, {
-                foreignKey: "user_address_id",
+            this.hasMany(models.user_address, {
+                foreignKey: "user_id",
             });
-            this.belongsTo(models.cart, {
-                foreignKey: "cart_id",
+            this.hasOne(models.cart, {
+                foreignKey: "user_id",
             });
             this.hasMany(models.transaction, {
                 foreignKey: "user_id",
@@ -37,7 +37,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             email: DataTypes.STRING,
             password: DataTypes.STRING,
-            status: DataTypes.STRING,
+            is_verified: DataTypes.BOOLEAN,
+            role: DataTypes.INTEGER,
             name: DataTypes.STRING,
             phone_number: DataTypes.STRING,
             photo_profile: DataTypes.STRING,
