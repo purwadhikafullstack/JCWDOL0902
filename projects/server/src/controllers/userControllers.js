@@ -4,6 +4,7 @@ const { hashPassword, hashMatch } = require("../helpers/hashpassword");
 const transporter = require("../helpers/transporter");
 const fs = require("fs").promises;
 const handlebars = require("handlebars");
+const { createToken } = require("../helpers/token");
 
 //import model
 const db = require("../models");
@@ -119,6 +120,56 @@ module.exports = {
             res.status(404).send({
                 status: false,
                 message: error.message,
+            });
+        }
+    },
+    login: async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            if (!email || !password)
+                throw { message: "Please Complete Your Data" };
+
+            const dataUser = await user.findOne({
+                where: {
+                    email,
+                },
+            });
+            if (!dataUser)
+                throw {
+                    status: false,
+                    message: "User Not Found",
+                };
+
+            let matchPassword = await hashMatch(
+                password,
+                dataUser.dataValues.password
+            );
+
+            if (matchPassword == false)
+                return res.status(404).send({
+                    status: false,
+                    message: "Wrong Password",
+                });
+
+            const token = createToken({
+                id: dataUser.dataValues.id,
+                role: dataUser.dataValues.role,
+            });
+
+            res.status(200).send({
+                status: true,
+                message: "Login Success",
+                data: {
+                    username: dataUser.dataValues.name,
+                    role: dataUser.dataValues.role,
+                    token: token,
+                    id: dataUser.dataValues.id,
+                },
+            });
+        } catch (error) {
+            res.status(404).send({
+                status: false,
+                message: error.message
             });
         }
     },
