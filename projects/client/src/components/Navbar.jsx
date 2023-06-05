@@ -23,6 +23,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { CgHeart } from "react-icons/cg";
 
 import { RegisterationForm } from "./Authentications/RegisterationForm";
+import { LoginForm } from "./Authentications/LoginForm";
 import { HamburgerMenu } from "./HamburgerMenu";
 
 export const Navbar = ({
@@ -271,6 +272,7 @@ export const Navbar = ({
                                             lg: "inline-flex",
                                         }}
                                     >
+                                        <LoginForm />
                                         <RegisterationForm />
                                     </Flex>
                                 </Center>

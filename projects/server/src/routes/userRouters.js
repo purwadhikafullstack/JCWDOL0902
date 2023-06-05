@@ -7,5 +7,6 @@ const { userControllers } = require("../controllers");
 //paths
 router.post("/register", userControllers.register);
 router.patch("/activation/:id", userControllers.activation);
+router.post("/login", userControllers.login);
 
 module.exports = router;
