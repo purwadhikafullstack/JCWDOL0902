@@ -1,35 +1,29 @@
-import { Box, Heading, Text, Button } from "@chakra-ui/react";
+// react
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import decode from "jwt-decode";
+
+// chakra
+import { Box } from "@chakra-ui/react";
+import { NavbarAdmin } from "../components/Admin/NavbarAdmin";
+
+// component
+// import { AdminBody } from "../components/Admin/AdminBody";
 
 export const AdminPage = () => {
-  const navigate = useNavigate();
-  return (
-    <Box textAlign="center" py={10} px={6}>
-      <Heading
-        display="inline-block"
-        as="h2"
-        size="2xl"
-        bgGradient="linear(to-r, blue.400, blue.600)"
-        backgroundClip="text"
-      >
-        ADMIN 
-      </Heading>
-      <Text fontSize="18px" mt={3} mb={2}>
-        ADMIN PAGE
-      </Text>
-      <Text color={"gray.500"} mb={6}>
-        ADMIN PAGE
-      </Text>
+    const [context, setContext] = useState(0);
 
-      <Button
-        onClick={() => navigate("/")}
-        colorScheme="blue"
-        bgGradient="linear(to-r, blue.400, blue.500, blue.600)"
-        color="white"
-        variant="solid"
-      >
-        Go to Home
-      </Button>
-    </Box>
-  );
+    const token = localStorage.getItem("token");
+    const decodedToken = decode(token);
+
+    const navigate = useNavigate();
+
+    return (
+        <Box bg={"white"}>
+            <NavbarAdmin />
+            <Box>
+                <p>test</p>
+            </Box>
+        </Box>
+    );
 };
