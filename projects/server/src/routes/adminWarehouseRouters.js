@@ -6,6 +6,11 @@ const { adminWarehouseControllers } = require("../controllers");
 const { login } = require("../middleware/authorize");
 
 //paths
+router.post(
+    "/createwarehouse",
+    login,
+    adminWarehouseControllers.deleteWarehouse
+);
 router.get(
     "/fetchwarehouses",
     login,

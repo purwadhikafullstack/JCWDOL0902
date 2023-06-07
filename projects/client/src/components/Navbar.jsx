@@ -17,6 +17,7 @@ import {
     Container,
     useToast,
     Tooltip,
+    useMediaQuery,
 } from "@chakra-ui/react";
 
 import { BiSearchAlt } from "react-icons/bi";
@@ -25,6 +26,7 @@ import { CgHeart } from "react-icons/cg";
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 import { HamburgerMenu } from "./HamburgerMenu";
+import { UserMenu } from "./UserMenu";
 
 export const Navbar = ({
     setPage,
@@ -33,6 +35,7 @@ export const Navbar = ({
     setPmax,
     setPmin,
 }) => {
+    const [mobileView] = useMediaQuery("(max-width: 1007px)");
     const navigate = useNavigate();
     const toast = useToast();
     const [valuesearch, setValueSearch] = useState("");
@@ -47,6 +50,8 @@ export const Navbar = ({
             setSearchParams(`search_query=${valuesearch}`);
         }
     }
+
+    const token = localStorage.getItem("token");
 
     return (
         <>
@@ -265,16 +270,20 @@ export const Navbar = ({
                                 w={{ base: "50px", lg: "200px" }}
                             >
                                 <Center>
-                                    <Flex
-                                        gap={4}
-                                        display={{
-                                            base: "none",
-                                            lg: "inline-flex",
-                                        }}
-                                    >
-                                        <LoginForm />
-                                        <RegisterationForm />
-                                    </Flex>
+                                    {token || mobileView ? (
+                                        <UserMenu />
+                                    ) : (
+                                        <Flex
+                                            gap={4}
+                                            display={{
+                                                base: "none",
+                                                lg: "inline-flex",
+                                            }}
+                                        >
+                                            <LoginForm />
+                                            <RegisterationForm />
+                                        </Flex>
+                                    )}
                                 </Center>
                             </GridItem>
                         </Grid>

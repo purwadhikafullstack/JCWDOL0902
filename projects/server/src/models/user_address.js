@@ -19,15 +19,16 @@ module.exports = (sequelize, DataTypes) => {
     }
     user_address.init(
         {
+            receiver_name: DataTypes.STRING,
             user_address: DataTypes.STRING,
-            subdistrict: DataTypes.STRING,
-            city: DataTypes.STRING,
             province: DataTypes.STRING,
+            province_id: DataTypes.INTEGER,
+            city: DataTypes.STRING,
+            city_id: DataTypes.INTEGER,
             latitude: DataTypes.STRING,
             longitude: DataTypes.STRING,
-            receiver_name: DataTypes.STRING,
             phone_number: DataTypes.STRING,
-            default_address: DataTypes.STRING,
+            default_address: DataTypes.BOOLEAN,
         },
         {
             sequelize,

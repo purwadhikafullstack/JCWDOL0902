@@ -17,7 +17,7 @@ module.exports = {
                     message: "Unauthorized Access",
                 };
 
-            const { search, sort, direction, pagination } = req.query;
+            const { search, sort, order, page } = req.query;
 
             const pages = Math.ceil(
                 (await user.count({
@@ -53,9 +53,9 @@ module.exports = {
                         },
                     ],
                 },
-                order: [[sort ? sort : "id", direction ? direction : "ASC"]],
+                order: [[sort ? sort : "id", order ? order : "ASC"]],
                 limit: 10,
-                offset: pagination ? +pagination * 10 : 0,
+                offset: page ? +page * 10 : 0,
             });
 
             res.status(200).send({ result, pages });
