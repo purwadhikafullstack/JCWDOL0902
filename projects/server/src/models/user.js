@@ -42,11 +42,7 @@ module.exports = (sequelize, DataTypes) => {
             role: DataTypes.INTEGER,
             name: DataTypes.STRING,
             phone_number: DataTypes.STRING,
-            photo_profile: {
-                type: DataTypes.STRING,
-                defaultValue:
-                    "https://img.freepik.com/premium-vector/happy-smiling-young-man-avatar-3d-portrait-man-cartoon-character-people-vector-illustration_653240-187.jpg",
-            },
+            photo_profile: DataTypes.STRING,
         },
         {
             sequelize,

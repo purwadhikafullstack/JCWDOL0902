@@ -3,7 +3,6 @@ import { useRef } from "react";
 import decode from "jwt-decode";
 import Axios from "axios";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import {
     Button,
     useDisclosure,
@@ -27,7 +26,7 @@ export const LoginForm = () => {
         onClose: onCloseLogin,
     } = useDisclosure();
 
-    const navigate = useNavigate();
+    // const dispatch = useDispatch();
 
     const inputEmail = useRef("");
     const inputPass = useRef("");
@@ -48,6 +47,10 @@ export const LoginForm = () => {
 
             console.log(decodedToken);
 
+            if (decodedToken.role === 2 || decodedToken.role === 3) {
+                window.location.replace("/admin");
+            }
+
             Swal.fire({
                 icon: "success",
                 title: "Login Success",
@@ -57,13 +60,8 @@ export const LoginForm = () => {
                     container: "my-swal",
                 },
             });
-            onCloseLogin();
 
-            if (decodedToken.role === 2 || decodedToken.role === 3) {
-                navigate("/admin");
-            } else {
-                navigate("/");
-            }
+            onCloseLogin();
         } catch (err) {
             console.log(err);
             Swal.fire({
@@ -77,7 +75,6 @@ export const LoginForm = () => {
                     container: "my-swal",
                 },
             });
-            onCloseLogin();
         }
     };
 
