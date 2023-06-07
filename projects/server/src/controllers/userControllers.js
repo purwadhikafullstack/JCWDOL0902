@@ -154,6 +154,8 @@ module.exports = {
             const token = createToken({
                 id: dataUser.dataValues.id,
                 role: dataUser.dataValues.role,
+                picture: dataUser.dataValues.photo_profile,
+                name: dataUser.dataValues.name,
             });
 
             res.status(200).send({
@@ -169,7 +171,7 @@ module.exports = {
         } catch (error) {
             res.status(404).send({
                 status: false,
-                message: error.message
+                message: error.message,
             });
         }
     },
