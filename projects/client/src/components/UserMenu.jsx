@@ -16,9 +16,11 @@ import {
 import decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 
-//component
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
+
+import userLogin from "../assets/default_avatar.jpg";
+import loginMenu from "../assets/login_menu.webp";
 
 export const UserMenu = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,11 +45,7 @@ export const UserMenu = () => {
             <Button
                 as={Avatar}
                 size={"xl"}
-                src={
-                    token
-                        ? decodedToken.picture
-                        : "https://img.freepik.com/premium-vector/happy-smiling-young-man-avatar-3d-portrait-man-cartoon-character-people-vector-illustration_653240-187.jpg"
-                }
+                src={token ? decodedToken.picture : userLogin}
                 bg="grey"
                 onClick={onOpen}
                 boxSize={{ base: 8, lg: 12 }}
@@ -63,9 +61,7 @@ export const UserMenu = () => {
                                 <Avatar
                                     size={{ base: "xl", lg: "xl" }}
                                     src={
-                                        token
-                                            ? decodedToken.picture
-                                            : "https://cdn3d.iconscout.com/3d/premium/thumb/login-page-5000918-4165667.png"
+                                        token ? decodedToken.picture : loginMenu
                                     }
                                     bg="white"
                                 />
