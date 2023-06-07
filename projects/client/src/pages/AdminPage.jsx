@@ -22,7 +22,7 @@ export const AdminPage = () => {
         <Box bg={"white"}>
             <NavbarAdmin />
             <Box>
-                <p>test</p>
+                <p>test123</p>
             </Box>
         </Box>
     );
