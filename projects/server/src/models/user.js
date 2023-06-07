@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             });
             this.hasOne(models.warehouse_location, {
                 foreignKey: "user_id",
+                allowNull: true,
             });
         }
     }

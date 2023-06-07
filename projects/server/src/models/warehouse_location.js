@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             this.belongsTo(models.user, {
                 foreignKey: "user_id",
+                allowNull: true,
             });
             this.hasMany(models.product_location, {
                 foreignKey: "warehouse_location_id",
@@ -31,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     }
     warehouse_location.init(
         {
-            warehouse_name: DataTypes.STRING,
+            city: DataTypes.STRING,
+            subdistrict: DataTypes.STRING,
             province: DataTypes.STRING,
             province_id: DataTypes.INTEGER,
             city: DataTypes.STRING,
