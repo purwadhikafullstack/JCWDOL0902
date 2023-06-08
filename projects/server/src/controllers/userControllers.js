@@ -160,7 +160,7 @@ module.exports = {
 
             res.status(200).send({
                 status: true,
-                message: "Login Success",
+                message: "Happy Shopping!",
                 data: {
                     username: dataUser.dataValues.name,
                     role: dataUser.dataValues.role,

@@ -109,7 +109,8 @@ export const VerificationPage = () => {
                                     <Heading
                                         fontSize={"2xl"}
                                         pb={5}
-                                        fontFamily={"Nunito"}
+                                        fontFamily={"Work Sans"}
+                                        fontWeight={"500"}
                                     >
                                         Verify and Change Your Password
                                     </Heading>
@@ -117,7 +118,7 @@ export const VerificationPage = () => {
                                         id="password"
                                         colorScheme={"white"}
                                     >
-                                        <FormLabel fontWeight={"bold"}>
+                                        <FormLabel fontWeight={"500"}>
                                             New Password
                                         </FormLabel>
                                         <InputGroup size="md">
@@ -148,7 +149,7 @@ export const VerificationPage = () => {
                                         />
                                     </FormControl>
                                     <FormControl id="confirm password">
-                                        <FormLabel fontWeight={"bold"}>
+                                        <FormLabel fontWeight={"500"}>
                                             Confirm Password
                                         </FormLabel>
                                         <InputGroup size="md">

@@ -72,7 +72,7 @@ export const RegisterationForm = () => {
             <Button
                 display={{ base: "solid", md: "inline-flex" }}
                 fontSize={"md"}
-                fontWeight={600}
+                fontWeight={"600"}
                 color={"495057"}
                 bg="#CED4DA"
                 href={"#"}

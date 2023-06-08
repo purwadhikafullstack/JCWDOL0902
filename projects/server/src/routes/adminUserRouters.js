@@ -7,6 +7,7 @@ const { login } = require("../middleware/authorize");
 
 //paths
 router.get("/fetchuser", login, adminUserControllers.fetchAllUser);
+router.get("/fetchadmins", login, adminUserControllers.fetchWarehouseAdmin);
 router.patch("/edituser/:id", login, adminUserControllers.editUser);
 router.delete("/deleteuser/:id", login, adminUserControllers.deleteUser);
 

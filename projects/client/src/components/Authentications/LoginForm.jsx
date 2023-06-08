@@ -86,7 +86,7 @@ export const LoginForm = () => {
             <Button
                 display={{ base: "solid", md: "inline-flex" }}
                 fontSize={"md"}
-                fontWeight="bold"
+                fontWeight="600"
                 color={"495057"}
                 bg="#CED4DA"
                 href={"#"}
