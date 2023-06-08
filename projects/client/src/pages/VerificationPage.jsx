@@ -21,7 +21,7 @@ import * as Yup from "yup";
 import { Field, ErrorMessage, Formik, Form } from "formik";
 import verification_pict from "../assets/verification_pict.webp";
 
-const url = process.env.REACT_APP_API_BASE_URL;
+const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 export const VerificationPage = () => {
     const navigate = useNavigate();

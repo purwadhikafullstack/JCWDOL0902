@@ -6,9 +6,13 @@ const { categoryControllers } = require("../controllers");
 const { login } = require("../middleware/authorize");
 
 //paths
-router.get("/fetchCategories", login, categoryControllers.fetchAllCategory);
-router.post("/addCategory", login, categoryControllers.addCategory);
-router.patch("/editCategory/:id", login, categoryControllers.editCategory);
-router.delete("/deleteCategory/:id", login, categoryControllers.deleteCategory);
+router.get("/fetch-categories", login, categoryControllers.fetchAllCategory);
+router.post("/add-category", login, categoryControllers.addCategory);
+router.patch("/edit-category/:id", login, categoryControllers.editCategory);
+router.delete(
+    "/delete-category/:id",
+    login,
+    categoryControllers.deleteCategory
+);
 
 module.exports = router;

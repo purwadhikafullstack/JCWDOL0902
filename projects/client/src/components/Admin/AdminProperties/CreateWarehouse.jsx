@@ -65,7 +65,7 @@ export const CreateWarehouse = ({ getWarehouse, provinces }) => {
 };
 
 const AddForm = ({ close, getWarehouse, provinces }) => {
-    const url = process.env.REACT_APP_API_BASE_URL;
+    const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
     const [cities, setCities] = useState();
@@ -101,7 +101,7 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
                 user_id: value.user_id,
             };
 
-            const result = await Axios.post(url + "/createwarehouse", data, {
+            const result = await Axios.post(url + "/create-warehouse", data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },

@@ -56,7 +56,8 @@ export const EditUser = ({ user, getUsers }) => {
 };
 
 const EditForm = ({ user, close, getUsers }) => {
-    const url = process.env.REACT_APP_API_BASE_URL + `/edituser/${user.id}`;
+    const url =
+        process.env.REACT_APP_API_BASE_URL + `/admin/edit-user/${user.id}`;
     const token = localStorage.getItem("token");
 
     const validation = Yup.object().shape({

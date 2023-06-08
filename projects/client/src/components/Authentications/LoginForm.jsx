@@ -18,7 +18,7 @@ import {
     FormLabel,
     Input,
 } from "@chakra-ui/react";
-const url = process.env.REACT_APP_API_BASE_URL;
+const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 export const LoginForm = () => {
     const {

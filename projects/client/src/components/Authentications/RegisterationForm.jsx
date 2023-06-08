@@ -21,7 +21,7 @@ import { Field, ErrorMessage, Formik, Form } from "formik";
 import Swal from "sweetalert2";
 import { useState } from "react";
 
-const url = process.env.REACT_APP_API_BASE_URL;
+const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 export const RegisterationForm = () => {
     const [isLoading, setIsLoading] = useState(false);
