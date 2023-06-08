@@ -1,85 +1,96 @@
 import Axios from "axios";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 import {
-    Table,
     Thead,
-    Tbody,
+    Box,
+    Table,
     Tr,
+    Tbody,
+    Td,
     Th,
     TableContainer,
-    Td,
-    Flex,
-    Box,
     Center,
+    Flex,
     InputGroup,
+    InputRightElement,
     Input,
     IconButton,
-    InputRightElement,
     Skeleton,
     Stack,
     Text,
 } from "@chakra-ui/react";
 
-// swal
 import Swal from "sweetalert2";
 
-// icons
 import { BiSearch } from "react-icons/bi";
 import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { RxReload } from "react-icons/rx";
 
-// props
-import { EditUser } from "./AdminProperties/EditUser";
+import { CreateWarehouse } from "./AdminProperties/CreateWarehouse";
+import { EditWarehouse } from "./AdminProperties/EditWarehouse";
 
-export const UserList = () => {
-    const url = process.env.REACT_APP_API_BASE_URL + "/fetchuser";
+export const WarehouseList = () => {
+    const url = process.env.REACT_APP_API_BASE_URL;
     const token = localStorage.getItem("token");
 
-    const [users, setUsers] = useState();
+    const [admin, setAdmin] = useState();
+    const [warehouse, setWarehouse] = useState();
     const [sort, setSort] = useState("id");
-    const [order, setOrder] = useState("ASC");
+    const [provinces, setProvinces] = useState();
     const [page, setPage] = useState(0);
+    const [order, setOrder] = useState("ASC");
     const [pages, setPages] = useState();
     const [search, setSearch] = useState(``);
 
     const searchValue = useRef(``);
 
-    const getUsers = useCallback(async () => {
+    const getWarehouse = useCallback(async () => {
         try {
-            const userURL =
+            const warehouseURL =
                 url +
-                `?search=${search}&sort=${sort}&order=${order}&page=${page}`;
-            const resultUsers = await Axios.get(userURL, {
+                `/fetchwarehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+            const resultWarehouse = await Axios.get(warehouseURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            setUsers(resultUsers.data.result, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-            setPages(resultUsers.data.pages, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-
+            setWarehouse(resultWarehouse.data.result);
+            setPages(resultWarehouse.data.pages);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
         } catch (err) {}
-    }, [sort, page, order, search, url, token]);
+    }, [sort, order, page, search, url, token]);
 
-    const deleteUser = async (id) => {
+    const getProvince = async () => {
         try {
-            await Axios.delete(url + `deleteuser/${id}`, {
+            const resultProvinces = await Axios.get(
+                process.env.REACT_APP_API_BASE_URL + "/province"
+            );
+            setProvinces(resultProvinces.data.result);
+        } catch (err) {}
+    };
+
+    const getAdmin = useCallback(async () => {
+        try {
+            const resultAdmin = await Axios.get(url + "/fetchadmins", {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            getUsers();
+            setAdmin(resultAdmin.data);
+        } catch (err) {}
+    }, [url, token]);
+
+    const deleteWarehouse = async (id) => {
+        try {
+            await Axios.delete(url + `/deletewarehouse/${id}`, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            });
+            getWarehouse();
         } catch (err) {}
     };
 
@@ -95,12 +106,8 @@ export const UserList = () => {
                 confirmButtonText: "Yes, delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    deleteUser(id);
-                    Swal.fire(
-                        "Deleted!",
-                        "Your file has been deleted.",
-                        "success"
-                    );
+                    deleteWarehouse(id);
+                    Swal.fire("Deleted!", "Warehouse deleted.", "success");
                 }
             });
         } catch (err) {
@@ -115,49 +122,65 @@ export const UserList = () => {
     };
 
     useEffect(() => {
-        getUsers();
-    }, [getUsers]);
+        getWarehouse();
+        getAdmin();
+        getProvince();
+    }, [getWarehouse, getAdmin]);
 
     const tableHead = [
         { name: "Id", origin: "id", width: "100px" },
-        { name: "Email", origin: "email", width: "" },
-        { name: "Name", origin: "name", width: "700px" },
-        { name: "Phone Number", origin: "phone_number", width: "700px" },
-        { name: "Role", origin: "role", width: "50px" },
+        { name: "Warehouse Name", origin: "warehouse_name", width: "" },
+        { name: "Province", origin: "province", width: "250px" },
+        { name: "City", origin: "city", width: "150px" },
+        { name: "Admin Id", origin: "user_id", width: "50px" },
     ];
 
     return (
         <Box padding={{ base: "10px", lg: "0" }}>
-            <Center paddingBottom={"12px"}>
-                <Box paddingRight={"5px"}>
-                    <InputGroup w={{ base: "200px", lg: "400px" }}>
-                        <Input
-                            placeholder={"Search"}
-                            _focusVisible={{ border: "1px solid #212529" }}
-                            ref={searchValue}
+            <Center paddingBottom={"5px"}>
+                <Stack>
+                    <Flex>
+                        <Box paddingRight={"5px"}>
+                            <InputGroup w={{ base: "200px", lg: "400px" }}>
+                                <Input
+                                    placeholder={"Search"}
+                                    _focusVisible={{
+                                        border: "1px solid black",
+                                    }}
+                                    ref={searchValue}
+                                />
+                                <InputRightElement>
+                                    <IconButton
+                                        type={"submit"}
+                                        aria-label="Search database"
+                                        bg={"none"}
+                                        opacity={"50%"}
+                                        _hover={{ bg: "none", opacity: "100%" }}
+                                        icon={<BiSearch />}
+                                        onClick={() => {
+                                            setSearch(
+                                                searchValue.current.value
+                                            );
+                                        }}
+                                    />
+                                </InputRightElement>
+                            </InputGroup>
+                        </Box>
+                        <IconButton
+                            icon={<RxReload />}
+                            onClick={() => {
+                                getWarehouse();
+                            }}
                         />
-                        <InputRightElement>
-                            <IconButton
-                                type={"submit"}
-                                aria-label="Search database"
-                                bg={"none"}
-                                opacity={"50%"}
-                                _hover={{ bg: "none", opacity: "100%" }}
-                                icon={<BiSearch />}
-                                onClick={() => {
-                                    setSearch(searchValue.current.value);
-                                }}
-                            />
-                        </InputRightElement>
-                    </InputGroup>
-                </Box>
-                <IconButton
-                    icon={<RxReload />}
-                    onClick={() => {
-                        window.location.reload();
-                        getUsers();
-                    }}
-                />
+                    </Flex>
+                    <Center>
+                        <CreateWarehouse
+                            getWarehouse={getWarehouse}
+                            provinces={provinces}
+                            admin={admin}
+                        />
+                    </Center>
+                </Stack>
             </Center>
             <TableContainer borderRadius={"10px"}>
                 <Table>
@@ -220,8 +243,8 @@ export const UserList = () => {
                             </Th>
                         </Tr>
                     </Thead>
-                    {users ? (
-                        users?.map((item, index) => {
+                    {warehouse ? (
+                        warehouse?.map((item, index) => {
                             return (
                                 <Tbody
                                     key={index}
@@ -230,11 +253,15 @@ export const UserList = () => {
                                 >
                                     <Tr>
                                         <Td textAlign={"center"}>{item.id}</Td>
-                                        <Td>{item.email}</Td>
-                                        <Td>{item.name}</Td>
-                                        <Td>{item.phone_number}</Td>
+                                        <Td>{item.warehouse_name}</Td>
                                         <Td textAlign={"center"}>
-                                            {item.role}
+                                            {item.province}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.city}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.user_id}
                                         </Td>
                                         <Td>
                                             <Flex
@@ -242,9 +269,11 @@ export const UserList = () => {
                                                 justifyContent={"center"}
                                                 alignItems={"center"}
                                             >
-                                                <EditUser
-                                                    user={item}
-                                                    getUsers={getUsers}
+                                                <EditWarehouse
+                                                    warehouse={item}
+                                                    admin={admin}
+                                                    getWarehouse={getWarehouse}
+                                                    provinces={provinces}
                                                 />
                                                 <IconButton
                                                     onClick={() => {
