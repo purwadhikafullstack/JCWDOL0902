@@ -38,6 +38,7 @@ const {
     adminUserRouters,
     adminWarehouseRouters,
     rajaOngkirRouters,
+    categoryRouters,
 } = require("./routes/index");
 
 //users
@@ -46,6 +47,7 @@ app.use("/api", userRouters);
 //admin
 app.use("/api", adminUserRouters);
 app.use("/api", adminWarehouseRouters);
+app.use("/api", categoryRouters);
 
 //rajaongkir
 app.use("/api", rajaOngkirRouters);
