@@ -9,7 +9,7 @@ const { login } = require("../middleware/authorize");
 router.post(
     "/createwarehouse",
     login,
-    adminWarehouseControllers.deleteWarehouse
+    adminWarehouseControllers.createWarehouse
 );
 router.get(
     "/fetchwarehouses",

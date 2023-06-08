@@ -40,6 +40,9 @@ module.exports = {
 
             const result = await user.findAll({
                 where: {
+                    role: {
+                        [Op.lt]: 3, // Find users where role is less than 3
+                    },
                     [Op.or]: [
                         {
                             name: {
@@ -111,6 +114,24 @@ module.exports = {
                 status: false,
                 message: error.message,
             });
+        }
+    },
+    fetchWarehouseAdmin: async (req, res) => {
+        try {
+            const getToken = dataToken;
+            if (getToken.role === 1 || getToken.role === 2) {
+                throw "Unauthorize Access";
+            }
+
+            const result = await user.findAll({
+                where: {
+                    role: 2,
+                },
+                raw: true,
+            });
+            res.status(200).send(result);
+        } catch (err) {
+            res.status(400).send(err);
         }
     },
 };
