@@ -33,7 +33,7 @@ export const UserMenu = () => {
     } else {
         decodedToken = null;
     }
-    console.log(decodedToken);
+    // console.log(decodedToken);
 
     const onLogout = async () => {
         localStorage.removeItem("token");
