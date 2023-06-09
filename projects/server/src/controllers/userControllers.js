@@ -130,9 +130,7 @@ module.exports = {
                 throw { message: "Please Complete Your Data" };
 
             const dataUser = await user.findOne({
-                where: {
-                    email,
-                },
+                where: { email },
             });
             if (!dataUser)
                 throw {
@@ -170,6 +168,56 @@ module.exports = {
             });
         } catch (error) {
             res.status(404).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
+    emailResetPass: async (req, res) => {
+        try {
+            const { email } = req.body;
+
+            const isEmailExist = await user.findOne({
+                where: { email },
+            });
+
+            if (!isEmailExist) throw { message: "Email incorrect/not found" };
+
+            const checkVerified = await user.findOne({
+                where: {
+                    email: email,
+                    is_verified: 1,
+                },
+            });
+
+            if (!checkVerified) throw { message: "No User Found" };
+
+            const token = createToken({
+                id: email,
+            });
+
+            const template = await fs.readFile(
+                path.resolve(__dirname, "../template/resetpassword.html"),
+                "utf-8"
+            );
+            const templateToCompile = await handlebars.compile(template);
+            const newTemplate = templateToCompile({
+                email,
+                url: `${process.env.URL}/reset-password/${token}`,
+            });
+            await transporter.sendMail({
+                from: "KicksHub",
+                to: email,
+                subject: "Reset Password",
+                html: newTemplate,
+            });
+
+            res.status(200).send({
+                status: true,
+                message: "Please check your email to reset your password",
+            });
+        } catch (error) {
+            res.status(400).send({
                 status: false,
                 message: error.message,
             });

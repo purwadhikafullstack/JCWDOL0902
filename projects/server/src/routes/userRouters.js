@@ -8,5 +8,6 @@ const { userControllers } = require("../controllers");
 router.post("/register", userControllers.register);
 router.patch("/activation/:id", userControllers.activation);
 router.post("/login", userControllers.login);
+router.post("/reset-password-email", userControllers.emailResetPass);
 
 module.exports = router;
