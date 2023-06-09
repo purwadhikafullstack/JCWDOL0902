@@ -32,7 +32,7 @@ import { CreateWarehouse } from "./AdminProperties/CreateWarehouse";
 import { EditWarehouse } from "./AdminProperties/EditWarehouse";
 
 export const WarehouseList = () => {
-    const url = process.env.REACT_APP_API_BASE_URL;
+    const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
     const [admin, setAdmin] = useState();
@@ -50,7 +50,7 @@ export const WarehouseList = () => {
         try {
             const warehouseURL =
                 url +
-                `/fetchwarehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-warehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`;
             const resultWarehouse = await Axios.get(warehouseURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const WarehouseList = () => {
 
     const getAdmin = useCallback(async () => {
         try {
-            const resultAdmin = await Axios.get(url + "/fetchadmins", {
+            const resultAdmin = await Axios.get(url + "/fetch-admins", {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -85,7 +85,7 @@ export const WarehouseList = () => {
 
     const deleteWarehouse = async (id) => {
         try {
-            await Axios.delete(url + `/deletewarehouse/${id}`, {
+            await Axios.delete(url + `/delete-warehouse/${id}`, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },

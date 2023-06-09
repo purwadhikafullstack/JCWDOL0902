@@ -7,22 +7,22 @@ const { login } = require("../middleware/authorize");
 
 //paths
 router.post(
-    "/createwarehouse",
+    "/create-warehouse",
     login,
     adminWarehouseControllers.createWarehouse
 );
 router.get(
-    "/fetchwarehouses",
+    "/fetch-warehouses",
     login,
     adminWarehouseControllers.fetchWarehouses
 );
 router.patch(
-    "/updatewarehouse/:id",
+    "/update-warehouse/:id",
     login,
     adminWarehouseControllers.editWarehouse
 );
 router.delete(
-    "/deletewarehouse/:id",
+    "/delete-warehouse/:id",
     login,
     adminWarehouseControllers.deleteWarehouse
 );

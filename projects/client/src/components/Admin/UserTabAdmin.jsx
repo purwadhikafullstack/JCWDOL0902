@@ -34,7 +34,7 @@ import { RxReload } from "react-icons/rx";
 import { EditUser } from "./AdminProperties/EditUser";
 
 export const UserList = () => {
-    const url = process.env.REACT_APP_API_BASE_URL + "/fetchuser";
+    const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
     const [users, setUsers] = useState();
@@ -50,7 +50,7 @@ export const UserList = () => {
         try {
             const userURL =
                 url +
-                `?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-users?search=${search}&sort=${sort}&order=${order}&page=${page}`;
             const resultUsers = await Axios.get(userURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const UserList = () => {
 
     const deleteUser = async (id) => {
         try {
-            await Axios.delete(url + `deleteuser/${id}`, {
+            await Axios.delete(url + `delete-user/${id}`, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },

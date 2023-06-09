@@ -65,7 +65,8 @@ export const EditWarehouse = ({
 
 const EditForm = ({ close, getWarehouse, admin, provinces, warehouse }) => {
     const url =
-        process.env.REACT_APP_API_BASE_URL + `/updatewarehouse/${warehouse.id}`;
+        process.env.REACT_APP_API_BASE_URL +
+        `/admin/update-warehouse/${warehouse.id}`;
     const token = localStorage.getItem("token");
 
     const [cities, setCities] = useState();

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Button,
@@ -15,21 +15,35 @@ import {
     IconButton,
 } from "@chakra-ui/react";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
+import pict from "../assets/reset_password_pict.jpeg";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { Field, ErrorMessage, Formik, Form } from "formik";
-import verification_pict from "../assets/verification_pict.webp";
 
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
-export const VerificationPage = () => {
+export const ResetPasswordPage = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
-    const [show, setShow] = useState(false);
-    const [showConfirm, setConfirm] = useState(false);
+    const params = useParams();
+    const [user, setUser] = useState([]);
+    const [showPass, setShowPass] = useState(false);
+    const [showConfirmPass, setConfirmPass] = useState(false);
 
-    const signUpSchema = Yup.object().shape({
+    const VerifyToken = async () => {
+        try {
+            const result = await Axios.get(`${url}/token-validator`, {
+                headers: {
+                    Authorization: `Bearer ${params.token}`,
+                },
+            });
+            setUser(result.data.user);
+        } catch (err) {
+            navigate("/err");
+        }
+    };
+
+    const resetPassSchema = Yup.object().shape({
         password: Yup.string()
             .required("Password is required")
             .min(8, "password must contain 8 or more characters"),
@@ -38,38 +52,39 @@ export const VerificationPage = () => {
             .required("Please match with password"),
     });
 
-    const OnSignUp = async (data) => {
+    const onResetPass = async (data) => {
         try {
             if (data.password !== data.password_confirmation) {
                 return Swal.fire({
                     icon: "error",
                     title: "Oooops ...",
-                    text: "Password does not match",
+                    text: "Make sure password and confirm password match",
                     customClass: {
                         container: "my-swal",
                     },
                 });
             }
+
             Swal.fire({
                 icon: "success",
-                title: "Account Verified",
-                text: "Your account is successfully verified!",
+                title: "Reset Password Success",
+                text: "You can now log in to your account, Happy shopping!",
                 customClass: {
                     container: "my-swal",
                 },
             });
 
-            await Axios.patch(`${url}/activation/${id}`, {
+            await Axios.patch(`${url}/reset-password`, {
+                email: user,
                 password: data.password,
                 password_confirmation: data.password_confirmation,
             });
             navigate("/");
         } catch (err) {
-            console.log(err);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.message,
+                text: "Something went wrong!",
                 customClass: {
                     container: "my-swal",
                 },
@@ -77,12 +92,15 @@ export const VerificationPage = () => {
         }
     };
 
-    const handlePassword = () => {
-        setShow(!show);
+    const handlePass = () => {
+        setShowPass(!showPass);
     };
-    const handleConfirmPassword = () => {
-        setConfirm(!showConfirm);
+    const handleConfirmPass = () => {
+        setConfirmPass(!showConfirmPass);
     };
+    useEffect(() => {
+        VerifyToken();
+    });
 
     return (
         <Stack
@@ -91,15 +109,24 @@ export const VerificationPage = () => {
             bg="#495057"
             color="white"
         >
+            <Flex flex={1.5}>
+                <Image
+                    alt={"Login Image"}
+                    bgSize="cover"
+                    objectFit={"cover"}
+                    src={pict}
+                />
+            </Flex>
             <Flex p={8} flex={1} align={"center"} justify={"center"}>
                 <Formik
                     initialValues={{
+                        email: user,
                         password: "",
                         password_confirmation: "",
                     }}
-                    validationSchema={signUpSchema}
+                    validationSchema={resetPassSchema}
                     onSubmit={(value, action) => {
-                        OnSignUp(value);
+                        onResetPass(value);
                     }}
                 >
                     {(props) => {
@@ -112,20 +139,30 @@ export const VerificationPage = () => {
                                         fontFamily={"Work Sans"}
                                         fontWeight={"500"}
                                     >
-                                        Verify and Change Your Password
+                                        Create your New Password
                                     </Heading>
+
+                                    <FormControl id="email">
+                                        <FormLabel>Email address</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            type="email"
+                                            value={user}
+                                            disabled={user ? true : false}
+                                        />
+                                    </FormControl>
                                     <FormControl
                                         id="password"
                                         colorScheme={"white"}
                                     >
-                                        <FormLabel fontWeight={"500"}>
-                                            New Password
-                                        </FormLabel>
+                                        <FormLabel> New Password</FormLabel>
                                         <InputGroup size="md">
                                             <Field
                                                 as={Input}
                                                 type={
-                                                    show ? "text" : "password"
+                                                    showPass
+                                                        ? "text"
+                                                        : "password"
                                                 }
                                                 name="password"
                                             />
@@ -133,9 +170,9 @@ export const VerificationPage = () => {
                                                 <IconButton
                                                     color="black"
                                                     aria-label="Show Pasword"
-                                                    onClick={handlePassword}
+                                                    onClick={handlePass}
                                                 >
-                                                    {show ? (
+                                                    {showPass ? (
                                                         <ViewIcon />
                                                     ) : (
                                                         <ViewOffIcon />
@@ -148,15 +185,13 @@ export const VerificationPage = () => {
                                             component="div"
                                         />
                                     </FormControl>
-                                    <FormControl id="confirm password">
-                                        <FormLabel fontWeight={"500"}>
-                                            Confirm Password
-                                        </FormLabel>
+                                    <FormControl id="password_confirmation">
+                                        <FormLabel>Confirm Password</FormLabel>
                                         <InputGroup size="md">
                                             <Field
                                                 as={Input}
                                                 type={
-                                                    showConfirm
+                                                    showConfirmPass
                                                         ? "text"
                                                         : "password"
                                                 }
@@ -166,11 +201,9 @@ export const VerificationPage = () => {
                                                 <IconButton
                                                     color="black"
                                                     aria-label="Show Pasword"
-                                                    onClick={
-                                                        handleConfirmPassword
-                                                    }
+                                                    onClick={handleConfirmPass}
                                                 >
-                                                    {showConfirm ? (
+                                                    {showConfirmPass ? (
                                                         <ViewIcon />
                                                     ) : (
                                                         <ViewOffIcon />
@@ -205,14 +238,6 @@ export const VerificationPage = () => {
                         );
                     }}
                 </Formik>
-            </Flex>
-            <Flex flex={2}>
-                <Image
-                    alt={"Verification Image"}
-                    bgSize="cover"
-                    objectFit={"cover"}
-                    src={verification_pict}
-                />
             </Flex>
         </Stack>
     );

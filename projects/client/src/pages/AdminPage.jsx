@@ -32,6 +32,7 @@ import logo from "../assets/kickshub_logo.png";
 import simple from "../assets/kickshub_logo_simplified.png";
 
 import { AdminContent } from "../components/Admin/AdminContent";
+import { ErrorPage } from "./ErrorPage";
 
 export const AdminPage = () => {
     const [tab, setTab] = useState(0);
@@ -41,7 +42,9 @@ export const AdminPage = () => {
 
     const TabContent = () => {
         const items =
-            decodedToken.role === 3 ? ["Users", "Warehouses", "Categories"] : ["Categories"];
+            decodedToken.role === 3
+                ? ["Users", "Warehouses", "Categories"]
+                : ["Categories"];
 
         return (
             <Box>
@@ -215,11 +218,17 @@ export const AdminPage = () => {
     };
 
     return (
-        <Box bg={"white"}>
-            <Navbar />
-            <Box>
-                <AdminContent tabNum={tab} role={decodedToken.role} />
-            </Box>
-        </Box>
+        <>
+            {decodedToken.role === 1 ? (
+                <ErrorPage />
+            ) : (
+                <Box bg={"white"}>
+                    <Navbar />
+                    <Box>
+                        <AdminContent tabNum={tab} role={decodedToken.role} />
+                    </Box>
+                </Box>
+            )}
+        </>
     );
 };

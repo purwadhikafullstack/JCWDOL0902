@@ -41,7 +41,7 @@ module.exports = {
             const result = await user.findAll({
                 where: {
                     role: {
-                        [Op.lt]: 3, // Find users where role is less than 3
+                        [Op.lt]: 3,
                     },
                     [Op.or]: [
                         {

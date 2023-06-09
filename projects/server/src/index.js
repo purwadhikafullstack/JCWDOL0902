@@ -1,4 +1,5 @@
-require("dotenv/config");
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
@@ -42,12 +43,12 @@ const {
 } = require("./routes/index");
 
 //users
-app.use("/api", userRouters);
+app.use("/api/users", userRouters);
 
 //admin
-app.use("/api", adminUserRouters);
-app.use("/api", adminWarehouseRouters);
-app.use("/api", categoryRouters);
+app.use("/api/admin", adminUserRouters);
+app.use("/api/admin", adminWarehouseRouters);
+app.use("/api/admin", categoryRouters);
 
 //rajaongkir
 app.use("/api", rajaOngkirRouters);
