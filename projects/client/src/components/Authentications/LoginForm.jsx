@@ -4,6 +4,7 @@ import decode from "jwt-decode";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+
 import {
     Button,
     useDisclosure,
@@ -18,6 +19,8 @@ import {
     FormLabel,
     Input,
 } from "@chakra-ui/react";
+
+import { ResetPassword } from "./ResetPasswordForm";
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 export const LoginForm = () => {
@@ -116,6 +119,7 @@ export const LoginForm = () => {
                                     type="password"
                                     ref={inputPass}
                                 />
+                                <ResetPassword />
                             </FormControl>
                             <ModalFooter>
                                 <Button mr={5} type="submit">

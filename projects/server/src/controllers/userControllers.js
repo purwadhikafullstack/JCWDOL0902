@@ -4,7 +4,7 @@ const { hashPassword, hashMatch } = require("../helpers/hashpassword");
 const transporter = require("../helpers/transporter");
 const fs = require("fs").promises;
 const handlebars = require("handlebars");
-const { createToken } = require("../helpers/token");
+const { createToken, validateToken } = require("../helpers/token");
 
 //import model
 const db = require("../models");
@@ -215,6 +215,57 @@ module.exports = {
             res.status(200).send({
                 status: true,
                 message: "Please check your email to reset your password",
+            });
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
+    tokenValidator: async (req, res) => {
+        let token = req.headers.authorization;
+        token = token.split(" ")[1];
+        try {
+            const verify = validateToken(token);
+            res.status(200).send({
+                status: true,
+                message: "Token is valid",
+                user: verify.id,
+            });
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
+    resetPassword: async (req, res) => {
+        try {
+            const { email, password, password_confirmation } = req.body;
+
+            if (!password || !password_confirmation)
+                throw { message: "Please complete your data" };
+
+            if (password !== password_confirmation)
+                throw { message: "Password does not match" };
+
+            if (password.length < 8)
+                throw {
+                    message: "Password must contain at least 8 characters",
+                };
+
+            await user.update(
+                { password: await hashPassword(password) },
+                {
+                    where: {
+                        email: email,
+                    },
+                }
+            );
+            res.status(200).send({
+                status: true,
+                message: "Sucessfully reseting password",
             });
         } catch (error) {
             res.status(400).send({
