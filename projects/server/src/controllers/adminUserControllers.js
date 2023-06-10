@@ -11,12 +11,6 @@ dotenv.config();
 module.exports = {
     fetchAllUser: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             const { search, sort, order, page } = req.query;
 
             const pages = Math.ceil(
@@ -63,6 +57,7 @@ module.exports = {
 
             res.status(200).send({ result, pages });
         } catch (error) {
+            console.log(error);
             res.status(400).send({
                 status: false,
                 message: error.message,
@@ -71,12 +66,6 @@ module.exports = {
     },
     editUser: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             await user.update(req.body, {
                 where: {
                     id: req.params.id,
@@ -95,11 +84,6 @@ module.exports = {
     },
     deleteUser: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
             await user.destroy({
                 where: {
                     id: req.params.id,
@@ -118,11 +102,6 @@ module.exports = {
     },
     fetchWarehouseAdmin: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2) {
-                throw "Unauthorize Access";
-            }
-
             const result = await user.findAll({
                 where: {
                     role: 2,

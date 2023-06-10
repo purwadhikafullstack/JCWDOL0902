@@ -3,27 +3,27 @@ const router = express.Router();
 
 //import controllers and middlewares
 const { adminWarehouseControllers } = require("../controllers");
-const { login } = require("../middleware/authorize");
+const { superAdminLogin } = require("../middleware/authorize");
 
 //paths
 router.post(
     "/create-warehouse",
-    login,
+    superAdminLogin,
     adminWarehouseControllers.createWarehouse
 );
 router.get(
     "/fetch-warehouses",
-    login,
+    superAdminLogin,
     adminWarehouseControllers.fetchWarehouses
 );
 router.patch(
     "/update-warehouse/:id",
-    login,
+    superAdminLogin,
     adminWarehouseControllers.editWarehouse
 );
 router.delete(
     "/delete-warehouse/:id",
-    login,
+    superAdminLogin,
     adminWarehouseControllers.deleteWarehouse
 );
 

@@ -7,12 +7,6 @@ const category = db.category;
 module.exports = {
     fetchAllCategory: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             const { search, sort, order, page } = req.query;
 
             const pages = Math.ceil(
@@ -54,11 +48,6 @@ module.exports = {
     },
     addCategory: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
             const { name } = req.body;
 
             if (!name) throw { message: "Please input the category name" };
@@ -86,12 +75,6 @@ module.exports = {
     },
     editCategory: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             await category.update(
                 {
                     name: req.body.name,
@@ -117,12 +100,6 @@ module.exports = {
     },
     deleteCategory: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             await category.destroy({
                 where: {
                     id: req.params.id,

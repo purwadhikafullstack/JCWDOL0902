@@ -13,12 +13,6 @@ dotenv.config();
 module.exports = {
     createWarehouse: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             const {
                 warehouse_name,
                 address,
@@ -83,12 +77,6 @@ module.exports = {
     },
     fetchWarehouses: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             const { search, sort, order, page } = req.query;
 
             const { count, rows } = await warehouse.findAndCountAll({
@@ -118,12 +106,6 @@ module.exports = {
     },
     editWarehouse: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             await warehouse.update(req.body, {
                 where: {
                     id: req.params.id,
@@ -143,12 +125,6 @@ module.exports = {
     },
     deleteWarehouse: async (req, res) => {
         try {
-            const getToken = dataToken;
-            if (getToken.role === 1 || getToken.role === 2)
-                throw {
-                    message: "Unauthorized Access",
-                };
-
             await warehouse.destroy({
                 where: {
                     id: req.params.id,
