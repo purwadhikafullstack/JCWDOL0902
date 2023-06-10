@@ -41,6 +41,7 @@ const {
     rajaOngkirRouters,
     categoryRouters,
     adminProductRouters,
+    productRouters,
 } = require("./routes/index");
 
 //users
@@ -51,6 +52,9 @@ app.use("/api/admin", adminUserRouters);
 app.use("/api/admin", adminWarehouseRouters);
 app.use("/api/admin", categoryRouters);
 app.use("/api/admin", adminProductRouters);
+
+//products
+app.use("/api/products", productRouters);
 
 //rajaongkir
 app.use("/api", rajaOngkirRouters);
