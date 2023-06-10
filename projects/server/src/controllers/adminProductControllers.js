@@ -51,7 +51,7 @@ module.exports = {
                 color,
                 brand,
                 category_id,
-                total_qty: 0,
+                stock: 0,
                 is_active: true,
             });
             res.status(200).send({
