@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     product.init(
         {
             name: DataTypes.STRING,
-            description: DataTypes.STRING,
+            description: DataTypes.TEXT,
             product_image: DataTypes.STRING,
             price: DataTypes.INTEGER,
             total_qty: DataTypes.INTEGER,
@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
             size: DataTypes.INTEGER,
             color: DataTypes.STRING,
             brand: DataTypes.STRING,
+            is_active: DataTypes.BOOLEAN,
         },
         {
             sequelize,

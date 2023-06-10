@@ -37,8 +37,8 @@ module.exports = {
         token = token.split(" ")[1];
 
         try {
-            const checkRole = validateToken(token);
-            if (checkRole.role === 1) {
+            const adminData = validateToken(token);
+            if (adminData.role === 1) {
                 throw { message: "Unauthorized Access" };
             }
             next();
@@ -61,15 +61,15 @@ module.exports = {
         token = token.split(" ")[1];
 
         try {
-            const checkRole = validateToken(token);
-            if (checkRole.role === 1 || checkRole.role === 2) {
+            const adminData = validateToken(token);
+            if (adminData.role === 1 || adminData.role === 2) {
                 throw { message: "Unauthorized Access" };
             }
             next();
         } catch (error) {
             res.status(500).send({
                 status: false,
-                message: "Token is not valid",
+                message: "Unauthorized Access or Token is not valid",
             });
         }
     },
