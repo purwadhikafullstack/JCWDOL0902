@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import icon from "../assets/kickshub_logo.png";
-import iconSimple from "../assets/kickshub_logo_simplified.png";
+import icon from "../assets/hobbyzone_logo.png";
+import iconSimple from "../assets/hobbyzone_logo_simple.png";
 
 import {
     Box,
@@ -108,7 +108,6 @@ export const Navbar = ({
                                         onClick={() =>
                                             window.location.replace("/")
                                         }
-                                        marginLeft={2}
                                     />
                                     <Image
                                         to={"/"}
@@ -148,14 +147,14 @@ export const Navbar = ({
                                                 outline: "none",
                                             }}
                                             color={"white"}
-                                            placeholder="Find Your Feet Companion"
+                                            placeholder="Search for Hobbies, Toys, and More..."
                                             _placeholder={{
                                                 color: "grey",
                                                 fontSize: {
                                                     base: "12px",
                                                     md: "16px",
                                                 },
-                                                fontWeight: "600",
+                                                fontWeight: "500",
                                             }}
                                             _focusVisible={{
                                                 outline: "none",

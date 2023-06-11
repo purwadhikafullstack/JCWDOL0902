@@ -56,7 +56,7 @@ module.exports = {
                 url: `${process.env.URL}/activation/${createUser.dataValues.id}`,
             });
             await transporter.sendMail({
-                from: "KicksHub",
+                from: "HobbyZone (No Reply)",
                 to: email,
                 subject: "Account Activation",
                 html: newTemplate,
@@ -206,7 +206,7 @@ module.exports = {
                 url: `${process.env.URL}/reset-password/${token}`,
             });
             await transporter.sendMail({
-                from: "KicksHub",
+                from: "HobbyZone (No Reply)",
                 to: email,
                 subject: "Reset Password",
                 html: newTemplate,
@@ -215,6 +215,7 @@ module.exports = {
             res.status(200).send({
                 status: true,
                 message: "Please check your email to reset your password",
+                token: token,
             });
         } catch (error) {
             res.status(400).send({

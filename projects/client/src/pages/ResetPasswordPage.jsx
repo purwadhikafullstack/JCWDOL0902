@@ -15,7 +15,7 @@ import {
     IconButton,
 } from "@chakra-ui/react";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
-import pict from "../assets/reset_password_pict.jpeg";
+import pict from "../assets/reset_password_pict.jpg";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
