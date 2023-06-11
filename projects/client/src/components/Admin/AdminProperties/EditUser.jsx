@@ -94,9 +94,7 @@ const EditForm = ({ user, close, getUsers }) => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
+                text: err.response.data.message,
             });
         }
     };

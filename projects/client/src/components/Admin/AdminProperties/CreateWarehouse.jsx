@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 
 // validation
-import { Formik, ErrorMessage, Form, Field } from "formik";
+import { Formik, ErrorMessage, Form, Field, FastField } from "formik";
 import * as Yup from "yup";
 
 // chakra
@@ -155,14 +155,20 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
                             component="div"
                             name="warehouse_name"
                         />
-                        <FormLabel>Address</FormLabel>
-                        <Textarea
-                            as={Field}
-                            name="address"
-                            placeholder="Enter address"
-                            resize="vertical"
-                            minHeight="100px"
-                        />
+                        <FormLabel>Warehouse Address</FormLabel>
+                        <FastField name="address">
+                            {({ field, form }) => (
+                                <Textarea
+                                    {...field}
+                                    size="lg"
+                                    height="200px"
+                                    isInvalid={
+                                        form.errors.address &&
+                                        form.touched.address
+                                    }
+                                />
+                            )}
+                        </FastField>
                         <ErrorMessage
                             style={{ color: "red" }}
                             component="div"

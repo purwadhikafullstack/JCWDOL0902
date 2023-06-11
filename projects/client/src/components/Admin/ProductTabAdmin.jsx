@@ -29,6 +29,9 @@ import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { RxReload } from "react-icons/rx";
 
+import { AddProduct } from "./AdminProperties/AddProduct";
+import { EditProduct } from "./AdminProperties/EditProduct";
+
 export const ProductList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
@@ -127,6 +130,7 @@ export const ProductList = () => {
         { name: "Weight", origin: "weight", width: "150px" },
         { name: "Category", origin: "category_id", width: "150px" },
         { name: "Stock", origin: "stock", width: "150px" },
+        { name: "Brand", origin: "brand", width: "150px" },
     ];
 
     return (
@@ -139,7 +143,7 @@ export const ProductList = () => {
                                 <Input
                                     placeholder={"Search"}
                                     _focusVisible={{
-                                        border: "1px solid #b759b4",
+                                        border: "1px solid black",
                                     }}
                                     ref={searchValue}
                                 />
@@ -175,11 +179,10 @@ export const ProductList = () => {
                     </Flex>
                     {decodedToken.role === 3 ? (
                         <Center>
-                            {/* <AddProduct
-                                warehouses={warehouses}
+                            <AddProduct
                                 getProducts={getProducts}
                                 category={category}
-                            /> */}
+                            />
                         </Center>
                     ) : null}
                 </Stack>
@@ -272,6 +275,9 @@ export const ProductList = () => {
                                         <Td textAlign={"center"}>
                                             {item.stock}
                                         </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.brand}
+                                        </Td>
                                         {decodedToken.role === 3 ? (
                                             <Td>
                                                 <Flex
@@ -279,13 +285,13 @@ export const ProductList = () => {
                                                     justifyContent={"center"}
                                                     alignItems={"center"}
                                                 >
-                                                    {/* <EditProduct
+                                                    <EditProduct
                                                         getProducts={
                                                             getProducts
                                                         }
                                                         category={category}
                                                         item={item}
-                                                    /> */}
+                                                    />
                                                     <IconButton
                                                         onClick={() => {
                                                             deleteWarning(
