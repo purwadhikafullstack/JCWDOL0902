@@ -16,24 +16,14 @@ module.exports = {
     createProduct: async (req, res) => {
         try {
             const admin = dataToken;
-            const {
-                name,
-                description,
-                price,
-                weight,
-                size,
-                color,
-                brand,
-                category_id,
-            } = req.body;
+            const { name, description, price, weight, brand, category_id } =
+                req.body;
 
             if (
                 !name ||
                 !description ||
                 !price ||
                 !weight ||
-                !size ||
-                !color ||
                 !brand ||
                 !category_id
             ) {
@@ -47,8 +37,6 @@ module.exports = {
                 product_image: `Public/images/${req.files.images[0].filename}`,
                 price,
                 weight,
-                size,
-                color,
                 brand,
                 category_id,
                 stock: 0,

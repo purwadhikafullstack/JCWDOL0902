@@ -17,6 +17,7 @@ app.use(cors());
 // );
 
 app.use(express.json());
+app.use("/Public", express.static(path.join(__dirname, "Public/images")));
 
 //#region API ROUTES
 
