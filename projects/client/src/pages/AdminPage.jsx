@@ -28,8 +28,8 @@ import {
 import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-import logo from "../assets/kickshub_logo.png";
-import simple from "../assets/kickshub_logo_simplified.png";
+import logo from "../assets/hobbyzone_logo.png";
+import simple from "../assets/hobbyzone_logo_simple.png";
 
 import { AdminContent } from "../components/Admin/AdminContent";
 import { ErrorPage } from "./ErrorPage";
@@ -43,8 +43,8 @@ export const AdminPage = () => {
     const TabContent = () => {
         const items =
             decodedToken.role === 3
-                ? ["Users", "Warehouses", "Categories"]
-                : ["Categories"];
+                ? ["Users", "Warehouses", "Categories", "Products"]
+                : ["Categories", "Products"];
 
         return (
             <Box>

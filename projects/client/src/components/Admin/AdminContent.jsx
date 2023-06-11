@@ -5,10 +5,13 @@ import { Box } from "@chakra-ui/react";
 import { UserList } from "./UserTabAdmin";
 import { WarehouseList } from "./WarehouseTabAdmin";
 import { CategoryList } from "./CategoryTabAdmin";
+import { ProductList } from "./ProductTabAdmin";
 
 export const AdminContent = ({ tabNum, role }) => {
     const tabs =
-        role === 3 ? [UserList, WarehouseList, CategoryList] : [CategoryList];
+        role === 3
+            ? [UserList, WarehouseList, CategoryList, ProductList]
+            : [CategoryList, ProductList];
     const TabBody = tabs[tabNum];
 
     return (
