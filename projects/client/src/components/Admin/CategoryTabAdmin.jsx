@@ -31,7 +31,6 @@ import Swal from "sweetalert2";
 import { BiSearch } from "react-icons/bi";
 import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { RxReload } from "react-icons/rx";
 
 // Props
 import { AddCategory } from "./AdminProperties/AddCategory";
@@ -152,12 +151,6 @@ export const CategoryList = () => {
                                 </InputRightElement>
                             </InputGroup>
                         </Box>
-                        <IconButton
-                            icon={<RxReload />}
-                            onClick={() => {
-                                getCategory();
-                            }}
-                        />
                     </Flex>
                     {decodedToken.role === 3 ? (
                         <Center>

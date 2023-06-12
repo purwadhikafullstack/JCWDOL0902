@@ -1,6 +1,6 @@
 // react
 import Axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 // validation
 import { Formik, ErrorMessage, Form, Field, FastField } from "formik";
@@ -65,14 +65,14 @@ export const AddProduct = ({ getProducts, category }) => {
 const AddForm = ({ close, category_name, getProducts }) => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
+    const [previewImage, setPreviewImage] = useState(null);
 
     const category_id = useRef("");
 
     const validation = Yup.object().shape({
         name: Yup.string().required("Cannot be Empty"),
         description: Yup.string()
-            .min(20, "description minimum is 20 char")
-            .max(200, "description maximum is 200 char")
+            .min(50, "description minimum is 20 char")
             .required("Cannot be Empty"),
         images: Yup.mixed().required("Image is required"),
         price: Yup.number("Must be Integer").required("Cannot be Empty"),
@@ -166,12 +166,27 @@ const AddForm = ({ close, category_name, getProducts }) => {
                                     type="file"
                                     name="images"
                                     onChange={(event) => {
-                                        props.setFieldValue(
-                                            "images",
-                                            event.currentTarget.files[0]
-                                        );
+                                        const file =
+                                            event.currentTarget.files[0];
+                                        props.setFieldValue("images", file);
+
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            setPreviewImage(reader.result);
+                                        };
+                                        reader.readAsDataURL(file);
                                     }}
                                 />
+                                {previewImage && (
+                                    <img
+                                        src={previewImage}
+                                        alt="Preview"
+                                        style={{
+                                            marginTop: "10px",
+                                            width: "200px",
+                                        }}
+                                    />
+                                )}
                                 <FormLabel>Price</FormLabel>
                                 <Input
                                     type={"number"}

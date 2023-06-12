@@ -27,10 +27,10 @@ import Swal from "sweetalert2";
 import { BiSearch } from "react-icons/bi";
 import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { RxReload } from "react-icons/rx";
 
 import { AddProduct } from "./AdminProperties/AddProduct";
 import { EditProduct } from "./AdminProperties/EditProduct";
+import { EditProductImage } from "./AdminProperties/EditProductImage";
 
 export const ProductList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -112,9 +112,7 @@ export const ProductList = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
+                text: err.response.data.message,
             });
         }
     };
@@ -167,15 +165,6 @@ export const ProductList = () => {
                                 </InputRightElement>
                             </InputGroup>
                         </Box>
-                        <IconButton
-                            icon={<RxReload />}
-                            onClick={() => {
-                                setSearch("");
-                                setSort("id");
-                                setPage(0);
-                                setOrder("ASC");
-                            }}
-                        />
                     </Flex>
                     {decodedToken.role === 3 ? (
                         <Center>
@@ -290,6 +279,12 @@ export const ProductList = () => {
                                                             getProducts
                                                         }
                                                         category={category}
+                                                        item={item}
+                                                    />
+                                                    <EditProductImage
+                                                        getProducts={
+                                                            getProducts
+                                                        }
                                                         item={item}
                                                     />
                                                     <IconButton

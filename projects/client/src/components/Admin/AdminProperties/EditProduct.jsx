@@ -68,8 +68,7 @@ const EditForm = ({ close, category_name, getProducts, item }) => {
     const validation = Yup.object().shape({
         name: Yup.string().required("Cannot be Empty"),
         description: Yup.string()
-            .min(20, "description minimum is 20 char")
-            .max(200, "description maximum is 200 char")
+            .min(50, "description minimum is 50 char")
             .required("Cannot be Empty"),
         price: Yup.number("Must be Integer").required("Cannot be Empty"),
         brand: Yup.string().required("Cannot Be Empty"),
@@ -126,7 +125,7 @@ const EditForm = ({ close, category_name, getProducts, item }) => {
                     name: item.name,
                     description: item.description,
                     price: item.price,
-                    brand: item.weight,
+                    brand: item.brand,
                     weight: item.weight,
                 }}
                 validationSchema={validation}
