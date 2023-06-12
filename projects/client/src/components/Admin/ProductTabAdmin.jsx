@@ -32,9 +32,6 @@ import { AddProduct } from "./AdminProperties/AddProduct";
 import { EditProduct } from "./AdminProperties/EditProduct";
 import { EditProductImage } from "./AdminProperties/EditProductImage";
 
-import { AddProduct } from "./AdminProperties/AddProduct";
-import { EditProduct } from "./AdminProperties/EditProduct";
-
 export const ProductList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
