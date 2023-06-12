@@ -28,7 +28,6 @@ import Swal from "sweetalert2";
 import { BiSearch } from "react-icons/bi";
 import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { RxReload } from "react-icons/rx";
 
 // props
 import { EditUser } from "./AdminProperties/EditUser";
@@ -107,9 +106,7 @@ export const UserList = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
+                text: err.response.data.message,
             });
         }
     };
@@ -151,13 +148,6 @@ export const UserList = () => {
                         </InputRightElement>
                     </InputGroup>
                 </Box>
-                <IconButton
-                    icon={<RxReload />}
-                    onClick={() => {
-                        window.location.reload();
-                        getUsers();
-                    }}
-                />
             </Center>
             <TableContainer borderRadius={"10px"}>
                 <Table>
