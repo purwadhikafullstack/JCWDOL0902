@@ -43,8 +43,8 @@ export const AdminPage = () => {
     const TabContent = () => {
         const items =
             decodedToken.role === 3
-                ? ["Users", "Warehouses", "Categories", "Products"]
-                : ["Categories", "Products"];
+                ? ["Users", "Warehouses", "Categories", "Products", "Stock Management"]
+                : ["Categories", "Products", "Stock Management"];
 
         return (
             <Box>

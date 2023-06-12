@@ -5,6 +5,7 @@ const rajaOngkirControllers = require("./rajaOngkirControllers");
 const categoryControllers = require("./categoryControllers");
 const adminProductControllers = require("./adminProductControllers");
 const productControllers = require("./productControllers");
+const adminStockControllers = require("./adminStockControllers");
 
 module.exports = {
     userControllers,
@@ -14,4 +15,5 @@ module.exports = {
     categoryControllers,
     adminProductControllers,
     productControllers,
+    adminStockControllers,
 };

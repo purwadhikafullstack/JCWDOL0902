@@ -6,12 +6,19 @@ import { UserList } from "./UserTabAdmin";
 import { WarehouseList } from "./WarehouseTabAdmin";
 import { CategoryList } from "./CategoryTabAdmin";
 import { ProductList } from "./ProductTabAdmin";
+import { ProductStockList } from "./StockTabAdmin";
 
 export const AdminContent = ({ tabNum, role }) => {
     const tabs =
         role === 3
-            ? [UserList, WarehouseList, CategoryList, ProductList]
-            : [CategoryList, ProductList];
+            ? [
+                  UserList,
+                  WarehouseList,
+                  CategoryList,
+                  ProductList,
+                  ProductStockList,
+              ]
+            : [CategoryList, ProductList, ProductStockList];
     const TabBody = tabs[tabNum];
 
     return (
