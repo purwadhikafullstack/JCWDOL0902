@@ -44,7 +44,7 @@ export const AdminPage = () => {
         const items =
             decodedToken.role === 3
                 ? ["Users", "Warehouses", "Categories", "Products", "Stock Management"]
-                : ["Categories", "Products", "Stock Management"];
+                : ["Categories", "Products", "My Warehouse Stocks"];
 
         return (
             <Box>

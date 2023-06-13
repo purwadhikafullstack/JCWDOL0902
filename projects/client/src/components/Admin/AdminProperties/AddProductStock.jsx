@@ -1,6 +1,7 @@
 // react
 import Axios from "axios";
 import { useRef } from "react";
+import decode from "jwt-decode";
 
 // validation
 import { Formik, ErrorMessage, Form, Field } from "formik";
@@ -31,7 +32,11 @@ import Swal from "sweetalert2";
 import { CgMathPlus } from "react-icons/cg";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 
-export const AddProductStock = ({ getProductStock, product, warehouse }) => {
+export const AddProductStock = ({
+    getProductStock,
+    productStock,
+    allWarehouse,
+}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -53,8 +58,8 @@ export const AddProductStock = ({ getProductStock, product, warehouse }) => {
                     <ModalBody>
                         <AddForm
                             close={onClose}
-                            product_name={product}
-                            warehouse_name={warehouse}
+                            product_name={productStock}
+                            warehouse_name={allWarehouse}
                             getProductStock={getProductStock}
                         />
                     </ModalBody>
@@ -67,6 +72,7 @@ export const AddProductStock = ({ getProductStock, product, warehouse }) => {
 const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
+    const decodedToken = decode(token);
 
     const product_id = useRef("");
     const warehouse_location_id = useRef("");
@@ -79,7 +85,14 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
         try {
             const data = {
                 product_id: product_id.current.value,
-                warehouse_location_id: warehouse_location_id.current.value,
+                warehouse_location_id:
+                    decodedToken.role === 3
+                        ? warehouse_location_id.current.value
+                        : product_name.filter(
+                              (product_name) =>
+                                  product_name.warehouse_location.user_id ===
+                                  decodedToken.id
+                          ).warehouse_location.id,
                 qty: value.qty,
             };
 
@@ -135,19 +148,31 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
                                         );
                                     })}
                                 </Select>
-                                <FormLabel>Warehouse Name</FormLabel>
-                                <Select
-                                    ref={warehouse_location_id}
-                                    placeholder={"- Select -"}
-                                >
-                                    {warehouse_name?.map((item, index) => {
-                                        return (
-                                            <option value={item.id} key={index}>
-                                                {item.warehouse_name}
-                                            </option>
-                                        );
-                                    })}
-                                </Select>
+
+                                {decodedToken.role === 3 ? (
+                                    <>
+                                        <FormLabel>Warehouse Name</FormLabel>
+                                        <Select
+                                            ref={warehouse_location_id}
+                                            placeholder={"- Select -"}
+                                        >
+                                            {warehouse_name?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <option
+                                                            value={item.id}
+                                                            key={index}
+                                                        >
+                                                            {
+                                                                item.warehouse_name
+                                                            }
+                                                        </option>
+                                                    );
+                                                }
+                                            )}
+                                        </Select>
+                                    </>
+                                ) : null}
                                 <FormLabel>Add Stock</FormLabel>
                                 <Input name={"qty"} as={Field} />
                                 <ErrorMessage
