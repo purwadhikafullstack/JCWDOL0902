@@ -81,8 +81,7 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
         description: Yup.string().required("Required"),
     });
 
-
-    const [newStock, setNewStock] = useState(stockValue.product.stock);
+    const [newStock, setNewStock] = useState(stockValue.qty);
     const [selectedType, setSelectedType] = useState();
 
     const increment = useRef(``);
@@ -100,6 +99,8 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                 description: value.description,
                 product_id: stockValue.product.id,
                 warehouse_location_id: stockValue.warehouse_location.id,
+                product_location_id: stockValue.id,
+                product_stock: stockValue.product.stock,
             };
 
             await Axios.patch(url, editData, {
@@ -165,10 +166,18 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                         setSelectedType(
                                             typeValue.current.value
                                         );
-                                        setNewStock(stockValue.product.stock);
+                                        // setNewStock(stockValue.qty);
                                         props.setFieldValue(
                                             "type",
                                             typeValue.current.value
+                                        );
+                                        props.setFieldValue(
+                                            "increment_change",
+                                            0
+                                        );
+                                        props.setFieldValue(
+                                            "decrement_change",
+                                            0
                                         );
                                     }}
                                 >
@@ -195,7 +204,7 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                     name={"total_qty_before_change"}
                                     textAlign={"center"}
                                 >
-                                    {stockValue.product.stock}
+                                    {stockValue.qty}
                                 </FormLabel>
 
                                 {selectedType ? (
@@ -213,8 +222,7 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                                     ref={increment}
                                                     onClick={() => {
                                                         setNewStock(
-                                                            stockValue.product
-                                                                .stock +
+                                                            stockValue.qty +
                                                                 parseInt(
                                                                     increment
                                                                         .current
@@ -255,8 +263,7 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                                     ref={decrement}
                                                     onClick={() => {
                                                         setNewStock(
-                                                            stockValue.product
-                                                                .stock -
+                                                            stockValue.qty -
                                                                 parseInt(
                                                                     decrement
                                                                         .current
@@ -318,11 +325,10 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                                 fontSize={"3xl"}
                                                 color={"green"}
                                                 type={"submit"}
-                                                onClick={()=>{
+                                                onClick={() => {
                                                     props.setFieldValue(
                                                         "total_qty_before_change",
-                                                        stockValue.product
-                                                            .stock
+                                                        stockValue.product.stock
                                                     );
                                                     props.setFieldValue(
                                                         "new_total_qty",

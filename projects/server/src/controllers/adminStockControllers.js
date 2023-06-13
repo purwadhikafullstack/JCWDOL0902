@@ -62,16 +62,29 @@ module.exports = {
                 description,
                 product_id,
                 warehouse_location_id,
+                product_location_id,
+                product_stock,
             } = req.body;
             // Update Stock in Product
             await product.update(
                 {
-                    stock: new_total_qty,
+                    stock: product_stock + increment_change - decrement_change,
                     updatedAt: new Date(),
                 },
                 {
                     where: {
                         id: req.params.id,
+                    },
+                }
+            );
+            // Update qty in product_location
+            await product_location.update(
+                {
+                    qty: new_total_qty,
+                },
+                {
+                    where: {
+                        id: product_location_id,
                     },
                 }
             );
