@@ -5,7 +5,6 @@ const router = express.Router();
 const { adminStockControllers } = require("../controllers");
 const {
     warehouseAdminLogin,
-    superAdminLogin,
 } = require("../middleware/authorize");
 
 //paths
@@ -16,17 +15,17 @@ router.get(
 );
 router.post(
     "/add-product-stock",
-    superAdminLogin,
+    warehouseAdminLogin,
     adminStockControllers.addProductStock
 );
 router.patch(
     "/update-product-stock/:id",
-    superAdminLogin,
+    warehouseAdminLogin,
     adminStockControllers.updateProductStock
 );
 router.delete(
     "/delete-product-stock/:id",
-    superAdminLogin,
+    warehouseAdminLogin,
     adminStockControllers.deleteProductStock
 );
 

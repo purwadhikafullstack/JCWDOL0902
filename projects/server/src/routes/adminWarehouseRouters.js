@@ -3,10 +3,7 @@ const router = express.Router();
 
 //import controllers and middlewares
 const { adminWarehouseControllers } = require("../controllers");
-const {
-    superAdminLogin,
-    warehouseAdminLogin,
-} = require("../middleware/authorize");
+const { superAdminLogin, warehouseAdminLogin } = require("../middleware/authorize");
 
 //paths
 router.post(
@@ -16,6 +13,7 @@ router.post(
 );
 router.get(
     "/fetch-warehouses",
+    // superAdminLogin,
     warehouseAdminLogin,
     adminWarehouseControllers.fetchWarehouses
 );

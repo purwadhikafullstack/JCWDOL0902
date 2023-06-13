@@ -1,5 +1,6 @@
 // react
 import Axios from "axios";
+import { useState, useRef } from "react";
 
 // validation
 import { Formik, ErrorMessage, Form, Field } from "formik";
@@ -22,6 +23,11 @@ import {
     Center,
     Button,
     Select,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
+    NumberInput,
 } from "@chakra-ui/react";
 
 // swal
@@ -31,7 +37,7 @@ import Swal from "sweetalert2";
 import { BiEdit } from "react-icons/bi";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 
-export const UpdateStock = ({ stock, getStock }) => {
+export const UpdateStock = ({ product, getProductStock }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -53,8 +59,8 @@ export const UpdateStock = ({ stock, getStock }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <EditForm
-                            stockValue={stock}
-                            getStock={getStock}
+                            stockValue={product}
+                            getProductStock={getProductStock}
                             close={onClose}
                         />
                     </ModalBody>
@@ -64,46 +70,59 @@ export const UpdateStock = ({ stock, getStock }) => {
     );
 };
 
-const EditForm = ({ close, stockValue, getStock }) => {
+const EditForm = ({ close, stockValue, getProductStock }) => {
     const url =
         process.env.REACT_APP_API_BASE_URL +
-        `/admin/edit-product-stock/${stockValue.id}`;
+        `/admin/update-product-stock/${stockValue.product.id}`;
     const token = localStorage.getItem("token");
 
     const validation = Yup.object().shape({
-        name: Yup.string().required("Required"),
+        type: Yup.string().required("Required"),
+        description: Yup.string().required("Required"),
     });
+
+
+    const [newStock, setNewStock] = useState(stockValue.product.stock);
+    const [selectedType, setSelectedType] = useState();
+
+    const increment = useRef(``);
+    const decrement = useRef(``);
+    const typeValue = useRef(``);
 
     const editStock = async (value) => {
         try {
-            if (value.name !== stockValue.name) {
-                const editData = {
-                    name: value.name,
-                };
-                await Axios.patch(url, editData, {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                });
-                getStock();
+            const editData = {
+                type: value.type,
+                increment_change: value.increment_change,
+                decrement_change: value.decrement_change,
+                total_qty_before_change: value.total_qty_before_change,
+                new_total_qty: value.new_total_qty,
+                description: value.description,
+                product_id: stockValue.product.id,
+                warehouse_location_id: stockValue.warehouse_location.id,
+            };
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: `Stock Updated`,
-                });
-            }
+            await Axios.patch(url, editData, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            });
+            getProductStock();
 
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: `Stock Updated`,
+            });
             close();
         } catch (err) {
             console.log(err);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
+                text: err.response.data.message,
             });
+            close();
         }
     };
 
@@ -111,11 +130,17 @@ const EditForm = ({ close, stockValue, getStock }) => {
         <Box>
             <Formik
                 initialValues={{
-                    name: stockValue.name,
+                    type: "",
+                    increment_change: 0,
+                    decrement_change: 0,
+                    total_qty_before_change: 0,
+                    new_total_qty: 0,
+                    description: "",
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
                     editStock(value);
+                    console.log(value);
                 }}
             >
                 {(props) => {
@@ -123,43 +148,197 @@ const EditForm = ({ close, stockValue, getStock }) => {
                         <Form>
                             <FormControl>
                                 <FormLabel>
-                                    {stockValue.name} (
+                                    {stockValue.product.name} (
                                     {
-                                        stockValue.user.warehouse_location
+                                        stockValue.warehouse_location
                                             .warehouse_name
                                     }
                                     )
                                 </FormLabel>
-                                {/* <Input  as={Field} name={"name"} /> */}
-
                                 <Select
-                                    paddingRight={"5px"}
-                                    defaultValue={"All Warehouse"}placeholder="Select Type of Journal"
+                                    paddingBottom={"10px"}
+                                    defaultValue={""}
+                                    placeholder="Select Type of Journal"
+                                    name={"type"}
+                                    ref={typeValue}
+                                    onClick={() => {
+                                        setSelectedType(
+                                            typeValue.current.value
+                                        );
+                                        setNewStock(stockValue.product.stock);
+                                        props.setFieldValue(
+                                            "type",
+                                            typeValue.current.value
+                                        );
+                                    }}
                                 >
-                                    <option value={"type"}>penjualan product</option>
-                                    <option value={"type"}>penambahan stock oleh admin</option>
-                                    <option value={"type"}>pengurangan stock oleh admin</option>
+                                    <option value={"Stock Sold"}>
+                                        Stock Sold
+                                    </option>
+                                    <option value={"Add Stock by Admin"}>
+                                        Add Stock by Admin
+                                    </option>
+                                    <option value={"Subtract Stock by Admin"}>
+                                        Subtract Stock by Admin
+                                    </option>
                                 </Select>
-
                                 <ErrorMessage
                                     style={{ color: "red" }}
                                     component="div"
-                                    name="name"
+                                    name="type"
                                 />
-                                <Center paddingTop={"10px"} gap={"10px"}>
-                                    <IconButton
-                                        icon={<RxCheck />}
-                                        fontSize={"3xl"}
-                                        color={"green"}
-                                        type={"submit"}
-                                    />
-                                    <IconButton
-                                        icon={<RxCross1 />}
-                                        fontSize={"xl"}
-                                        color={"red"}
-                                        onClick={close}
-                                    />
-                                </Center>
+
+                                <FormLabel textAlign={"center"}>
+                                    Current Stock:
+                                </FormLabel>
+                                <FormLabel
+                                    name={"total_qty_before_change"}
+                                    textAlign={"center"}
+                                >
+                                    {stockValue.product.stock}
+                                </FormLabel>
+
+                                {selectedType ? (
+                                    <>
+                                        {selectedType ===
+                                        "Add Stock by Admin" ? (
+                                            <>
+                                                <FormLabel>
+                                                    Increment Change
+                                                </FormLabel>
+                                                <NumberInput
+                                                    defaultValue={0}
+                                                    min={0}
+                                                    name={"increment_change"}
+                                                    ref={increment}
+                                                    onClick={() => {
+                                                        setNewStock(
+                                                            stockValue.product
+                                                                .stock +
+                                                                parseInt(
+                                                                    increment
+                                                                        .current
+                                                                        .firstChild
+                                                                        .value
+                                                                )
+                                                        );
+                                                        props.setFieldValue(
+                                                            "increment_change",
+                                                            parseInt(
+                                                                increment
+                                                                    .current
+                                                                    .firstChild
+                                                                    .value
+                                                            )
+                                                        );
+                                                    }}
+                                                >
+                                                    <NumberInputField />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FormLabel>
+                                                    Decrement Change
+                                                </FormLabel>
+                                                <NumberInput
+                                                    defaultValue={0}
+                                                    min={0}
+                                                    max={
+                                                        stockValue.product.stock
+                                                    }
+                                                    name={"decrement_change"}
+                                                    ref={decrement}
+                                                    onClick={() => {
+                                                        setNewStock(
+                                                            stockValue.product
+                                                                .stock -
+                                                                parseInt(
+                                                                    decrement
+                                                                        .current
+                                                                        .firstChild
+                                                                        .value
+                                                                )
+                                                        );
+                                                        props.setFieldValue(
+                                                            "decrement_change",
+                                                            parseInt(
+                                                                decrement
+                                                                    .current
+                                                                    .firstChild
+                                                                    .value
+                                                            )
+                                                        );
+                                                    }}
+                                                >
+                                                    <NumberInputField />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </>
+                                        )}
+
+                                        <FormLabel
+                                            textAlign={"center"}
+                                            paddingTop={"5px"}
+                                        >
+                                            Updated Stock:
+                                        </FormLabel>
+                                        <FormLabel
+                                            textAlign={"center"}
+                                            paddingTop={"5px"}
+                                            name={"new_total_qty"}
+                                        >
+                                            {newStock}
+                                        </FormLabel>
+
+                                        <Input
+                                            placeholder={"Description"}
+                                            name={"description"}
+                                            as={Field}
+                                        />
+                                        <ErrorMessage
+                                            style={{ color: "red" }}
+                                            component="div"
+                                            name="description"
+                                        />
+
+                                        <Center
+                                            paddingTop={"10px"}
+                                            gap={"10px"}
+                                        >
+                                            <IconButton
+                                                icon={<RxCheck />}
+                                                fontSize={"3xl"}
+                                                color={"green"}
+                                                type={"submit"}
+                                                onClick={()=>{
+                                                    props.setFieldValue(
+                                                        "total_qty_before_change",
+                                                        stockValue.product
+                                                            .stock
+                                                    );
+                                                    props.setFieldValue(
+                                                        "new_total_qty",
+                                                        newStock
+                                                    );
+                                                }}
+                                            />
+                                            <IconButton
+                                                icon={<RxCross1 />}
+                                                fontSize={"xl"}
+                                                color={"red"}
+                                                onClick={close}
+                                            />
+                                        </Center>
+                                    </>
+                                ) : null}
                             </FormControl>
                         </Form>
                     );

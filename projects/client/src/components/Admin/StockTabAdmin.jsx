@@ -141,7 +141,7 @@ export const ProductStockList = () => {
 
     const tableHead = [
         { name: "Id", origin: "id", width: "100px" },
-        { name: "Product Name", origin: "name", width: "" },
+        { name: "Name", origin: "name", width: "" },
         { name: "Warehouse", origin: "user", width: "" },
         { name: "Stock", origin: "stock", width: "" },
     ];
@@ -209,8 +209,8 @@ export const ProductStockList = () => {
                         <Center>
                             <AddProductStock
                                 getProductStock={getProductStock}
-                                product={product}
-                                warehouse={allWarehouse}
+                                productStock={product}
+                                allWarehouse={allWarehouse}
                             />
                         </Center>
                     ) : null}
@@ -281,8 +281,8 @@ export const ProductStockList = () => {
                         (decodedToken.role === 2
                             ? productStock.filter(
                                   (productStock) =>
-                                      productStock.product.user_id ===
-                                      decodedToken.id
+                                      productStock.warehouse_location
+                                          .user_id === decodedToken.id
                               )
                             : warehouse === "All Warehouse"
                             ? productStock
@@ -310,7 +310,7 @@ export const ProductStockList = () => {
                                             }
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.product.stock}
+                                            {item.qty}
                                         </Td>
                                         <Td>
                                             <Flex

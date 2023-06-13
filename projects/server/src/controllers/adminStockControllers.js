@@ -15,7 +15,6 @@ module.exports = {
             if (!qty || !product_id || !warehouse_location_id) {
                 throw { message: "Please Complete the Stock Form" };
             }
-
             const existingProductLocation = await product_location.findOne({
                 where: {
                     product_id,
@@ -29,20 +28,17 @@ module.exports = {
                         "Product already exists in the specified warehouse location",
                 };
             }
-
             const result = await product_location.create({
                 qty,
                 product_id,
                 warehouse_location_id,
             });
-
             // Update product stock
             const productToUpdate = await product.findByPk(product_id);
             if (productToUpdate) {
                 const updatedStock = productToUpdate.stock + parseInt(qty);
                 await productToUpdate.update({ stock: updatedStock });
             }
-
             // Send response
             res.status(200).send({
                 status: true,
@@ -57,58 +53,42 @@ module.exports = {
     },
     updateProductStock: async (req, res) => {
         try {
-            const { increment, decrement } = req.body;
-
-            if (increment && decrement) {
-                throw {
-                    message:
-                        "Please provide either increment or decrement, not both",
-                };
-            }
-
-            let quantityToUpdate = 0;
-            if (increment) {
-                quantityToUpdate = parseInt(increment);
-            } else if (decrement) {
-                quantityToUpdate = -parseInt(decrement);
-            } else {
-                throw {
-                    message:
-                        "Please provide either increment or decrement value",
-                };
-            }
-
-            // Find product location for the given product ID
-            const productLocation = await product_location.findOne({
-                where: {
-                    id: req.params.id,
+            const {
+                type,
+                increment_change,
+                decrement_change,
+                total_qty_before_change,
+                new_total_qty,
+                description,
+                product_id,
+                warehouse_location_id,
+            } = req.body;
+            // Update Stock in Product
+            await product.update(
+                {
+                    stock: new_total_qty,
+                    updatedAt: new Date(),
                 },
-            });
-
-            if (!productLocation) {
-                throw { message: "Product not found" };
-            }
-
-            const updatedQuantity = productLocation.qty + quantityToUpdate;
-
-            if (quantityToUpdate < 0 && updatedQuantity < 0) {
-                throw {
-                    message: "Cannot decrement more than the current quantity",
-                };
-            }
-
-            // Update product location quantity
-            await productLocation.update({ qty: updatedQuantity });
-
-            // Update product stock in the product database
-            const productToUpdate = await product.findByPk(
-                productLocation.product_id
+                {
+                    where: {
+                        id: req.params.id,
+                    },
+                }
             );
-            if (productToUpdate) {
-                const updatedStock = productToUpdate.stock + quantityToUpdate;
-                await productToUpdate.update({ stock: updatedStock });
-            }
-
+            // Create stock_journal entry
+            await stock_journal.create({
+                journal_date: new Date(),
+                type,
+                increment_change,
+                decrement_change,
+                total_qty_before_change,
+                new_total_qty,
+                description,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                product_id,
+                warehouse_location_id,
+            });
             // Send response
             res.status(200).send({
                 status: true,
@@ -122,30 +102,38 @@ module.exports = {
         }
     },
     deleteProductStock: async (req, res) => {
-        const productLocation = await product_location.findOne({
-            where: {
-                id: req.params.id,
-            },
-        });
-
-        if (!productLocation) {
-            throw { message: "Product not found" };
-        }
-    },
-    deleteProductStock: async (req, res) => {
         try {
             const productLocation = await product_location.findOne({
+                include: [
+                    {
+                        model: product,
+                        attributes: ["id", "name", "stock", "user_id"],
+                    },
+                    {
+                        model: warehouse_location,
+                        attributes: ["id", "warehouse_name", "user_id"],
+                    },
+                ],
                 where: {
                     id: req.params.id,
                 },
             });
-
             if (!productLocation) {
                 throw { message: "Product location not found" };
             }
-
             const deletedQty = productLocation.qty;
-
+            await stock_journal.create({
+                journal_date: new Date(),
+                type: "Stock Deleted by Admin",
+                decrement_change: deletedQty,
+                total_qty_before_change: deletedQty,
+                new_total_qty: 0,
+                description: "Stock Deleted by Admin",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                product_id: productLocation.product.id,
+                warehouse_location_id: productLocation.warehouse_location.id,
+            });
             // Delete the product location
             await productLocation.destroy();
 
@@ -157,7 +145,6 @@ module.exports = {
                 const updatedStock = productToUpdate.stock - deletedQty;
                 await productToUpdate.update({ stock: updatedStock });
             }
-
             // Send response
             res.status(200).send({
                 status: true,
@@ -179,11 +166,11 @@ module.exports = {
                 include: [
                     {
                         model: product,
-                        attributes: ["name", "stock", "user_id"],
+                        attributes: ["id", "name", "stock", "user_id"],
                     },
                     {
                         model: warehouse_location,
-                        attributes: ["warehouse_name"],
+                        attributes: ["id", "warehouse_name", "user_id"],
                     },
                 ],
                 where: {
@@ -205,7 +192,6 @@ module.exports = {
                 offset: page ? +page * 10 : 0,
                 subQuery: false,
             });
-
             res.status(200).send({
                 pages: Math.ceil(count / 10),
                 result: rows,
