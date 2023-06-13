@@ -44,6 +44,7 @@ module.exports = {
                         },
                     ],
                 },
+                where: { is_active: true },
                 offset: offset,
                 limit: limit_list,
                 order: [[order_by, direction]],
