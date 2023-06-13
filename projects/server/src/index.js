@@ -43,18 +43,18 @@ const {
     categoryRouters,
     adminProductRouters,
     productRouters,
-    adminStockRouters,
+    userProfileRouters,
 } = require("./routes/index");
 
 //users
 app.use("/api/users", userRouters);
+app.use("/api/users", userProfileRouters);
 
 //admin
 app.use("/api/admin", adminUserRouters);
 app.use("/api/admin", adminWarehouseRouters);
 app.use("/api/admin", categoryRouters);
 app.use("/api/admin", adminProductRouters);
-app.use("/api/admin", adminStockRouters);
 
 //products
 app.use("/api/products", productRouters);
