@@ -5,8 +5,7 @@ import { VerificationPage } from "./pages/VerificationPage";
 import { AdminPage } from "./pages/AdminPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { DetailProductPage } from "./pages/ProductDetailPage";
-// const path = require("path");
-// require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+import { ProfilePage } from "./pages/UserProfilePage";
 
 const router = createBrowserRouter([
     {
@@ -18,6 +17,7 @@ const router = createBrowserRouter([
     { path: "/reset-password/:token", element: <ResetPasswordPage /> },
     { path: "/admin", element: <AdminPage />, errorElement: <ErrorPage /> },
     { path: "/product/:name", element: <DetailProductPage /> },
+    { path: "profile/settings", element: <ProfilePage /> },
 ]);
 
 function App() {
