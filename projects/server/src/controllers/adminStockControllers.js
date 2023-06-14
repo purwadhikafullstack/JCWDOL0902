@@ -39,6 +39,20 @@ module.exports = {
                 const updatedStock = productToUpdate.stock + parseInt(qty);
                 await productToUpdate.update({ stock: updatedStock });
             }
+            // Create initial stock_journal entry
+            await stock_journal.create({
+                journal_date: new Date(),
+                type: "Add Initial Stock",
+                increment_change: qty,
+                decrement_change: 0,
+                total_qty_before_change: 0,
+                new_total_qty: qty,
+                description: "Add Initial Stock",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                product_id,
+                warehouse_location_id,
+            });
             // Send response
             res.status(200).send({
                 status: true,
