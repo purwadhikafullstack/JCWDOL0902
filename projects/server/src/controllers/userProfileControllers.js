@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const { hashPassword, hashMatch } = require("../helpers/hashpassword");
+
 //import model
 const db = require("../models");
 const user = db.user;

@@ -22,6 +22,8 @@ import { LoginForm } from "./Authentications/LoginForm";
 import userLogin from "../assets/default_avatar.jpg";
 import loginMenu from "../assets/login_menu.webp";
 
+const serverApi = process.env.REACT_APP_SERVER;
+
 export const UserMenu = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
@@ -45,7 +47,7 @@ export const UserMenu = () => {
             <Button
                 as={Avatar}
                 size={"xl"}
-                src={token ? decodedToken.picture : userLogin}
+                src={token ? `${serverApi}${decodedToken.picture}` : userLogin}
                 bg="grey"
                 onClick={onOpen}
                 boxSize={{ base: 8, lg: 12 }}
@@ -61,7 +63,9 @@ export const UserMenu = () => {
                                 <Avatar
                                     size={{ base: "xl", lg: "xl" }}
                                     src={
-                                        token ? decodedToken.picture : loginMenu
+                                        token
+                                            ? `${serverApi}${decodedToken.picture}`
+                                            : loginMenu
                                     }
                                     bg="white"
                                 />

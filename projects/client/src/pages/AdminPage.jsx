@@ -33,6 +33,7 @@ import simple from "../assets/hobbyzone_logo_simple.png";
 
 import { AdminContent } from "../components/Admin/AdminContent";
 import { ErrorPage } from "./ErrorPage";
+const serverApi = process.env.REACT_APP_SERVER;
 
 export const AdminPage = () => {
     const [tab, setTab] = useState(0);
@@ -43,7 +44,13 @@ export const AdminPage = () => {
     const TabContent = () => {
         const items =
             decodedToken.role === 3
-                ? ["Users", "Warehouses", "Categories", "Products", "Stock Management"]
+                ? [
+                      "Users",
+                      "Warehouses",
+                      "Categories",
+                      "Products",
+                      "Stock Management",
+                  ]
                 : ["Categories", "Products", "My Warehouse Stocks"];
 
         return (
@@ -169,7 +176,7 @@ export const AdminPage = () => {
                                 <HStack>
                                     <Avatar
                                         size={"sm"}
-                                        src={decodedToken.picture}
+                                        src={`${serverApi}${decodedToken.picture}`}
                                         border={"1px solid white"}
                                     />
                                     <VStack
