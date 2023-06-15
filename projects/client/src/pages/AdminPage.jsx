@@ -33,6 +33,7 @@ import simple from "../assets/hobbyzone_logo_simple.png";
 
 import { AdminContent } from "../components/Admin/AdminContent";
 import { ErrorPage } from "./ErrorPage";
+
 const serverApi = process.env.REACT_APP_SERVER;
 
 export const AdminPage = () => {
@@ -93,7 +94,7 @@ export const AdminPage = () => {
         return (
             <Box>
                 <HamburgerIcon
-                    color={"white"}
+                    color={"gray"}
                     display={{ base: "flex" }}
                     onClick={onOpen}
                     variant="outline"
@@ -110,7 +111,7 @@ export const AdminPage = () => {
                     onOverlayClick={onClose}
                     size={"xs"}
                 >
-                    <DrawerContent bg={"#343A40"}>
+                    <DrawerContent bg={"#385898"}>
                         <DrawerCloseButton color={"white"} />
                         <TabContent onClose={onClose} />
                     </DrawerContent>
@@ -125,7 +126,7 @@ export const AdminPage = () => {
                 <Container>
                     <DrawerAdminResponsive />
                     <Box
-                        bg={"#343A40"}
+                        bg={"#385898"}
                         w={{ base: 40, md: 60 }}
                         pos={"fixed"}
                         h={"full"}
@@ -152,7 +153,7 @@ export const AdminPage = () => {
                 px={{ base: 4, md: 4 }}
                 height={"20"}
                 alignItems="center"
-                bg={"#212529"}
+                bg={"#E9ECEF"}
                 justifyContent={{ base: "space-between" }}
                 boxShadow="md"
             >
@@ -187,14 +188,14 @@ export const AdminPage = () => {
                                     >
                                         <Text
                                             fontSize="lg"
-                                            color="white"
+                                            color="black"
                                             fontWeight="600"
                                         >
                                             {decodedToken.name}
                                         </Text>
                                     </VStack>
                                     <Box display={{ base: "none", md: "flex" }}>
-                                        <FiChevronDown color={"white"} />
+                                        <FiChevronDown color={"black"} />
                                     </Box>
                                 </HStack>
                             </MenuButton>

@@ -40,8 +40,7 @@ export const AddProduct = ({ getProducts, category }) => {
             <Button
                 onClick={onOpen}
                 leftIcon={<CgMathPlus />}
-                bg={"#DEE2E6"}
-                _hover={{ bg: "#F8F9FA" }}
+                colorScheme="teal"
             >
                 New Product
             </Button>

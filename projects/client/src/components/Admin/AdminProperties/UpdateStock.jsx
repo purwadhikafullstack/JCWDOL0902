@@ -44,9 +44,8 @@ export const UpdateStock = ({ product, getProductStock }) => {
         <Box>
             <Button
                 rightIcon={<BiEdit />}
-                bg={"#495057"}
                 color={"white"}
-                _hover={{ bg: "#DEE2E6", color: "#495057" }}
+                colorScheme="facebook"
                 textAlign={"center"}
                 onClick={onOpen}
             >

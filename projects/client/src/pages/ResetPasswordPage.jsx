@@ -106,8 +106,8 @@ export const ResetPasswordPage = () => {
         <Stack
             minH={"100vh"}
             direction={{ base: "column", md: "row" }}
-            bg="#495057"
-            color="white"
+            bg="#DDB620"
+            color="black"
         >
             <Flex flex={1.5}>
                 <Image

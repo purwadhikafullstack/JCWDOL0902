@@ -20,7 +20,7 @@ export const HamburgerMenu = () => {
     return (
         <>
             <Button onClick={handleToggle} variant="ghost">
-                <HamburgerIcon w={6} h={6} color="white" />
+                <HamburgerIcon w={6} h={6} color="gray" />
             </Button>
             <Drawer isOpen={isOpen} placement="left" onClose={handleToggle}>
                 <DrawerOverlay />

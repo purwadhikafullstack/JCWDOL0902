@@ -157,7 +157,7 @@ export const UserList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         width={item.width}
@@ -200,7 +200,7 @@ export const UserList = () => {
                                 );
                             })}
                             <Th
-                                bg={"#495057"}
+                                bg={"#3182CE"}
                                 textAlign={"center"}
                                 color={"white"}
                                 width={"200px"}

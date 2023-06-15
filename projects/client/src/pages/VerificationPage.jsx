@@ -88,7 +88,7 @@ export const VerificationPage = () => {
         <Stack
             minH={"100vh"}
             direction={{ base: "column", md: "row" }}
-            bg="#495057"
+            bg="#385898"
             color="white"
         >
             <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -109,7 +109,7 @@ export const VerificationPage = () => {
                                     <Heading
                                         fontSize={"2xl"}
                                         pb={5}
-                                        fontFamily={"Work Sans"}
+                                        fontFamily={"Gantari"}
                                         fontWeight={"500"}
                                     >
                                         Verify and Change Your Password

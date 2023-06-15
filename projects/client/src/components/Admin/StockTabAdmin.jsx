@@ -224,7 +224,7 @@ export const ProductStockList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         width={item.width}
@@ -267,7 +267,7 @@ export const ProductStockList = () => {
                                 );
                             })}
                             <Th
-                                bg={"#495057"}
+                                bg={"#3182CE"}
                                 textAlign={"center"}
                                 color={"white"}
                                 w={"200px"}
@@ -309,9 +309,7 @@ export const ProductStockList = () => {
                                                     .warehouse_name
                                             }
                                         </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.qty}
-                                        </Td>
+                                        <Td textAlign={"center"}>{item.qty}</Td>
                                         <Td>
                                             <Flex
                                                 gap={"20px"}

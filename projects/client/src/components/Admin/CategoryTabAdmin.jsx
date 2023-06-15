@@ -167,7 +167,7 @@ export const CategoryList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         width={item.width}
@@ -211,7 +211,7 @@ export const CategoryList = () => {
                             })}
                             {decodedToken.role === 3 ? (
                                 <Th
-                                    bg={"#495057"}
+                                    bg={"#3182CE"}
                                     textAlign={"center"}
                                     color={"white"}
                                     w={"200px"}

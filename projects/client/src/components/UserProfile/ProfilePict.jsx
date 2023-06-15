@@ -11,22 +11,15 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const baseApi = process.env.REACT_APP_API_BASE_URL;
 
-export const ChangeProfilePicture = ({ user, token }) => {
+export const ChangeProfilePicture = ({ user, token, getUser }) => {
     const [previewImage, setPreviewImage] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const toast = useToast();
-    const navigate = useNavigate();
-
-    const onLogout = async () => {
-        localStorage.removeItem("token");
-        navigate("/");
-    };
 
     const handlePictureChange = async (e) => {
         const file = e.target.files[0];
@@ -45,14 +38,15 @@ export const ChangeProfilePicture = ({ user, token }) => {
                         },
                     }
                 );
-                setTimeout(() => 2000);
+
                 toast({
                     position: "top",
-                    title: "Successfuly updating profile picture, please Re-Login",
+                    title: "Successfuly updating profile picture, click save changes to continue",
                     status: "success",
                     isClosable: true,
                 });
-                setTimeout(() => onLogout(), 2500);
+                setTimeout(() => 2000);
+                getUser();
             } catch (error) {
                 console.error("Error updating profile picture:", error);
                 // Handle error scenario
@@ -76,7 +70,7 @@ export const ChangeProfilePicture = ({ user, token }) => {
 
     return (
         <>
-            <Button bg={"#DEE2E6"} mb={4} onClick={onOpen}>
+            <Button colorScheme="blue" mb={4} m={2} onClick={onOpen}>
                 New Profile Picture
             </Button>
 

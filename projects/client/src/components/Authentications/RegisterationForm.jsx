@@ -73,8 +73,7 @@ export const RegisterationForm = () => {
                 display={{ base: "solid", md: "inline-flex" }}
                 fontSize={"md"}
                 fontWeight={"600"}
-                color={"495057"}
-                bg="#CED4DA"
+                colorScheme="teal"
                 href={"#"}
                 onClick={onOpen}
                 borderRadius="15px"
