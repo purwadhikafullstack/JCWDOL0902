@@ -35,6 +35,7 @@ import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 // Props
 import { AddCategory } from "./AdminProperties/AddCategory";
 import { EditCategory } from "./AdminProperties/EditCategory";
+import { EditCategoryImage } from "./AdminProperties/EditCategoryImage";
 
 export const CategoryList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -244,6 +245,12 @@ export const CategoryList = () => {
                                                         category={
                                                             category[index]
                                                         }
+                                                        getCategory={
+                                                            getCategory
+                                                        }
+                                                    />
+                                                    <EditCategoryImage
+                                                        item={item}
                                                         getCategory={
                                                             getCategory
                                                         }

@@ -1,15 +1,9 @@
 import { HomeCarousel } from "../components/Carousel";
 import { FooterComponent } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
-import {
-    Box,
-    Image,
-    Center,
-    Divider,
-    Heading,
-    useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Heading, useMediaQuery } from "@chakra-ui/react";
 import { ProductPage } from "../components/Products/ProductLists";
+import { CategoryList } from "../components/Products/CategoryLists";
 
 export const HomePage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
@@ -26,12 +20,23 @@ export const HomePage = () => {
                 <HomeCarousel />
                 <Box mt={isSmallScreen ? "50px" : "200px"} color="black" pb="6">
                     <Box maxW="85%" m="auto">
-                        <Divider mb="2" />
                         <Heading
                             fontFamily={"gantari"}
                             mb="2"
                             size="lg"
-                            color="#385898"
+                            color="black"
+                            fontWeight="bold"
+                        >
+                            Categories
+                        </Heading>
+                        <CategoryList />
+                    </Box>
+                    <Box maxW="85%" m="auto" mt="2">
+                        <Heading
+                            fontFamily={"gantari"}
+                            mb="2"
+                            size="lg"
+                            color="black"
                             fontWeight="bold"
                         >
                             All Products
