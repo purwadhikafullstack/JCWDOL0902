@@ -127,12 +127,14 @@ export const ResetPassword = () => {
                                                                 isLoading
                                                             }
                                                             loadingText="Sending"
+                                                            colorScheme="teal"
                                                             mr={5}
                                                         >
                                                             Send
                                                         </Button>
                                                         <Button
                                                             onClick={onClose}
+                                                            colorScheme="blue"
                                                         >
                                                             Cancel
                                                         </Button>

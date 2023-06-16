@@ -15,11 +15,12 @@ import {
     IconButton,
 } from "@chakra-ui/react";
 import { ViewOffIcon, ViewIcon } from "@chakra-ui/icons";
-import pict from "../assets/reset_password_pict.jpg";
+import pict from "../assets/reset_password.png";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { Field, ErrorMessage, Formik, Form } from "formik";
+import { FooterComponent } from "../components/Footer";
 
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
@@ -103,20 +104,14 @@ export const ResetPasswordPage = () => {
     });
 
     return (
-        <Stack
-            minH={"100vh"}
-            direction={{ base: "column", md: "row" }}
-            color="black"
-        >
-            <Flex flex={1.5}>
-                <Image
-                    alt={"Login Image"}
-                    bgSize="cover"
-                    objectFit={"cover"}
-                    src={pict}
-                />
-            </Flex>
-            <Flex p={8} flex={1} align={"center"} justify={"center"}>
+        <Stack minH={"100vh"} color="black">
+            <Flex
+                p={8}
+                flex={1}
+                align={"center"}
+                justify={"center"}
+                direction={{ base: "column", md: "row" }}
+            >
                 <Formik
                     initialValues={{
                         email: user,
@@ -243,7 +238,16 @@ export const ResetPasswordPage = () => {
                         );
                     }}
                 </Formik>
+                <Image
+                    src={pict}
+                    alt="reset pass image"
+                    maxW={{ base: "xs", md: "sm" }}
+                    w="100%"
+                    objectFit="cover"
+                    mr={8}
+                />
             </Flex>
+            <FooterComponent />
         </Stack>
     );
 };

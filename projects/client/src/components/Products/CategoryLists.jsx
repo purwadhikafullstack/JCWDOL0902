@@ -64,8 +64,6 @@ export const CategoryList = () => {
                             cursor: "pointer",
                             boxShadow: "xl",
                         }}
-                        ml={2} // Add margin between slides
-                        style={{ minWidth: 0 }} // Allow the slider to shrink the slide width
                     >
                         <Box display="flex" justifyContent="center">
                             <Image

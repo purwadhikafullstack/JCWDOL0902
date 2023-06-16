@@ -121,10 +121,15 @@ export const LoginForm = () => {
                                 <ResetPassword />
                             </FormControl>
                             <ModalFooter>
-                                <Button mr={5} type="submit">
+                                <Button mr={5} type="submit" colorScheme="blue">
                                     Login
                                 </Button>
-                                <Button onClick={onCloseLogin}>Cancel</Button>
+                                <Button
+                                    onClick={onCloseLogin}
+                                    colorScheme="teal"
+                                >
+                                    Cancel
+                                </Button>
                             </ModalFooter>
                         </form>
                     </ModalBody>
