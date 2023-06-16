@@ -106,7 +106,6 @@ export const ResetPasswordPage = () => {
         <Stack
             minH={"100vh"}
             direction={{ base: "column", md: "row" }}
-            bg="#DDB620"
             color="black"
         >
             <Flex flex={1.5}>
@@ -136,7 +135,7 @@ export const ResetPasswordPage = () => {
                                     <Heading
                                         fontSize={"2xl"}
                                         pb={5}
-                                        fontFamily={"Work Sans"}
+                                        fontFamily={"gantari"}
                                         fontWeight={"500"}
                                     >
                                         Create your New Password
@@ -156,7 +155,10 @@ export const ResetPasswordPage = () => {
                                         colorScheme={"white"}
                                     >
                                         <FormLabel> New Password</FormLabel>
-                                        <InputGroup size="md">
+                                        <InputGroup
+                                            size="md"
+                                            variant={"filled"}
+                                        >
                                             <Field
                                                 as={Input}
                                                 type={
@@ -187,7 +189,10 @@ export const ResetPasswordPage = () => {
                                     </FormControl>
                                     <FormControl id="password_confirmation">
                                         <FormLabel>Confirm Password</FormLabel>
-                                        <InputGroup size="md">
+                                        <InputGroup
+                                            size="md"
+                                            variant={"filled"}
+                                        >
                                             <Field
                                                 as={Input}
                                                 type={
@@ -226,7 +231,7 @@ export const ResetPasswordPage = () => {
                                             justify={"space-between"}
                                         ></Stack>
                                         <Button
-                                            bgColor="#F8F9FA"
+                                            colorScheme="teal"
                                             variant={"solid"}
                                             type="submit"
                                         >

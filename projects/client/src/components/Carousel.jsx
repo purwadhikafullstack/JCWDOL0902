@@ -14,7 +14,7 @@ export const HomeCarousel = () => {
 
     return (
         <Center>
-            <Box w="100%" maxW="1300px">
+            <Box w="100%" maxW="1200px">
                 <Box
                     as={Carousel}
                     h={{ base: "200px", md: "350px" }}

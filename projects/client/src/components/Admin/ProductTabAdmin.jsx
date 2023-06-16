@@ -244,8 +244,8 @@ export const ProductList = () => {
                             return (
                                 <Tbody
                                     key={index}
-                                    bg={"#DEE2E6"}
-                                    _hover={{ bg: "#ADB5BD" }}
+                                    bg={"#ADE8F4"}
+                                    _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
                                         <Td>{item.id}</Td>
