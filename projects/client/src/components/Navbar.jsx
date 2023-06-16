@@ -140,7 +140,7 @@ export const Navbar = ({
                                                 border: "none",
                                                 outline: "none",
                                             }}
-                                            color={"white"}
+                                            color={"black"}
                                             variant={"filled"}
                                             boxShadow={"sm"}
                                             placeholder="Search for Hobbies"

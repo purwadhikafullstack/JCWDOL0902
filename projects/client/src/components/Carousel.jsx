@@ -8,9 +8,10 @@ import { Box, Image, Center } from "@chakra-ui/react";
 // picture
 import carousel1 from "../assets/carousel_1.webp";
 import carousel2 from "../assets/carousel_2.webp";
+import carousel3 from "../assets/carousel_3.jpeg";
 
 export const HomeCarousel = () => {
-    const carouselPic = [carousel1, carousel2];
+    const carouselPic = [carousel1, carousel2, carousel3];
 
     return (
         <Center>
