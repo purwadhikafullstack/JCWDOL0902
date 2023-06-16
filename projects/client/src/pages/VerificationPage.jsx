@@ -88,8 +88,7 @@ export const VerificationPage = () => {
         <Stack
             minH={"100vh"}
             direction={{ base: "column", md: "row" }}
-            bg="#495057"
-            color="white"
+            color="black"
         >
             <Flex p={8} flex={1} align={"center"} justify={"center"}>
                 <Formik
@@ -109,7 +108,7 @@ export const VerificationPage = () => {
                                     <Heading
                                         fontSize={"2xl"}
                                         pb={5}
-                                        fontFamily={"Work Sans"}
+                                        fontFamily={"Gantari"}
                                         fontWeight={"500"}
                                     >
                                         Verify and Change Your Password
@@ -121,7 +120,10 @@ export const VerificationPage = () => {
                                         <FormLabel fontWeight={"500"}>
                                             New Password
                                         </FormLabel>
-                                        <InputGroup size="md">
+                                        <InputGroup
+                                            size="md"
+                                            variant={"filled"}
+                                        >
                                             <Field
                                                 as={Input}
                                                 type={
@@ -152,7 +154,10 @@ export const VerificationPage = () => {
                                         <FormLabel fontWeight={"500"}>
                                             Confirm Password
                                         </FormLabel>
-                                        <InputGroup size="md">
+                                        <InputGroup
+                                            size="md"
+                                            variant={"filled"}
+                                        >
                                             <Field
                                                 as={Input}
                                                 type={
@@ -193,7 +198,7 @@ export const VerificationPage = () => {
                                             justify={"space-between"}
                                         ></Stack>
                                         <Button
-                                            bgColor="#F8F9FA"
+                                            colorScheme="teal"
                                             variant={"solid"}
                                             type="submit"
                                         >

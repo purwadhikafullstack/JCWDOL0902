@@ -184,7 +184,7 @@ export const ProductList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         w={item.width}
@@ -228,7 +228,7 @@ export const ProductList = () => {
                             })}
                             {decodedToken.role === 3 ? (
                                 <Th
-                                    bg={"#495057"}
+                                    bg={"#3182CE"}
                                     textAlign={"center"}
                                     color={"white"}
                                     w={"200px"}
@@ -244,8 +244,8 @@ export const ProductList = () => {
                             return (
                                 <Tbody
                                     key={index}
-                                    bg={"#DEE2E6"}
-                                    _hover={{ bg: "#ADB5BD" }}
+                                    bg={"#ADE8F4"}
+                                    _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
                                         <Td>{item.id}</Td>

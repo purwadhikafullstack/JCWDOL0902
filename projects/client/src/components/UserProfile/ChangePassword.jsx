@@ -106,12 +106,10 @@ export const ChangePassword = ({ user, token }) => {
                     isClosable: true,
                 });
             }
-        } catch (error) {
-            console.error("Error updating password:", error);
-            // Handle error scenario
+        } catch (err) {
             toast({
                 position: "top",
-                title: "Error updating password",
+                title: err.response.data.message,
                 status: "error",
                 isClosable: true,
             });
@@ -120,7 +118,7 @@ export const ChangePassword = ({ user, token }) => {
 
     return (
         <>
-            <Button bg={"#DEE2E6"} mb={4} ml={2} onClick={onOpen}>
+            <Button colorScheme="blue" mb={4} m={2} onClick={onOpen}>
                 Change Password
             </Button>
 
@@ -145,9 +143,6 @@ export const ChangePassword = ({ user, token }) => {
                             </FormControl>
                             <Button type="submit" colorScheme="blue" mr={3}>
                                 Change Password
-                            </Button>
-                            <Button variant="ghost" onClick={onClose}>
-                                Cancel
                             </Button>
                         </form>
                     </ModalBody>

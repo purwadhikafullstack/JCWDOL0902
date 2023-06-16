@@ -190,7 +190,7 @@ export const WarehouseList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         width={item.width}
@@ -233,7 +233,7 @@ export const WarehouseList = () => {
                                 );
                             })}
                             <Th
-                                bg={"#495057"}
+                                bg={"#3182CE"}
                                 textAlign={"center"}
                                 color={"white"}
                                 width={"200px"}
@@ -248,8 +248,8 @@ export const WarehouseList = () => {
                             return (
                                 <Tbody
                                     key={index}
-                                    bg={"#DEE2E6"}
-                                    _hover={{ bg: "#ADB5BD" }}
+                                    bg={"#ADE8F4"}
+                                    _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
                                         <Td textAlign={"center"}>{item.id}</Td>

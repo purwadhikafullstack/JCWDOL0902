@@ -55,20 +55,6 @@ export const Profile = () => {
         } catch (error) {}
     }, [decodedToken.id]);
 
-    const handleProfilePictureChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handlePasswordChange = () => {
-        // Logic for changing the password
-        // Add your code here
-    };
-
     const handleSaveChanges = async () => {
         try {
             await axios.patch(
@@ -83,7 +69,6 @@ export const Profile = () => {
                     },
                 }
             );
-            setTimeout(() => 2000);
             toast({
                 position: "top",
                 title: "Successfuly updating profile, please Re-Login",
@@ -106,6 +91,7 @@ export const Profile = () => {
                 <FormControl mb={4}>
                     <FormLabel>Name</FormLabel>
                     <Input
+                        variant="filled"
                         type="text"
                         name="name"
                         value={name}
@@ -116,6 +102,7 @@ export const Profile = () => {
                 <FormControl mb={4}>
                     <FormLabel>Phone Number</FormLabel>
                     <Input
+                        variant="filled"
                         type="text"
                         name="phoneNumber"
                         value={phoneNumber}
@@ -125,7 +112,12 @@ export const Profile = () => {
 
                 <FormControl mb={4}>
                     <FormLabel>Email</FormLabel>
-                    <Input type="text" value={email} isDisabled />
+                    <Input
+                        type="text"
+                        value={email}
+                        isDisabled
+                        variant="filled"
+                    />
                 </FormControl>
 
                 <FormLabel>Profile Picture</FormLabel>
@@ -153,12 +145,17 @@ export const Profile = () => {
                 <ChangeProfilePicture
                     user={user}
                     image={image}
-                    setImage={setImage}
                     token={token}
+                    getUser={getUser}
                 />
 
                 <ChangePassword user={user} token={token} />
-                <Button colorScheme="green" mb={4} onClick={handleSaveChanges}>
+                <Button
+                    colorScheme="green"
+                    mb={4}
+                    m={2}
+                    onClick={handleSaveChanges}
+                >
                     Save Changes
                 </Button>
             </Box>

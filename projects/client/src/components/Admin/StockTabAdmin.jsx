@@ -224,7 +224,7 @@ export const ProductStockList = () => {
                                 return (
                                     <Th
                                         key={index}
-                                        bg={"#495057"}
+                                        bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
                                         width={item.width}
@@ -267,7 +267,7 @@ export const ProductStockList = () => {
                                 );
                             })}
                             <Th
-                                bg={"#495057"}
+                                bg={"#3182CE"}
                                 textAlign={"center"}
                                 color={"white"}
                                 w={"200px"}
@@ -295,8 +295,8 @@ export const ProductStockList = () => {
                             return (
                                 <Tbody
                                     key={index}
-                                    bg={"#DEE2E6"}
-                                    _hover={{ bg: "#ADB5BD" }}
+                                    bg={"#ADE8F4"}
+                                    _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
                                         <Td textAlign={"center"}>{item.id}</Td>
@@ -309,9 +309,7 @@ export const ProductStockList = () => {
                                                     .warehouse_name
                                             }
                                         </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.qty}
-                                        </Td>
+                                        <Td textAlign={"center"}>{item.qty}</Td>
                                         <Td>
                                             <Flex
                                                 gap={"20px"}

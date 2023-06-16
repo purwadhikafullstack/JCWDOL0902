@@ -10,7 +10,7 @@ module.exports = {
         try {
             const { page, limit, search_query, order, by } = req.query;
             const page_list = +page || 0;
-            const limit_list = +limit || 9;
+            const limit_list = +limit || 12;
             const search = search_query || "";
             const offset = limit_list * page_list;
             const order_by = order || "name";

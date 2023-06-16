@@ -37,8 +37,7 @@ export const AddCategory = ({ getCategory }) => {
             <Button
                 onClick={onOpen}
                 leftIcon={<CgMathPlus />}
-                bg={"#DEE2E6"}
-                _hover={{ bg: "#F8F9FA" }}
+                colorScheme="teal"
             >
                 New Category
             </Button>

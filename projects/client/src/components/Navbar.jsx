@@ -20,8 +20,7 @@ import {
     useMediaQuery,
 } from "@chakra-ui/react";
 
-import { BiSearchAlt } from "react-icons/bi";
-import { CgHeart } from "react-icons/cg";
+import { BiSearch } from "react-icons/bi";
 
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
@@ -58,7 +57,7 @@ export const Navbar = ({
             <Box
                 px={{ base: 6, md: "28" }}
                 py={{ base: 1, md: 4 }}
-                backgroundColor="#212529"
+                backgroundColor="#E9ECEF"
                 boxShadow="md"
                 position="sticky"
                 top="0"
@@ -130,7 +129,6 @@ export const Navbar = ({
                             <GridItem colSpan={{ base: 1 }}>
                                 <Flex>
                                     <Box
-                                        border="2px solid white"
                                         p={{ base: "3px" }}
                                         rounded="15px"
                                         marginLeft={3}
@@ -147,9 +145,11 @@ export const Navbar = ({
                                                 outline: "none",
                                             }}
                                             color={"white"}
+                                            variant={"filled"}
+                                            boxShadow={"sm"}
                                             placeholder="Search for Hobbies, Toys, and More..."
                                             _placeholder={{
-                                                color: "grey",
+                                                color: "gray",
                                                 fontSize: {
                                                     base: "12px",
                                                     md: "16px",
@@ -210,22 +210,22 @@ export const Navbar = ({
                                     >
                                         <Tooltip label="Search" hasArrow>
                                             <IconButton
-                                                icon={<BiSearchAlt />}
+                                                icon={<BiSearch />}
                                                 h={{ base: "10px", md: "40x" }}
                                                 minW={{
                                                     base: "30px",
                                                     md: "40px",
                                                 }}
-                                                fontSize={{ md: "3xl" }}
+                                                fontSize={{ md: "2xl" }}
                                                 borderRadius={0}
                                                 bg="none"
-                                                color={"white"}
+                                                color={"gray"}
                                                 _hover={{
                                                     bg: "none",
                                                 }}
                                                 _active={{
                                                     bg: "none",
-                                                    color: "white",
+                                                    color: "gray",
                                                 }}
                                                 onClick={() => {
                                                     navigate(
@@ -244,26 +244,7 @@ export const Navbar = ({
                             <GridItem
                                 display={{ base: "none", md: "block" }}
                                 w={{ base: "50px", md: "150px" }}
-                            >
-                                <Flex>
-                                    <IconButton
-                                        icon={<CgHeart />}
-                                        fontSize={"35px"}
-                                        href={"#"}
-                                        bg={"none"}
-                                        borderRadius={0}
-                                        borderRight={"1px solid white"}
-                                        color={"white"}
-                                        width={70}
-                                        height={30}
-                                        _hover={{
-                                            bg: "none",
-                                            color: "red",
-                                        }}
-                                        _active={{ color: "white" }}
-                                    />
-                                </Flex>
-                            </GridItem>
+                            ></GridItem>
                             <GridItem
                                 colSpan={{ base: 1 }}
                                 w={{ base: "50px", lg: "200px" }}

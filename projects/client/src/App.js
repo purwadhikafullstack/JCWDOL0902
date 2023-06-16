@@ -17,7 +17,11 @@ const router = createBrowserRouter([
     { path: "/reset-password/:token", element: <ResetPasswordPage /> },
     { path: "/admin", element: <AdminPage />, errorElement: <ErrorPage /> },
     { path: "/product/:name", element: <DetailProductPage /> },
-    { path: "profile/settings", element: <ProfilePage /> },
+    {
+        path: "profile/settings",
+        element: <ProfilePage />,
+        errorElement: <ErrorPage />,
+    },
 ]);
 
 function App() {

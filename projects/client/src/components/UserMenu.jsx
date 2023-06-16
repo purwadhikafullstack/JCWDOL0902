@@ -15,6 +15,8 @@ import {
 } from "@chakra-ui/react";
 import decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
@@ -81,7 +83,14 @@ export const UserMenu = () => {
                         {token ? (
                             <Stack>
                                 <Button as={Link} to={"/profile/settings"}>
+                                    <FaUser style={{ marginRight: "0.5rem" }} />{" "}
                                     Profile
+                                </Button>
+                                <Button as={Link} to={"/profile/settings"}>
+                                    <FaMapMarkerAlt
+                                        style={{ marginRight: "0.5rem" }}
+                                    />{" "}
+                                    Address
                                 </Button>
                             </Stack>
                         ) : (
