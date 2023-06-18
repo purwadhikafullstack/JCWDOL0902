@@ -59,7 +59,10 @@ module.exports = {
             });
             if (dataCategory) throw { message: "Category already existed" };
 
-            const createCategory = await category.create({ name });
+            const createCategory = await category.create({
+                name,
+                image: `Public/images/${req.files.images[0].filename}`,
+            });
 
             res.status(200).send({
                 status: true,
@@ -92,6 +95,30 @@ module.exports = {
                 message: "Category Successfully Updated",
             });
         } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
+    updateCategoryImage: async (req, res) => {
+        try {
+            await category.update(
+                {
+                    image: `Public/images/${req.files.images[0].filename}`,
+                },
+                {
+                    where: {
+                        id: req.params.id,
+                    },
+                }
+            );
+            res.status(200).send({
+                status: true,
+                message: "category photo successfully updated",
+            });
+        } catch (error) {
+            deleteFiles(req.files);
             res.status(400).send({
                 status: false,
                 message: error.message,

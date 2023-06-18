@@ -24,7 +24,6 @@ import { BiSearch } from "react-icons/bi";
 
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
-import { HamburgerMenu } from "./HamburgerMenu";
 import { UserMenu } from "./UserMenu";
 
 export const Navbar = ({
@@ -79,7 +78,6 @@ export const Navbar = ({
                                 w={{ base: "50px", md: "200px" }}
                             >
                                 <Center>
-                                    <HamburgerMenu />
                                     <Link
                                         as={Image}
                                         href={"/"}
@@ -91,7 +89,6 @@ export const Navbar = ({
                                         onClick={() =>
                                             window.location.replace("/")
                                         }
-                                        marginLeft={2}
                                     />
                                     <Image
                                         to={"/"}
@@ -122,7 +119,6 @@ export const Navbar = ({
                                         onClick={() =>
                                             window.location.replace("/")
                                         }
-                                        marginLeft={2}
                                     />
                                 </Center>
                             </GridItem>
@@ -144,10 +140,10 @@ export const Navbar = ({
                                                 border: "none",
                                                 outline: "none",
                                             }}
-                                            color={"white"}
+                                            color={"black"}
                                             variant={"filled"}
                                             boxShadow={"sm"}
-                                            placeholder="Search for Hobbies, Toys, and More..."
+                                            placeholder="Search for Hobbies"
                                             _placeholder={{
                                                 color: "gray",
                                                 fontSize: {
