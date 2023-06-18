@@ -42,13 +42,17 @@ module.exports = {
                                 [Op.like]: "%" + search + "%",
                             },
                         },
+                        {
+                            "$category.name$": {
+                                [Op.like]: `%${search}%`,
+                            },
+                        },
                     ],
                 },
                 where: { is_active: true },
                 offset: offset,
                 limit: limit_list,
                 order: [[order_by, direction]],
-                subQuery: false,
             });
             res.status(200).send({
                 result: all,

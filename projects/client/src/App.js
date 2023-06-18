@@ -6,6 +6,8 @@ import { AdminPage } from "./pages/AdminPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { DetailProductPage } from "./pages/ProductDetailPage";
 import { ProfilePage } from "./pages/UserProfilePage";
+import { ProductFilteredPage } from "./pages/ProductFiltered";
+import { ProductBySearchPage } from "./pages/ProductBySearchPage";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +24,8 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
         errorElement: <ErrorPage />,
     },
+    { path: "/productlist/:category", element: <ProductFilteredPage /> },
+    { path: "/product-results/:querry", element: <ProductBySearchPage /> },
 ]);
 
 function App() {

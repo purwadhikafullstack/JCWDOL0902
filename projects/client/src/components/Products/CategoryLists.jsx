@@ -50,6 +50,10 @@ export const CategoryList = () => {
         ],
     };
 
+    const handleCardClick = (categoryName) => {
+        navigate(`/productlist/${categoryName}`);
+    };
+
     return (
         <Box p={4}>
             <Slider {...settings}>
@@ -64,6 +68,7 @@ export const CategoryList = () => {
                             cursor: "pointer",
                             boxShadow: "xl",
                         }}
+                        onClick={() => handleCardClick(category.name)}
                     >
                         <Box display="flex" justifyContent="center">
                             <Image
