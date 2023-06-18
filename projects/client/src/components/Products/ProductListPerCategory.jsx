@@ -6,29 +6,51 @@ import {
     Image,
     Text,
     Tooltip,
+    Select,
     Center,
     IconButton,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
 const url = process.env.REACT_APP_API_BASE_URL;
 const serverApi = process.env.REACT_APP_SERVER;
 
-export const ProductPage = () => {
+export const ProductListPerCategory = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(0);
-    const [order, setOrder] = useState("");
     const [totalPages, setTotalPages] = useState(0);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [direction, setDirection] = useState("DESC");
+    const [sort, setSort] = useState(0);
+
+    const { category } = useParams();
     const navigate = useNavigate();
+
+    let productData;
+
+    switch (parseInt(sort)) {
+        //mengurutkan dari nama produk A-Z
+        case 1:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${category}&order=${"name"}&by=${"asc"}`;
+            break;
+        //mengurutkan nama Z-A
+        case 2:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${category}&order=${"name"}&by=${"desc"}`;
+            break;
+        //mengurutkan harga dari termahal - termurah
+        case 3:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${category}&order=${"price"}&by=${"desc"}`;
+            break;
+        //mengurutkan harga dari termurah - termahal
+        case 4:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${category}&order=${"price"}&by=${"asc"}`;
+            break;
+        default:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${category}&order=${""}&by=${"desc"}`;
+    }
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(
-                `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}`
-            );
+            const response = await axios.get(productData);
             console.log(response);
             setProducts(response.data.result);
             setTotalPages(response.data.totalPage);
@@ -39,7 +61,7 @@ export const ProductPage = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [page, searchQuery, order, direction]);
+    }, [page, sort]);
 
     const handleCardClick = (productName) => {
         navigate(`/product/${productName}`);
@@ -47,6 +69,22 @@ export const ProductPage = () => {
 
     return (
         <Box p={4}>
+            <Select
+                placeholder="Sort by"
+                mb={5}
+                backgroundColor={"#3182CE"}
+                fontWeight={"600"}
+                borderRadius={"lg"}
+                color={"white"}
+                size={"sm"}
+                maxW="250px"
+                onChange={(e) => setSort(e.target.value)}
+            >
+                <option value="1">Sort by Product Name A-Z</option>
+                <option value="2">Sort by Product Name Z-A</option>
+                <option value="3">Sort by Price Highest-Lowest</option>
+                <option value="4">Sort by Price Lowest-Highest</option>
+            </Select>
             <Grid
                 templateColumns={{
                     base: "1fr",
@@ -99,9 +137,6 @@ export const ProductPage = () => {
                         <Text fontWeight={"600"} color={"maroon"}>
                             {`Rp ${product?.price?.toLocaleString()}`}
                         </Text>
-                        <Text mt={2} fontSize="sm" fontWeight="500">
-                            Category: {product.category.name}
-                        </Text>
                     </Box>
                 ))}
             </Grid>
@@ -118,9 +153,7 @@ export const ProductPage = () => {
                             icon={<SlArrowLeft />}
                         />
                     )}
-                    <Text paddingX={"10px"}>
-                        {page + 1} of {totalPages}
-                    </Text>
+                    <Text paddingX={"10px"}>{page + 1}</Text>
                     {page < totalPages - 1 ? (
                         <IconButton
                             icon={<SlArrowRight />}

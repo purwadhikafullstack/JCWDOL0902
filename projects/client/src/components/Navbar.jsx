@@ -26,28 +26,11 @@ import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 import { UserMenu } from "./UserMenu";
 
-export const Navbar = ({
-    setPage,
-    searchquery,
-    setSearchParams,
-    setPmax,
-    setPmin,
-}) => {
+export const Navbar = () => {
     const [mobileView] = useMediaQuery("(max-width: 1007px)");
     const navigate = useNavigate();
     const toast = useToast();
     const [valuesearch, setValueSearch] = useState("");
-    const [enter, setEnter] = useState(0);
-    const location = useLocation();
-
-    function handleSearch() {
-        if (location.pathname === "/product") {
-            setPage(1);
-            setPmax(null);
-            setPmin(null);
-            setSearchParams(`search_query=${valuesearch}`);
-        }
-    }
 
     const token = localStorage.getItem("token");
 
@@ -155,48 +138,9 @@ export const Navbar = ({
                                             _focusVisible={{
                                                 outline: "none",
                                             }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    if (!valuesearch) {
-                                                        if (enter === 2) {
-                                                            return setTimeout(
-                                                                () =>
-                                                                    window.location.reload(),
-                                                                500
-                                                            );
-                                                        }
-                                                        toast({
-                                                            position: "top",
-                                                            title: `Find Something?`,
-                                                            variant: "subtle",
-                                                            duration: 1500,
-                                                            isClosable: true,
-                                                        });
-                                                        return setEnter(
-                                                            enter + 1
-                                                        );
-                                                    }
-                                                    navigate(
-                                                        `/product?search_query=${e.target.value}`
-                                                    );
-                                                    if (
-                                                        location.pathname ===
-                                                        "/product"
-                                                    ) {
-                                                        setPage(1);
-                                                        setPmax(null);
-                                                        setPmin(null);
-                                                        setSearchParams(
-                                                            `search_query=${e.target.value}`
-                                                        );
-                                                    }
-                                                    e.preventDefault();
-                                                }
-                                            }}
                                             onChange={(e) => {
                                                 setValueSearch(e.target.value);
                                             }}
-                                            defaultValue={searchquery}
                                         />
                                     </Box>
                                     <Box
@@ -224,10 +168,21 @@ export const Navbar = ({
                                                     color: "gray",
                                                 }}
                                                 onClick={() => {
-                                                    navigate(
-                                                        `/product?search_query=${valuesearch}`
-                                                    );
-                                                    handleSearch();
+                                                    if (!valuesearch) {
+                                                        toast({
+                                                            title: "Search Warning",
+                                                            description:
+                                                                "Please enter a search term.",
+                                                            status: "warning",
+                                                            position: "top",
+                                                            duration: 2000,
+                                                            isClosable: true,
+                                                        });
+                                                    } else {
+                                                        navigate(
+                                                            `/product-results/${valuesearch}`
+                                                        );
+                                                    }
                                                 }}
                                                 disabled={
                                                     valuesearch ? false : true
