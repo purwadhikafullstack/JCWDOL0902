@@ -4,6 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { Box, Heading, useMediaQuery } from "@chakra-ui/react";
 import { ProductPage } from "../components/Products/ProductLists";
 import { CategoryList } from "../components/Products/CategoryLists";
+import { Banner } from "../components/Banner";
 
 export const HomePage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
@@ -26,7 +27,8 @@ export const HomePage = () => {
                             size="lg"
                             color="black"
                             fontWeight="bold"
-                        >
+                            >
+                                <Banner/>
                             Categories
                         </Heading>
                         <CategoryList />
