@@ -22,11 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     }
     warehouse_mutation.init(
         {
-            request: DataTypes.STRING,
-            approve_by: DataTypes.STRING,
-            approved: DataTypes.BOOLEAN,
+            approved: DataTypes.STRING,
             qty: DataTypes.INTEGER,
             remarks: DataTypes.STRING,
+            mutation_date: DataTypes.DATE,
         },
         {
             sequelize,

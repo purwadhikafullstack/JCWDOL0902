@@ -126,7 +126,7 @@ module.exports = {
         try {
             const { search, sort, order, page } = req.query;
 
-            const raw = await product.findAll();
+            await product.findAll();
 
             const { count, rows } = await product.findAndCountAll({
                 where: {
@@ -143,7 +143,6 @@ module.exports = {
                 order: [[sort ? sort : "id", order ? order : "ASC"]],
                 limit: 10,
                 offset: page ? +page * 10 : 0,
-                subQuery: false,
             });
 
             res.status(200).send({
