@@ -62,7 +62,7 @@ export const ProductListBySearch = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [page, sort]);
+    }, [page, sort, querry]);
 
     const handleCardClick = (productName) => {
         navigate(`/product/${productName}`);
