@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import icon from "../assets/hobbyzone_logo.png";
 import iconSimple from "../assets/hobbyzone_logo_simple.png";
