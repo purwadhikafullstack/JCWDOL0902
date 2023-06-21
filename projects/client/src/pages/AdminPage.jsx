@@ -1,6 +1,8 @@
 import { useState } from "react";
 import decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 import {
     Avatar,
@@ -41,7 +43,7 @@ export const AdminPage = () => {
 
     const token = localStorage.getItem("token");
     const decodedToken = decode(token);
-
+    const dispatch = useDispatch();
     const TabContent = () => {
         const items =
             decodedToken.role === 3
@@ -150,7 +152,9 @@ export const AdminPage = () => {
 
     const Navbar = () => {
         const onLogout = async () => {
+            dispatch(logout());
             localStorage.removeItem("token");
+            navigate("/");
         };
         const navigate = useNavigate();
 

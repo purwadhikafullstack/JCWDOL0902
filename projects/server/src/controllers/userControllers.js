@@ -282,7 +282,6 @@ module.exports = {
                 where: {
                     id: userData.id,
                 },
-                raw: true,
             });
 
             res.status(200).send(isUserExist);

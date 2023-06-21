@@ -23,6 +23,8 @@ import { LoginForm } from "./Authentications/LoginForm";
 
 import userLogin from "../assets/default_avatar.jpg";
 import loginMenu from "../assets/login_menu.webp";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
 
@@ -38,8 +40,9 @@ export const UserMenu = () => {
         decodedToken = null;
     }
     // console.log(decodedToken);
-
+    const dispatch = useDispatch();
     const onLogout = async () => {
+        dispatch(logout());
         localStorage.removeItem("token");
         navigate("/");
     };
