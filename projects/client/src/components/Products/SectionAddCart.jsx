@@ -136,7 +136,7 @@ export const SectionAddCart = ({
                         </NumberInput>
                     </Box>
                     <Text>
-                        Stock:{" "}
+                        Available Stock:{" "}
                         <Text as={"span"} fontWeight="bold" color={"#385898"}>
                             {totalStock}
                         </Text>
