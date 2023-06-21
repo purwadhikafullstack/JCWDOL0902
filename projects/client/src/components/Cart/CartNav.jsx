@@ -69,7 +69,7 @@ export const CartNav = () => {
     );
 
     return (
-        <Popover>
+        <Popover zIndex="20">
             <PopoverTrigger>
                 <Avatar>
                     <Button

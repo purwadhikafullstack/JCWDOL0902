@@ -1,8 +1,7 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import decode from "jwt-decode";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cartUser } from "../../redux/cartSlice";
 
 import {
@@ -32,10 +31,10 @@ export const SectionAddCart = ({
     const [limit, setLimit] = useState(1);
     const addedQty = useRef(``);
     const dispatch = useDispatch();
+    const { id } = useSelector((state) => state.userSlice.value);
     const AddCart = async (product) => {
         try {
             const token = localStorage.getItem("token");
-            const decodedToken = decode(token);
 
             const data = {
                 product_id: product.id,
@@ -44,7 +43,7 @@ export const SectionAddCart = ({
             const url = process.env.REACT_APP_API_BASE_URL + "/users";
             const fetchCartURL = url + `/fetch-cart`;
             const addCartURL = url + `/add-to-cart`;
-            await axios.patch(`${addCartURL}/${decodedToken.id}`, data, {
+            await axios.patch(`${addCartURL}/${id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -62,7 +61,6 @@ export const SectionAddCart = ({
                 title: "Success",
                 text: `Product Added to Cart Successfully!`,
             });
-
         } catch (err) {
             if (!err.response) {
                 Swal.fire({

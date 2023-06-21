@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import axios from "axios";
-import decode from "jwt-decode";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cartUser } from "../../../redux/cartSlice";
 
 import {
@@ -27,10 +26,10 @@ const serverApi = process.env.REACT_APP_SERVER;
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 const token = localStorage.getItem("token");
-const decodedToken = decode(token);
 
 export const CartItem = (props) => {
     const { product, qty } = props;
+    const {id}=useSelector((state)=>state.userSlice.value) 
 
     const updatedQty = useRef();
     const dispatch = useDispatch();
@@ -43,7 +42,7 @@ export const CartItem = (props) => {
             const fetchCartURL = url + `/fetch-cart`;
             const editCartURL = url + `/edit-cart-qty`;
 
-            await axios.patch(`${editCartURL}/${decodedToken.id}`, data, {
+            await axios.patch(`${editCartURL}/${id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -77,7 +76,7 @@ export const CartItem = (props) => {
                 product_id: product.id,
             };
             await axios.delete(
-                url + `/remove-product-cart/${decodedToken.id}`,
+                url + `/remove-product-cart/${id}`,
                 {
                     headers: {
                         authorization: `Bearer ${token}`,
