@@ -35,7 +35,6 @@ export const CartItem = (props) => {
     const dispatch = useDispatch();
     const editCartQty = async (updatedQty) => {
         try {
-            console.log(id)
             const data = {
                 product_id: product.id,
                 newQty: parseInt(updatedQty),
