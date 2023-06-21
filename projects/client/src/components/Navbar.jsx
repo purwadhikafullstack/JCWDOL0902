@@ -26,6 +26,7 @@ import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 import { HamburgerMenu } from "./HamburgerMenu";
 import { UserMenu } from "./UserMenu";
+import { CartNav } from "./Cart/CartNav";
 
 export const Navbar = ({
     setPage,
@@ -251,7 +252,16 @@ export const Navbar = ({
                             >
                                 <Center>
                                     {token || mobileView ? (
-                                        <UserMenu />
+                                        <Flex
+                                            gap={4}
+                                            display={{
+                                                base: "none",
+                                                lg: "inline-flex",
+                                            }}
+                                        >
+                                            <CartNav />
+                                            <UserMenu />
+                                        </Flex>
                                     ) : (
                                         <Flex
                                             gap={4}

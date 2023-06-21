@@ -6,6 +6,7 @@ import { AdminPage } from "./pages/AdminPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { DetailProductPage } from "./pages/ProductDetailPage";
 import { ProfilePage } from "./pages/UserProfilePage";
+import { CartPage } from "./pages/CartPage";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
     {
         path: "profile/settings",
         element: <ProfilePage />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "cart",
+        element: <CartPage />,
         errorElement: <ErrorPage />,
     },
 ]);

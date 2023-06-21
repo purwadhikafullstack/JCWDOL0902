@@ -11,6 +11,8 @@ import {
     Image,
 } from "@chakra-ui/react";
 
+import { SectionAddCart } from "./SectionAddCart";
+
 const baseApi = process.env.REACT_APP_API_BASE_URL;
 const serverApi = process.env.REACT_APP_SERVER;
 
@@ -108,7 +110,16 @@ export const ProductDetail = () => {
                     </Box>
                 </Box>
                 <Box px={"6"} pt={4} mb={{ base: "14", md: "" }}>
-                    {/* cart section */}
+                    <SectionAddCart
+                        quantity={quantity}
+                        setQuantity={setQuantity}
+                        subtotal={subtotal}
+                        totalStock={product.stock}
+                        product={product}
+                        baseApi={baseApi}
+                        baseServer={serverApi}
+                        // imageProduct={imageProduct}
+                    />
                 </Box>
             </Box>
         </Container>
