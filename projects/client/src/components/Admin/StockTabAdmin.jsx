@@ -266,15 +266,17 @@ export const ProductStockList = () => {
                                     </Th>
                                 );
                             })}
-                            <Th
-                                bg={"#3182CE"}
-                                textAlign={"center"}
-                                color={"white"}
-                                w={"200px"}
-                                borderY={"none"}
-                            >
-                                Action
-                            </Th>
+                            {decodedToken.role === 3 ? (
+                                <Th
+                                    bg={"#3182CE"}
+                                    textAlign={"center"}
+                                    color={"white"}
+                                    w={"200px"}
+                                    borderY={"none"}
+                                >
+                                    Action
+                                </Th>
+                            ) : null}
                         </Tr>
                     </Thead>
                     {productStock ? (
@@ -310,30 +312,36 @@ export const ProductStockList = () => {
                                             }
                                         </Td>
                                         <Td textAlign={"center"}>{item.qty}</Td>
-                                        <Td>
-                                            <Flex
-                                                gap={"20px"}
-                                                justifyContent={"center"}
-                                                alignItems={"center"}
-                                            >
-                                                <UpdateStock
-                                                    product={
-                                                        productStock[index]
-                                                    }
-                                                    getProductStock={
-                                                        getProductStock
-                                                    }
-                                                />
-                                                <IconButton
-                                                    onClick={() => {
-                                                        deleteWarning(item.id);
-                                                    }}
-                                                    bg={"none"}
-                                                    color={"#ff4d4d"}
-                                                    icon={<BsFillTrashFill />}
-                                                />
-                                            </Flex>
-                                        </Td>
+                                        {decodedToken.role === 3 ? (
+                                            <Td>
+                                                <Flex
+                                                    gap={"20px"}
+                                                    justifyContent={"center"}
+                                                    alignItems={"center"}
+                                                >
+                                                    <UpdateStock
+                                                        product={
+                                                            productStock[index]
+                                                        }
+                                                        getProductStock={
+                                                            getProductStock
+                                                        }
+                                                    />
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            deleteWarning(
+                                                                item.id
+                                                            );
+                                                        }}
+                                                        bg={"none"}
+                                                        color={"#ff4d4d"}
+                                                        icon={
+                                                            <BsFillTrashFill />
+                                                        }
+                                                    />
+                                                </Flex>
+                                            </Td>
+                                        ) : null}
                                     </Tr>
                                 </Tbody>
                             );

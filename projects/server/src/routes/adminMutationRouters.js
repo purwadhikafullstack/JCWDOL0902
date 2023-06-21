@@ -21,6 +21,17 @@ router.get(
     warehouseAdminLogin,
     adminMutationControllers.fetchOwnMutation
 );
+router.get(
+    "/fetch-mutation-requests",
+    login,
+    warehouseAdminLogin,
+    adminMutationControllers.fetchOwnRequests
+);
+router.get(
+    "/fetch-available-stock/:id",
+    warehouseAdminLogin,
+    adminMutationControllers.fetchAvailableStock
+);
 router.post(
     "/req-mutation",
     login,
