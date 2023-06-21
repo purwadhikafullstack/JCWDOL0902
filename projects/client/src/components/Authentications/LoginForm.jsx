@@ -56,7 +56,7 @@ export const LoginForm = () => {
                   photo_profile: result.data.photo_profile,
                 })
               );
-            console.log(result.data.data.token);
+            // console.log(result.data.data.token);
 
             localStorage.setItem("token", result.data.data.token);
             const decodedToken = decode(result.data.data.token);

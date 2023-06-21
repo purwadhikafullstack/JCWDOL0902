@@ -64,7 +64,7 @@ function App() {
                 })
             );
 
-            console.log(result)
+            // console.log(result);
 
             const cart = await (await Axios.get(`${url}/fetch-cart`)).data;
             dispatch(cartUser(cart.result));
