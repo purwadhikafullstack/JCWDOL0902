@@ -5,6 +5,7 @@ const router = express.Router();
 const { userControllers } = require("../controllers");
 
 //paths
+router.get("/keeplogin", userControllers.keeplogin);
 router.post("/register", userControllers.register);
 router.patch("/activation/:id", userControllers.activation);
 router.post("/login", userControllers.login);
