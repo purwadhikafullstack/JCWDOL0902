@@ -20,4 +20,6 @@ module.exports = {
     productRouters,
     adminStockRouters,
     userProfileRouters,
+    adminMutationRouters,
+    userOrderRouters,
 };

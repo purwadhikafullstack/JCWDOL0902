@@ -25,6 +25,14 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
         errorElement: <ErrorPage />,
     },
+    {
+        path: "/cart",
+        element: <CartPage />,
+        errorElement: <ErrorPage />,
+    },
+    ,
+    { path: "/productlist/:category", element: <ProductFilteredPage /> },
+    { path: "/product-results/:querry", element: <ProductBySearchPage /> },
 ]);
 
 function App() {

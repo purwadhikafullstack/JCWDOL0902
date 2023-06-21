@@ -20,4 +20,6 @@ module.exports = {
     productControllers,
     adminStockControllers,
     userProfileControllers,
+    adminMutationControllers,
+    userOrderControllers,
 };
