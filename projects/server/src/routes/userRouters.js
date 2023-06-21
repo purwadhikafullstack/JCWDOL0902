@@ -3,9 +3,10 @@ const router = express.Router();
 
 //import controllers and middlewares
 const { userControllers } = require("../controllers");
+const { login } = require("../middleware/authorize");
 
 //paths
-router.get("/keeplogin", userControllers.keeplogin);
+router.get("/keeplogin", login, userControllers.keeplogin);
 router.post("/register", userControllers.register);
 router.patch("/activation/:id", userControllers.activation);
 router.post("/login", userControllers.login);
