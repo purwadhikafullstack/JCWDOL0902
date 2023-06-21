@@ -11,7 +11,7 @@ import { ProductBySearchPage } from "./pages/ProductBySearchPage";
 import { CartPage } from "./pages/CartPage";
 
 import { useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { login } from "./redux/userSlice";
 import { cartUser } from "./redux/cartSlice";
 import Axios from "axios";
@@ -45,6 +45,7 @@ function App() {
     const url = process.env.REACT_APP_API_BASE_URL;
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
+    const { id, role } = useSelector((state) => state.userSlice.value);
 
     const keepLogin = useCallback(async () => {
         try {
@@ -69,7 +70,7 @@ function App() {
             const cart = await (await Axios.get(`${url}/fetch-cart`)).data;
             dispatch(cartUser(cart.result));
         } catch (error) {}
-    }, [dispatch, token]);
+    }, [dispatch, id, token]);
 
     useEffect(() => {
         keepLogin();
