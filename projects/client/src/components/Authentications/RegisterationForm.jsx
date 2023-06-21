@@ -150,10 +150,14 @@ export const RegisterationForm = () => {
                                                 isLoading={isLoading}
                                                 loadingText="Sending"
                                                 mr={5}
+                                                colorScheme="teal"
                                             >
                                                 Send
                                             </Button>
-                                            <Button onClick={onClose}>
+                                            <Button
+                                                onClick={onClose}
+                                                colorScheme="blue"
+                                            >
                                                 Cancel
                                             </Button>
                                         </ModalFooter>

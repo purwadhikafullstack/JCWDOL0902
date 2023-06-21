@@ -1,12 +1,10 @@
 import Axios from "axios";
 import { useState } from "react";
-
-import { Formik, ErrorMessage, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import {
     Box,
-    Button,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -16,33 +14,39 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Center,
     IconButton,
+    Center,
 } from "@chakra-ui/react";
 
+// swal
 import Swal from "sweetalert2";
 
-import { CgMathPlus } from "react-icons/cg";
+import { AiOutlineFileImage } from "react-icons/ai";
 import { RxCheck, RxCross1 } from "react-icons/rx";
+import React from "react";
 
-export const AddCategory = ({ getCategory }) => {
+export const EditCategoryImage = ({ getCategory, item }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <Box>
-            <Button
+            <IconButton
+                icon={<AiOutlineFileImage />}
+                bg={"none"}
                 onClick={onOpen}
-                leftIcon={<CgMathPlus />}
-                colorScheme="teal"
-            >
-                New Category
-            </Button>
+            />
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader textAlign={"center"}>Add Category</ModalHeader>
+                    <ModalHeader textAlign={"center"}>
+                        Edit Category Image
+                    </ModalHeader>
                     <ModalBody>
-                        <AddForm close={onClose} getCategory={getCategory} />
+                        <EditForm
+                            close={onClose}
+                            getCategory={getCategory}
+                            item={item}
+                        />
                     </ModalBody>
                 </ModalContent>
             </Modal>
@@ -50,35 +54,33 @@ export const AddCategory = ({ getCategory }) => {
     );
 };
 
-const AddForm = ({ close, getCategory }) => {
+const EditForm = ({ close, getCategory, item }) => {
     const [previewImage, setPreviewImage] = useState(null);
-    const url = process.env.REACT_APP_API_BASE_URL + "/admin/add-category";
+    const url = process.env.REACT_APP_API_BASE_URL + `/admin`;
     const token = localStorage.getItem("token");
 
     const validation = Yup.object().shape({
-        name: Yup.string().required("Cannot Be Empty"),
         images: Yup.mixed().required("Image is required"),
     });
 
-    const addCategory = async (value) => {
+    const editCategory = async (value) => {
         try {
             const data = new FormData();
-            data.append("name", value.name);
             data.append("images", value.images);
 
-            await Axios.post(url, data, {
+            await Axios.patch(url + `/edit-category-image/${item.id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            getCategory();
 
             Swal.fire({
                 icon: "success",
                 title: "Success",
-                text: `Category Added`,
+                text: `Category Image Edited`,
             });
 
+            getCategory();
             close();
         } catch (err) {
             Swal.fire({
@@ -93,26 +95,18 @@ const AddForm = ({ close, getCategory }) => {
         <Box>
             <Formik
                 initialValues={{
-                    name: "",
-                    images: null,
+                    images: item.images,
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
-                    addCategory(value);
+                    editCategory(value);
                 }}
             >
                 {(props) => {
                     return (
                         <Form>
-                            <FormControl isRequired>
-                                <FormLabel>Category Name</FormLabel>
-                                <Input as={Field} name={"name"} />
-                                <ErrorMessage
-                                    style={{ color: "red" }}
-                                    component="div"
-                                    name="name"
-                                />
-                                <FormLabel>Category Image</FormLabel>
+                            <FormControl>
+                                <FormLabel>Please Upload an Image</FormLabel>
                                 <Input
                                     type="file"
                                     name="images"

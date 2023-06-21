@@ -19,7 +19,8 @@ import Axios from "axios";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { Field, ErrorMessage, Formik, Form } from "formik";
-import verification_pict from "../assets/verification_pict.jpg";
+import verification_pict from "../assets/verification.png";
+import { FooterComponent } from "../components/Footer";
 
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
@@ -85,12 +86,13 @@ export const VerificationPage = () => {
     };
 
     return (
-        <Stack
-            minH={"100vh"}
-            direction={{ base: "column", md: "row" }}
-            color="black"
-        >
-            <Flex p={8} flex={1} align={"center"} justify={"center"}>
+        <Stack minH={"100vh"} color="black">
+            <Flex
+                align={"center"}
+                flex={1}
+                justify={"center"}
+                direction={{ base: "column", md: "row" }}
+            >
                 <Formik
                     initialValues={{
                         password: "",
@@ -110,6 +112,7 @@ export const VerificationPage = () => {
                                         pb={5}
                                         fontFamily={"Gantari"}
                                         fontWeight={"500"}
+                                        mt={"5"}
                                     >
                                         Verify and Change Your Password
                                     </Heading>
@@ -210,15 +213,16 @@ export const VerificationPage = () => {
                         );
                     }}
                 </Formik>
-            </Flex>
-            <Flex flex={2}>
                 <Image
-                    alt={"Verification Image"}
-                    bgSize="cover"
-                    objectFit={"cover"}
                     src={verification_pict}
+                    alt="Verification Image"
+                    maxW={{ base: "xs", md: "sm" }}
+                    w="100%"
+                    objectFit="cover"
+                    mr={8}
                 />
             </Flex>
+            <FooterComponent />
         </Stack>
     );
 };

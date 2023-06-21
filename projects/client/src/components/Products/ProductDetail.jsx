@@ -96,7 +96,7 @@ export const ProductDetail = () => {
                             Category:{" "}
                             <Text
                                 as={Link}
-                                to={`/product?search_query=${category}`}
+                                to={`/productlist/${category}`}
                                 color={"#343A40"}
                                 textTransform={"capitalize"}
                                 fontWeight={"semibold"}

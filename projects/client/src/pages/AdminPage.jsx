@@ -51,8 +51,15 @@ export const AdminPage = () => {
                       "Categories",
                       "Products",
                       "Stock Management",
+                      "Stock Mutations",
                   ]
-                : ["Categories", "Products", "My Warehouse Stocks"];
+                : [
+                      "Categories",
+                      "Products",
+                      "My Warehouse Stock",
+                      "Request a Stock Mutation",
+                      "Approve Stock Mutation Requests",
+                  ];
 
         return (
             <Box>
