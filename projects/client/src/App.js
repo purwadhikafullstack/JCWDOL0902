@@ -8,6 +8,7 @@ import { DetailProductPage } from "./pages/ProductDetailPage";
 import { ProfilePage } from "./pages/UserProfilePage";
 import { ProductFilteredPage } from "./pages/ProductFiltered";
 import { ProductBySearchPage } from "./pages/ProductBySearchPage";
+import { CartPage } from "./pages/CartPage";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,12 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
         errorElement: <ErrorPage />,
     },
+    {
+        path: "/cart",
+        element: <CartPage />,
+        errorElement: <ErrorPage />,
+    },
+    ,
     { path: "/productlist/:category", element: <ProductFilteredPage /> },
     { path: "/product-results/:querry", element: <ProductBySearchPage /> },
 ]);
