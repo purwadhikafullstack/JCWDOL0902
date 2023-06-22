@@ -4,7 +4,8 @@ const { Op } = require("sequelize");
 const db = require("../models");
 const product = db.product;
 const category = db.category;
-const warehouse = db.warehouse_location;
+const product_location = db.product_location;
+const warehouse_location = db.warehouse_location;
 
 //import delete files untuk multer
 const deleteFiles = require("../helpers/deleteFiles");
@@ -130,7 +131,8 @@ module.exports = {
             const allProduct = await product.findAll({
                 include: [
                     {
-                        model: warehouse,
+                        model: product_location,
+                        include: [{ model: warehouse_location }],
                     },
                 ],
             });
