@@ -130,20 +130,18 @@ export const CartItem = (props) => {
             align="center"
             justifyItems={"center"}
         >
-            <Stack direction="row" spacing="2" width="full" align="flex-end">
+            <Stack direction="row" spacing="2" width="full" align="center">
                 <Image
                     rounded="lg"
-                    width="75px"
-                    height="75px"
+                    width="100px"
+                    height="100px"
                     fit="cover"
                     src={`${serverApi}${product.product_image}`}
                     draggable="false"
                     loading="lazy"
                 />
                 <Box pt="4">
-                    <Stack spacing="0.5">
-                        <Text fontWeight="medium">{product.name}</Text>
-                    </Stack>
+                    <Text fontWeight="medium">{product.name}</Text>
                 </Box>
             </Stack>
 
