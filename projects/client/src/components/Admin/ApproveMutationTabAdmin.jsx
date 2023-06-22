@@ -21,6 +21,8 @@ import {
 import { BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
+import {ApproveMutation} from "./AdminProperties/ApproveMutation"
+
 export const WarehouseMutationApproveList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
@@ -64,6 +66,7 @@ export const WarehouseMutationApproveList = () => {
         { name: "Product", origin: "product_id", width: "300px" },
         { name: "Quantity", origin: "qty", width: "200px" },
         { name: "Remarks", origin: "remarks", width: "250px" },
+        { name: "Confirmation", origin: "approved", width: "250px" },
     ];
 
     return (
@@ -146,6 +149,40 @@ export const WarehouseMutationApproveList = () => {
                                         <Td textAlign={"center"}>
                                             {item.remarks}
                                         </Td>
+                                        <Td>
+                                                <Flex
+                                                    gap={"20px"}
+                                                    justifyContent={"center"}
+                                                    alignItems={"center"}
+                                                >
+                                                    <ApproveMutation
+                                                        mutation={
+                                                            mutation[index]
+                                                        }
+                                                        getMutation={
+                                                            getMutation
+                                                        }
+                                                    />
+                                                    <ApproveMutation
+                                                        item={item}
+                                                        getMutation={
+                                                            getMutation
+                                                        }
+                                                    />
+                                                    {/* <IconButton
+                                                        onClick={() => {
+                                                            deleteWarning(
+                                                                item.id
+                                                            );
+                                                        }}
+                                                        bg={"none"}
+                                                        color={"#ff4d4d"}
+                                                        icon={
+                                                            <BsFillTrashFill />
+                                                        }
+                                                    /> */}
+                                                </Flex>
+                                            </Td>
                                     </Tr>
                                 </Tbody>
                             );

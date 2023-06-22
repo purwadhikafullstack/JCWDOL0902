@@ -21,6 +21,8 @@ import {
 import { BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
+import {CreateRequestMutation} from "./AdminProperties/CreateRequestMutation"
+
 export const WarehouseMutationRequestList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
@@ -85,6 +87,10 @@ export const WarehouseMutationRequestList = () => {
             <Center paddingBottom={"12px"}>
                 <Stack>
                     <Center>
+                        <CreateRequestMutation
+                                getMutation={getMutation}
+                                
+                            />
                         {/* <AddProduct
                                 getProducts={getProducts}
                                 category={category}
