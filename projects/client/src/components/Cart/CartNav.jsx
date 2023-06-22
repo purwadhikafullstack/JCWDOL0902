@@ -86,7 +86,7 @@ export const CartNav = () => {
                         fontSize={15}
                         borderColor="#E9ECEF"
                     >
-                        {cartQty}
+                        {new Set(cart).size}
                     </AvatarBadge>
                 </Avatar>
             </PopoverTrigger>

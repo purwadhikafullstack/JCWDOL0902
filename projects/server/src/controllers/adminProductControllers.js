@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const db = require("../models");
 const product = db.product;
 const category = db.category;
+const warehouse = db.warehouse_location;
 
 //import delete files untuk multer
 const deleteFiles = require("../helpers/deleteFiles");
@@ -126,7 +127,13 @@ module.exports = {
         try {
             const { search, sort, order, page } = req.query;
 
-            await product.findAll();
+            const allProduct = await product.findAll({
+                include: [
+                    {
+                        model: warehouse,
+                    },
+                ],
+            });
 
             const { count, rows } = await product.findAndCountAll({
                 where: {
@@ -148,6 +155,7 @@ module.exports = {
             res.status(200).send({
                 pages: Math.ceil(count / 10),
                 result: rows,
+                allProduct,
             });
         } catch (error) {
             console.log(error);

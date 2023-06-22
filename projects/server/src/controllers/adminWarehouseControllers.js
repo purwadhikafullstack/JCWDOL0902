@@ -90,12 +90,13 @@ module.exports = {
                 offset: page ? +page * 10 : 0,
                 raw: true,
             });
-
+            const allWarehouse = await warehouse.findAll();
             res.status(200).send({
                 status: true,
                 message: "Successfuly fetching All Warehouses",
                 pages: Math.ceil(count / 10),
                 result: rows,
+                allWarehouse,
             });
         } catch (error) {
             res.status(400).send({
