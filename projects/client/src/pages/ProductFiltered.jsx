@@ -32,7 +32,7 @@ export const ProductFilteredPage = () => {
             <Navbar />
             <Box flex="1">
                 <Box mt={isSmallScreen ? "50px" : "50px"} color="black" pb="6">
-                    <Box maxW="85%" m="auto">
+                    <Box maxW="1200px" m="auto">
                         <div
                             style={{
                                 backgroundImage: `url(${divider_2})`,

@@ -97,7 +97,7 @@ export const ProductDetail = () => {
                             <Text
                                 as={Link}
                                 to={`/productlist/${category}`}
-                                color={"#343A40"}
+                                color={"#385898"}
                                 textTransform={"capitalize"}
                                 fontWeight={"semibold"}
                             >

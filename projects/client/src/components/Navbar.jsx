@@ -202,17 +202,19 @@ export const Navbar = () => {
                                 w={{ base: "50px", lg: "200px" }}
                             >
                                 <Center>
-                                    {token || mobileView ? (
+                                    {token && !mobileView ? (
                                         <Flex
-                                            gap={4}
+                                            mr={"5"}
                                             display={{
                                                 base: "none",
                                                 lg: "inline-flex",
                                             }}
                                         >
                                             <CartNav />
-                                            <UserMenu />
                                         </Flex>
+                                    ) : null}
+                                    {token || mobileView ? (
+                                        <UserMenu />
                                     ) : (
                                         <Flex
                                             gap={4}
