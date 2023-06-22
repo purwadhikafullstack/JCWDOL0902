@@ -52,6 +52,7 @@ export const ProductStockList = () => {
     const [page, setPage] = useState(0);
     const [pages, setPages] = useState();
     const [search, setSearch] = useState(``);
+    const [allProduct, setAllProduct] = useState();
 
     const searchValue = useRef(``);
 
@@ -88,7 +89,8 @@ export const ProductStockList = () => {
             setProductStock(resultProductStockList.data.result);
             setPages(resultProductStockList.data.pages);
             setProduct(resultProducts.data.result);
-            setAllWarehouse(resultWarehouse.data.result);
+            setAllWarehouse(resultWarehouse.data.allWarehouse);
+            setAllProduct(resultProducts.data.allProduct);
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -209,7 +211,7 @@ export const ProductStockList = () => {
                         <Center>
                             <AddProductStock
                                 getProductStock={getProductStock}
-                                productStock={product}
+                                allProduct={allProduct}
                                 allWarehouse={allWarehouse}
                             />
                         </Center>

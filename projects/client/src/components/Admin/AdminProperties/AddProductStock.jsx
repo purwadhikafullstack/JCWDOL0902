@@ -34,7 +34,7 @@ import { RxCheck, RxCross1 } from "react-icons/rx";
 
 export const AddProductStock = ({
     getProductStock,
-    productStock,
+    allProduct,
     allWarehouse,
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,7 +57,7 @@ export const AddProductStock = ({
                     <ModalBody>
                         <AddForm
                             close={onClose}
-                            product_name={productStock}
+                            product_name={allProduct}
                             warehouse_name={allWarehouse}
                             getProductStock={getProductStock}
                         />
