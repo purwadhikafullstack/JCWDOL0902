@@ -47,11 +47,13 @@ const {
     adminStockRouters,
     userOrderRouters,
     adminMutationRouters,
+    userAddressRouters,
 } = require("./routes/index");
 
 //users
 app.use("/api/users", userRouters);
 app.use("/api/users", userProfileRouters);
+app.use("/api/users", userAddressRouters);
 app.use("/api/users", userOrderRouters);
 
 //admin

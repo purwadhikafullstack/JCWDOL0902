@@ -55,21 +55,6 @@ module.exports = {
     },
     uploadPicture: async (req, res) => {
         try {
-            // const userRecord = await user.findOne({
-            //     where: {
-            //         id: req.params.id,
-            //     },
-            // });
-
-            // if (userRecord.photo_profile) {
-            //     const oldPhotoPath = userRecord.photo_profile;
-            //     fs.unlink(oldPhotoPath, (error) => {
-            //         if (error) {
-            //             console.error("Error deleting old photo:", error);
-            //         }
-            //     });
-            // }
-
             await user.update(
                 {
                     photo_profile: `Public/images/${req.files.images[0].filename}`,
