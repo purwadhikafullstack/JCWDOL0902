@@ -4,7 +4,8 @@ import decode from "jwt-decode";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/userSlice";
 import {
     Button,
     useDisclosure,
@@ -34,6 +35,7 @@ export const LoginForm = () => {
 
     const inputEmail = useRef("");
     const inputPass = useRef("");
+    const dispatch = useDispatch();
 
     const onLogin = async (e) => {
         e.preventDefault();
@@ -44,7 +46,17 @@ export const LoginForm = () => {
             };
 
             const result = await Axios.post(`${url}/login`, user);
-            console.log(result.data.data.token);
+            dispatch(
+                login({
+                  id: result.data.id,
+                  email: result.data.email,
+                  name: result.data.name,
+                  is_verified: result.data.is_verified,
+                  role: result.data.role,
+                  photo_profile: result.data.photo_profile,
+                })
+              );
+            // console.log(result.data.data.token);
 
             localStorage.setItem("token", result.data.data.token);
             const decodedToken = decode(result.data.data.token);

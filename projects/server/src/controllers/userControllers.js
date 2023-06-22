@@ -275,4 +275,21 @@ module.exports = {
             });
         }
     },
+    keeplogin: async (req, res) => {
+        try {
+            const userData = dataToken;
+            const isUserExist = await user.findOne({
+                where: {
+                    id: userData.id,
+                },
+            });
+
+            res.status(200).send(isUserExist);
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
 };

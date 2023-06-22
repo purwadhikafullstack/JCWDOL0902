@@ -21,42 +21,26 @@ import {
 import { BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
-import {CreateRequestMutation} from "./AdminProperties/CreateRequestMutation"
-
-export const WarehouseMutationRequestList = () => {
+export const MutationList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
     const [mutation, setMutation] = useState();
-    const [warehouse, setWarehouse] = useState();
     const [sort, setSort] = useState("id");
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState("ASC");
     const [pages, setPages] = useState();
-    const [search, setSearch] = useState(``);
 
     const getMutation = useCallback(async () => {
         try {
             const mutationURL =
                 url +
-                `/fetch-mutation-requests?&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-all-mutations?&sort=${sort}&order=${order}&page=${page}`;
             const resultMutation = await Axios.get(mutationURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-
-            const resultWarehouse = await Axios.get(
-                url +
-                    `/fetch-warehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            setWarehouse(resultWarehouse.data.result);
             setMutation(resultMutation.data.result);
             setPages(resultMutation.data.pages);
             document.documentElement.scrollTop = 0;
@@ -73,8 +57,13 @@ export const WarehouseMutationRequestList = () => {
         { name: "Mutation Date", origin: "mutation_date", width: "250px" },
         { name: "Approval Status", origin: "approved", width: "250px" },
         {
-            name: "Request To",
-            origin: "warehouse_approve_id",
+            name: "Warehouse Request",
+            origin: "requested_by",
+            width: "300px",
+        },
+        {
+            name: "Warehouse Approval",
+            origin: "warehouse_approval_id",
             width: "300px",
         },
         { name: "Product", origin: "product_id", width: "300px" },
@@ -84,20 +73,6 @@ export const WarehouseMutationRequestList = () => {
 
     return (
         <Box padding={{ base: "10px", lg: "0" }} mt={"10"}>
-            <Center paddingBottom={"12px"}>
-                <Stack>
-                    <Center>
-                        <CreateRequestMutation
-                                getMutation={getMutation}
-                                
-                            />
-                        {/* <AddProduct
-                                getProducts={getProducts}
-                                category={category}
-                            /> */}
-                    </Center>
-                </Stack>
-            </Center>
             <TableContainer borderRadius={"10px"}>
                 <Table>
                     <Thead>
@@ -165,6 +140,9 @@ export const WarehouseMutationRequestList = () => {
                                         </Td>
                                         <Td textAlign={"center"}>
                                             {item.approved}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.requested_by}
                                         </Td>
                                         <Td textAlign={"center"}>
                                             {

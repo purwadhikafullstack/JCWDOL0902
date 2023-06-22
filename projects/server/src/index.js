@@ -45,12 +45,14 @@ const {
     productRouters,
     userProfileRouters,
     adminStockRouters,
+    userOrderRouters,
     adminMutationRouters,
 } = require("./routes/index");
 
 //users
 app.use("/api/users", userRouters);
 app.use("/api/users", userProfileRouters);
+app.use("/api/users", userOrderRouters);
 
 //admin
 app.use("/api/admin", adminUserRouters);

@@ -78,6 +78,64 @@ module.exports = {
             res.status(400).send(error);
         }
     },
+    fetchOwnRequests: async (req, res) => {
+        try {
+            const admin = dataToken;
+
+            const warehouseExist = await warehouse.findOne({
+                where: {
+                    user_id: admin.id,
+                },
+            });
+
+            const { sort, order, page } = req.query;
+
+            await mutation.findAll();
+
+            const { count, rows } = await mutation.findAndCountAll({
+                where: {
+                    warehouse_req_id: warehouseExist.id,
+                },
+                include: [
+                    {
+                        model: warehouse,
+                    },
+                    {
+                        model: product,
+                    },
+                ],
+                order: [[sort ? sort : "id", order ? order : "ASC"]],
+                limit: 10,
+                offset: page ? +page * 10 : 0,
+            });
+            res.status(200).send({
+                pages: Math.ceil(count / 10),
+                result: rows,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    },
+    fetchAvailableStock: async (req, res) => {
+        try {
+            const result = await productLocation.findAll({
+                where: {
+                    warehouse_location_id: req.params.id,
+                },
+                include: [
+                    {
+                        model: product,
+                    },
+                ],
+            });
+
+            res.status(200).send({ result });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    },
     requestMutation: async (req, res) => {
         try {
             const admin = dataToken;
@@ -109,7 +167,7 @@ module.exports = {
                 qty,
                 remarks,
                 approved: "none",
-                mutation_date: new Date(),
+                requested_by: warehouseExist.warehouse_name,
             });
 
             res.status(200).send({

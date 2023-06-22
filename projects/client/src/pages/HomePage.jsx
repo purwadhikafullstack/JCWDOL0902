@@ -22,7 +22,7 @@ export const HomePage = () => {
             <Box flex="1">
                 <HomeCarousel />
                 <Box mt={isSmallScreen ? "50px" : "130px"} color="black" pb="6">
-                    <Box maxW="85%" m="auto">
+                    <Box maxW="1200px" m="auto">
                         <div
                             style={{
                                 backgroundImage: `url(${divider})`,
@@ -46,7 +46,7 @@ export const HomePage = () => {
                         </div>
                         <CategoryList />
                     </Box>
-                    <Box maxW="85%" m="auto" mt="2">
+                    <Box maxW="1200px" m="auto" mt="2">
                         <div
                             style={{
                                 backgroundImage: `url(${divider_2})`,

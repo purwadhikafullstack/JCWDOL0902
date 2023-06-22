@@ -25,6 +25,7 @@ import { BiSearch } from "react-icons/bi";
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 import { UserMenu } from "./UserMenu";
+import { CartNav } from "./Cart/CartNav";
 
 export const Navbar = () => {
     const [mobileView] = useMediaQuery("(max-width: 1007px)");
@@ -43,7 +44,7 @@ export const Navbar = () => {
                 boxShadow="md"
                 position="sticky"
                 top="0"
-                zIndex="999"
+                zIndex="10"
             >
                 <Container>
                     <Center>
@@ -201,6 +202,17 @@ export const Navbar = () => {
                                 w={{ base: "50px", lg: "200px" }}
                             >
                                 <Center>
+                                    {token && !mobileView ? (
+                                        <Flex
+                                            mr={"5"}
+                                            display={{
+                                                base: "none",
+                                                lg: "inline-flex",
+                                            }}
+                                        >
+                                            <CartNav />
+                                        </Flex>
+                                    ) : null}
                                     {token || mobileView ? (
                                         <UserMenu />
                                     ) : (

@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 * {
-    font-family: "Gantari", sans-serif;
+    font-family: "Gantari", sans-serif !important;
 }
