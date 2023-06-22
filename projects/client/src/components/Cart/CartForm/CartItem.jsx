@@ -29,7 +29,7 @@ const token = localStorage.getItem("token");
 
 export const CartItem = (props) => {
     const { product, qty } = props;
-    const {id}=useSelector((state)=>state.userSlice.value) 
+    const { id } = useSelector((state) => state.userSlice.value);
 
     const updatedQty = useRef();
     const dispatch = useDispatch();
@@ -75,15 +75,12 @@ export const CartItem = (props) => {
             const data = {
                 product_id: product.id,
             };
-            await axios.delete(
-                url + `/remove-product-cart/${id}`,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                    data,
-                }
-            );
+            await axios.delete(url + `/remove-product-cart/${id}`, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+                data,
+            });
             const cartData = await axios.get(url + `/fetch-cart`, {
                 headers: {
                     authorization: `Bearer ${token}`,
@@ -96,7 +93,7 @@ export const CartItem = (props) => {
         try {
             Swal.fire({
                 title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                text: "The Product Will Be Removed From the Cart!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -107,7 +104,7 @@ export const CartItem = (props) => {
                     deleteProductCart();
                     Swal.fire(
                         "Deleted!",
-                        "Product has been deleted!",
+                        "The Product Has Been Removed From The Cart!",
                         "success"
                     );
                 }
@@ -131,12 +128,13 @@ export const CartItem = (props) => {
             }}
             justify="center"
             align="center"
+            justifyItems={"center"}
         >
             <Stack direction="row" spacing="2" width="full" align="flex-end">
                 <Image
                     rounded="lg"
-                    width="60px"
-                    height="60px"
+                    width="75px"
+                    height="75px"
                     fit="cover"
                     src={`${serverApi}${product.product_image}`}
                     draggable="false"
@@ -145,12 +143,6 @@ export const CartItem = (props) => {
                 <Box pt="4">
                     <Stack spacing="0.5">
                         <Text fontWeight="medium">{product.name}</Text>
-                        <Text
-                            color={useColorModeValue("gray.600", "gray.400")}
-                            fontSize="xs"
-                        >
-                            {product.description}
-                        </Text>
                     </Stack>
                 </Box>
             </Stack>

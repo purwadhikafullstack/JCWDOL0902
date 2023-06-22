@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-
 import { useDispatch, useSelector } from "react-redux";
 import { cartUser } from "../../redux/cartSlice";
 
@@ -25,8 +24,6 @@ export const SectionAddCart = ({
     setQuantity,
     subtotal,
     product,
-    baseApi,
-    baseServer,
 }) => {
     const [limit, setLimit] = useState(1);
     const addedQty = useRef(``);
@@ -65,13 +62,13 @@ export const SectionAddCart = ({
             if (!err.response) {
                 Swal.fire({
                     icon: "error",
-                    title: "Error",
+                    title: "Action Declined",
                     text: "Please Login/Register First!",
                 });
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Error",
+                    title: "Action Declined",
                     text: err.response.data.message,
                 });
             }
@@ -80,13 +77,8 @@ export const SectionAddCart = ({
 
     return (
         <>
-            <Box
-                borderColor="#385898"
-                borderRadius="md"
-                borderWidth="2px"
-                p={3}
-            >
-                <Text>Set the quantity</Text>
+            <Box borderRadius="md" backgroundColor={"#DEE2E6"} p={3}>
+                <Text fontWeight={"600"}>Add to Cart</Text>
                 <Divider my={"3"} />
                 <Box display={"flex"} gap={2} alignItems={"center"}>
                     <Box width={"45%"}>
@@ -95,8 +87,11 @@ export const SectionAddCart = ({
                             defaultValue={quantity}
                             min={1}
                             max={totalStock}
-                            borderColor={"gray"}
+                            borderWidth={"2px"}
+                            borderRadius={"md"}
+                            borderStyle={"none"}
                             isDisabled={totalStock ? false : true}
+                            backgroundColor={"white"}
                         >
                             <NumberInputField
                                 ref={addedQty}
@@ -117,34 +112,40 @@ export const SectionAddCart = ({
                             />
                             <NumberInputStepper>
                                 <NumberIncrementStepper
-                                    bg="#385898"
+                                    bg="#343A40"
                                     children="+"
+                                    fontWeight={"bold"}
                                     onClick={() => {
                                         if (quantity < totalStock)
                                             setQuantity(quantity + 1);
                                     }}
+                                    color={"white"}
                                 />
                                 <NumberDecrementStepper
-                                    bg="#385898"
+                                    bg="#343A40"
                                     children="-"
+                                    fontWeight={"bold"}
                                     onClick={() => {
                                         if (quantity > 1)
                                             setQuantity(quantity - 1);
                                     }}
+                                    color={"white"}
                                 />
                             </NumberInputStepper>
                         </NumberInput>
                     </Box>
-                    <Text>
+                    <Text fontWeight={"500"}>
                         Available Stock:{" "}
-                        <Text as={"span"} fontWeight="bold" color={"#385898"}>
+                        <Text as={"span"} fontWeight="bold">
                             {totalStock}
                         </Text>
                     </Text>
                 </Box>
                 <Box display={"flex"} justifyContent={"space-between"} mb={"4"}>
-                    <Text color={"gray"}>Subtotal</Text>
-                    <Text fontWeight="bold" color={"#385898"}>
+                    <Text color={"black"} fontWeight={"500"}>
+                        Total Price
+                    </Text>
+                    <Text fontWeight="bold">
                         {totalStock
                             ? `Rp${(subtotal * quantity)
                                   ?.toString()

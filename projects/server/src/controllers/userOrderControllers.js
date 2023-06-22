@@ -59,7 +59,7 @@ module.exports = {
             console.log(userVerified);
             if (!userVerified || userVerified.is_verified !== true) {
                 throw {
-                    message: "Please register or verify your account first!",
+                    message: "Please Login or Verify Your Account First!",
                 };
             }
 
@@ -72,7 +72,7 @@ module.exports = {
             // Check product stock
             if (productData.stock < 1) {
                 throw {
-                    message: "Out of stock!",
+                    message: "Out of Stock!",
                 };
             }
 
