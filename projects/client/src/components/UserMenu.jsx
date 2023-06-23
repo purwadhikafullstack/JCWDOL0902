@@ -13,6 +13,7 @@ import {
     Avatar,
     Box,
     Stack,
+    useToast,
 } from "@chakra-ui/react";
 import decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
@@ -23,11 +24,13 @@ import {
     FaHistory,
 } from "react-icons/fa";
 
+import { RiAdminFill } from "react-icons/ri";
+
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 
 import userLogin from "../assets/default_avatar.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
@@ -35,6 +38,7 @@ const serverApi = process.env.REACT_APP_SERVER;
 export const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const toast = useToast();
 
     const token = localStorage.getItem("token");
     let decodedToken;
@@ -43,12 +47,24 @@ export const UserMenu = () => {
     } else {
         decodedToken = null;
     }
+    const { role } = useSelector((state) => state.userSlice.value);
 
     const dispatch = useDispatch();
-    const onLogout = async () => {
+    const onLogout = () => {
         dispatch(logout());
         localStorage.removeItem("token");
-        navigate("/");
+
+        toast({
+            title: "Logging out",
+            status: "warning",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+        });
+
+        setTimeout(() => {
+            navigate("/");
+        }, 2000);
     };
 
     const onOpen = () => {
@@ -92,6 +108,19 @@ export const UserMenu = () => {
                     <PopoverBody display="flex" flexDir="column">
                         {token ? (
                             <Stack>
+                                {role !== 1 ? (
+                                    <Button
+                                        as={Link}
+                                        to="/admin"
+                                        fontWeight="600"
+                                        colorScheme="teal"
+                                    >
+                                        <RiAdminFill
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
+                                        Admin Page
+                                    </Button>
+                                ) : null}
                                 <Button
                                     as={Link}
                                     to="/profile/settings"
@@ -103,7 +132,7 @@ export const UserMenu = () => {
                                 </Button>
                                 <Button
                                     as={Link}
-                                    to="/profile/settings"
+                                    to="/profile/address"
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >

@@ -27,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
             city_id: DataTypes.INTEGER,
             latitude: DataTypes.STRING,
             longitude: DataTypes.STRING,
-            phone_number: DataTypes.STRING,
             default_address: DataTypes.BOOLEAN,
         },
         {

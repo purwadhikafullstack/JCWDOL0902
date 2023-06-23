@@ -12,7 +12,6 @@ module.exports = {
             let {
                 receiver_name,
                 user_address,
-                phone_number,
                 province,
                 province_id,
                 city,
@@ -37,7 +36,6 @@ module.exports = {
                     user_id: dataUser.id,
                     receiver_name,
                     user_address,
-                    phone_number,
                     province,
                     province_id,
                     city,
@@ -51,7 +49,6 @@ module.exports = {
                     user_id: dataUser.id,
                     receiver_name,
                     user_address,
-                    phone_number,
                     province,
                     province_id,
                     city,
@@ -81,7 +78,6 @@ module.exports = {
             let {
                 receiver_name,
                 user_address,
-                phone_number,
                 province,
                 province_id,
                 city,
@@ -99,7 +95,6 @@ module.exports = {
                 {
                     receiver_name,
                     user_address,
-                    phone_number,
                     province,
                     province_id,
                     city,

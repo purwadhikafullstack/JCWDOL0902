@@ -7,8 +7,6 @@ import divider from "../assets/divider_result.jpg";
 export const ProductBySearchPage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
 
-    console.log("test");
-
     return (
         <Box
             display="flex"
