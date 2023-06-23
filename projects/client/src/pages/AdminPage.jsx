@@ -29,6 +29,15 @@ import {
 
 import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import {
+    FaUser,
+    FaWarehouse,
+    FaListAlt,
+    FaBox,
+    FaExchangeAlt,
+} from "react-icons/fa";
+import { BsInboxesFill } from "react-icons/bs";
+import { ImCheckmark } from "react-icons/im";
 
 import logo from "../assets/hobbyzone_logo.png";
 import simple from "../assets/hobbyzone_logo_simple.png";
@@ -48,19 +57,25 @@ export const AdminPage = () => {
         const items =
             decodedToken.role === 3
                 ? [
-                      "Users",
-                      "Warehouses",
-                      "Categories",
-                      "Products",
-                      "Stock Management",
-                      "Stock Mutations",
+                      { label: "Users", icon: FaUser },
+                      { label: "Warehouses", icon: FaWarehouse },
+                      { label: "Categories", icon: FaListAlt },
+                      { label: "Products", icon: FaBox },
+                      { label: "Stock Management", icon: BsInboxesFill },
+                      { label: "Stock Mutations", icon: FaExchangeAlt },
                   ]
                 : [
-                      "Categories",
-                      "Products",
-                      "My Warehouse Stock",
-                      "Request a Stock Mutation",
-                      "Approve Stock Mutation Requests",
+                      { label: "Categories", icon: FaListAlt },
+                      { label: "Products", icon: FaBox },
+                      { label: "My Warehouse Stock", icon: BsInboxesFill },
+                      {
+                          label: "Request Stock Mutation",
+                          icon: FaExchangeAlt,
+                      },
+                      {
+                          label: "Approve Stock Mutation Requests",
+                          icon: ImCheckmark,
+                      },
                   ];
 
         return (
@@ -78,6 +93,8 @@ export const AdminPage = () => {
                 </Flex>
                 <Stack paddingTop={"2"}>
                     {items.map((item, index) => {
+                        const Icon = item.icon; // Dynamically set the icon component
+
                         return (
                             <Button
                                 key={index}
@@ -88,8 +105,9 @@ export const AdminPage = () => {
                                 onClick={() => {
                                     setTab(index);
                                 }}
+                                leftIcon={<Icon />} // Add the icon as the left icon
                             >
-                                {item}
+                                {item.label}
                             </Button>
                         );
                     })}
