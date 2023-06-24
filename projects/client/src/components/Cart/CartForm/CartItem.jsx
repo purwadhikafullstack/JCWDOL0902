@@ -6,7 +6,6 @@ import { cartUser } from "../../../redux/cartSlice";
 
 import {
     Flex,
-    useColorModeValue,
     Stack,
     Image,
     Text,
