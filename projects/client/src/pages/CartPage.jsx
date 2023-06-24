@@ -1,43 +1,21 @@
-import { FooterComponent } from "../components/Footer";
+import React from "react";
+import { Container, Box } from "@chakra-ui/react";
+
 import { Navbar } from "../components/Navbar";
-import { Box, useMediaQuery } from "@chakra-ui/react";
-import divider from "../assets/divider_result.jpg";
 import { CartForm } from "../components/Cart/CartForm/CartForm";
+import { FooterComponent } from "../components/Footer";
 
 export const CartPage = () => {
-    const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
-
     return (
-        <Box display="flex" flexDirection="column" minHeight="100vh">
+        <Box minHeight="100vh">
             <Navbar />
-            <Box flex="1">
-                <Box mt={isSmallScreen ? "50px" : "50px"} color="black" pb="6">
-                    <Box maxW="1100px" m="auto">
-                        <div
-                            style={{
-                                backgroundImage: `url(${divider})`,
-                                backgroundSize: "cover",
-                                borderRadius: "12px",
-                            }}
-                            className="w-full flex justify-between p-5 mt-5"
-                        >
-                            <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-full text-white">
-                                <p className="text-2xl font-semibold">
-                                    Your Cart
-                                </p>
-                            </div>
-                            {isSmallScreen && (
-                                <div className="flex flex-col gap-1 w-full text-white">
-                                    <p className="text-2xl font-semibold">
-                                        Your Cart
-                                    </p>
-                                </div>
-                            )}
-                        </div>
+            <Container minH={"89.5vh"} maxW={"100%"} p={5} color={"black"}>
+                <Container maxW="container.lg">
+                    <Container maxW="container.lg" p={5}>
                         <CartForm />
-                    </Box>
-                </Box>
-            </Box>
+                    </Container>
+                </Container>
+            </Container>
             <FooterComponent />
         </Box>
     );

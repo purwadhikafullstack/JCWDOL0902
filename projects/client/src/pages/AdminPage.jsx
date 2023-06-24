@@ -235,13 +235,6 @@ export const AdminPage = () => {
                                     "gray.700"
                                 )}
                             >
-                                <MenuItem
-                                    onClick={() => {
-                                        navigate("/");
-                                    }}
-                                >
-                                    Home
-                                </MenuItem>
                                 <MenuItem>Profile</MenuItem>
                                 <MenuItem>Settings</MenuItem>
                                 <MenuDivider />

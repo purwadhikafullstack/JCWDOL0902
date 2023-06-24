@@ -3,18 +3,9 @@ import React from "react";
 // redux
 import { useSelector } from "react-redux";
 
-import {
-    Box,
-    Flex,
-    Heading,
-    Stack,
-    Divider,
-    Text,
-    Image,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Stack, Divider } from "@chakra-ui/react";
 import { CartItem } from "./CartItem";
 import { CartOrderSummary } from "./CartOrderSummary";
-import pict from "../../../assets/empty-cart-ilustration.png";
 
 export const CartForm = () => {
     const cart = useSelector((state) => state.cartSlice.value);
@@ -31,24 +22,6 @@ export const CartForm = () => {
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     );
-
-    const renderCartItems = () => {
-        if (cart.length === 0) {
-            return (
-                <Stack spacing="4" align="center">
-                    <Text fontSize="xl" fontWeight="bold">
-                        Your Cart is Empty
-                    </Text>
-                    <Text fontWeight={"500"}>
-                        Looks like you have not added anything to your cart
-                    </Text>
-                    <Image src={pict} alt="Empty Cart" maxWidth="400px" />
-                </Stack>
-            );
-        }
-
-        return cart.map((item) => <CartItem key={item.id} {...item} />);
-    };
 
     return (
         <Box
@@ -93,7 +66,11 @@ export const CartForm = () => {
                     </Heading>
                     <Divider orientation="horizontal" />
 
-                    <Stack spacing="10">{renderCartItems()}</Stack>
+                    <Stack spacing="10">
+                        {cart?.map((item) => (
+                            <CartItem key={item.id} {...item} />
+                        ))}
+                    </Stack>
                 </Stack>
 
                 <Flex direction="column" align="center" flex="1">

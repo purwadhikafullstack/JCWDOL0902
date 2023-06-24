@@ -26,8 +26,6 @@ import {
 } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 
-import pict from "../.././assets/empty-cart-ilustration.png";
-
 const url = process.env.REACT_APP_API_BASE_URL + "/users";
 const serverApi = process.env.REACT_APP_SERVER;
 
@@ -143,9 +141,10 @@ export const CartNav = () => {
                                 spacing="24px"
                             >
                                 <Image
-                                    src={pict}
+                                    src="https://ecs7.tokopedia.net/assets-unify/il-header-cart-empty.jpg"
                                     alt="Empty Cart"
-                                    maxWidth={"200px"}
+                                    borderRadius="lg"
+                                    boxSize="150px"
                                 />
                                 <Text
                                     fontSize="m"
