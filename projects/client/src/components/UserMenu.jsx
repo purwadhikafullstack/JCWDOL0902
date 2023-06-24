@@ -13,6 +13,7 @@ import {
     Avatar,
     Box,
     Stack,
+    useToast,
 } from "@chakra-ui/react";
 import decode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
@@ -35,6 +36,7 @@ const serverApi = process.env.REACT_APP_SERVER;
 export const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const toast = useToast();
 
     const token = localStorage.getItem("token");
     let decodedToken;
@@ -45,10 +47,21 @@ export const UserMenu = () => {
     }
 
     const dispatch = useDispatch();
-    const onLogout = async () => {
+    const onLogout = () => {
         dispatch(logout());
         localStorage.removeItem("token");
-        navigate("/");
+
+        toast({
+            title: "Logging out",
+            status: "warning",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+        });
+
+        setTimeout(() => {
+            navigate("/");
+        }, 2000);
     };
 
     const onOpen = () => {
