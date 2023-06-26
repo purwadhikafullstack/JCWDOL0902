@@ -14,6 +14,8 @@ import {
     Input,
     Center,
     VStack,
+    FormHelperText,
+    Text,
 } from "@chakra-ui/react";
 import axios from "axios";
 import * as Yup from "yup";
@@ -143,6 +145,19 @@ export const RegisterationForm = () => {
                                                 component="div"
                                                 style={{ color: "red" }}
                                             />
+                                            <FormControl>
+                                                <FormHelperText>
+                                                    By clicking "Send" you agree
+                                                    to the{" "}
+                                                    <Text
+                                                        as={"span"}
+                                                        color={"#495057"}
+                                                    >
+                                                        Terms & Conditions
+                                                    </Text>
+                                                    .
+                                                </FormHelperText>
+                                            </FormControl>
                                         </FormControl>
                                         <ModalFooter>
                                             <Button

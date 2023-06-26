@@ -81,10 +81,10 @@ export const ProductListBySearch = () => {
                 maxW="250px"
                 onChange={(e) => setSort(e.target.value)}
             >
-                <option value="1">Sort by Product Name A-Z</option>
-                <option value="2">Sort by Product Name Z-A</option>
-                <option value="3">Sort by Price Highest-Lowest</option>
-                <option value="4">Sort by Price Lowest-Highest</option>
+                <option value="1">Product Name A-Z</option>
+                <option value="2">Product Name Z-A</option>
+                <option value="3">Price Highest-Lowest</option>
+                <option value="4">Price Lowest-Highest</option>
             </Select>
 
             {products.length === 0 ? (
@@ -111,7 +111,7 @@ export const ProductListBySearch = () => {
                     {products.map((product) => (
                         <Box
                             key={product.id}
-                            bg="white"
+                            bg={product.stock === 0 ? "#CED4DA" : "white"}
                             p={2}
                             borderRadius="md"
                             boxShadow="md"
@@ -129,6 +129,11 @@ export const ProductListBySearch = () => {
                                     h="200px"
                                     objectFit="cover"
                                     borderRadius="lg"
+                                    style={
+                                        product.stock === 0
+                                            ? { filter: "grayscale(100%)" }
+                                            : {}
+                                    }
                                 />
                             </Box>
 
@@ -159,6 +164,16 @@ export const ProductListBySearch = () => {
                             <Text mt={2} fontSize="sm" fontWeight="500">
                                 Category: {product.category.name}
                             </Text>
+                            {product.stock === 0 && (
+                                <Text
+                                    mt={2}
+                                    fontSize="md"
+                                    fontWeight="600"
+                                    color="red"
+                                >
+                                    Out of Stock
+                                </Text>
+                            )}
                         </Box>
                     ))}
                 </Grid>

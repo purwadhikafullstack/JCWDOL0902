@@ -8,7 +8,7 @@ const { login } = require("../middleware/authorize");
 //paths
 router.get("/keeplogin", login, userControllers.keeplogin);
 router.post("/register", userControllers.register);
-router.patch("/activation/:id", userControllers.activation);
+router.patch("/activation", userControllers.activation);
 router.post("/login", userControllers.login);
 router.post("/reset-password-email", userControllers.emailResetPass);
 router.get("/token-validator", userControllers.tokenValidator);

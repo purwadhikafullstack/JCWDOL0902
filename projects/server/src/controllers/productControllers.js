@@ -8,7 +8,8 @@ const category = db.category;
 module.exports = {
     fetchAllProducts: async (req, res) => {
         try {
-            const { page, limit, search_query, order, by } = req.query;
+            const { page, limit, search_query, order, by, has_stock } =
+                req.query;
             const page_list = +page || 0;
             const limit_list = +limit || 12;
             const search = search_query || "";
@@ -25,6 +26,14 @@ module.exports = {
                             },
                         },
                     ],
+                    ...(has_stock === "true" && {
+                        stock: {
+                            [Op.gt]: 0,
+                        },
+                    }),
+                    ...(has_stock === "false" && {
+                        stock: 0,
+                    }),
                 },
             });
             const totalPage = Math.ceil(totalRows / limit_list);
@@ -48,18 +57,23 @@ module.exports = {
                             },
                         },
                     ],
+                    ...(has_stock === "true" && {
+                        stock: {
+                            [Op.gt]: 0,
+                        },
+                    }),
+                    ...(has_stock === "false" && {
+                        stock: 0,
+                    }),
                 },
                 where: { is_active: true },
                 offset: offset,
                 limit: limit_list,
                 order: [[order_by, direction]],
             });
+
             res.status(200).send({
                 result: all,
-                page: page_list,
-                limit: limit_list,
-                offset: offset,
-                totalRows: totalRows,
                 totalPage: totalPage,
             });
         } catch (error) {

@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
         errorElement: <ErrorPage />,
     },
-    { path: "/activation/:id", element: <VerificationPage /> },
+    { path: "/activation/:token", element: <VerificationPage /> },
     { path: "/reset-password/:token", element: <ResetPasswordPage /> },
     { path: "/admin", element: <AdminPage />, errorElement: <ErrorPage /> },
     { path: "/product/:name", element: <DetailProductPage /> },

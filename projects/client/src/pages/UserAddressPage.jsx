@@ -3,9 +3,15 @@ import { Navbar } from "../components/Navbar";
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import divider from "../assets/divider_result.jpg";
 import { Address } from "../components/UserAddress/Address";
+import { ErrorPage } from "./ErrorPage";
 
 export const AddressPage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return <ErrorPage />;
+    }
 
     return (
         <Box display="flex" flexDirection="column" minHeight="100vh">

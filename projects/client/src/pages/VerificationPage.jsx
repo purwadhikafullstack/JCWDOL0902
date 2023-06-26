@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     Button,
@@ -26,9 +26,23 @@ const url = process.env.REACT_APP_API_BASE_URL + "/users";
 
 export const VerificationPage = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const params = useParams();
+    const [user, setUser] = useState([]);
     const [show, setShow] = useState(false);
     const [showConfirm, setConfirm] = useState(false);
+
+    const VerifyToken = async () => {
+        try {
+            const result = await Axios.get(`${url}/token-validator`, {
+                headers: {
+                    Authorization: `Bearer ${params.token}`,
+                },
+            });
+            setUser(result.data.user);
+        } catch (err) {
+            navigate("/err");
+        }
+    };
 
     const signUpSchema = Yup.object().shape({
         password: Yup.string()
@@ -60,7 +74,8 @@ export const VerificationPage = () => {
                 },
             });
 
-            await Axios.patch(`${url}/activation/${id}`, {
+            await Axios.patch(`${url}/activation`, {
+                email: user,
                 password: data.password,
                 password_confirmation: data.password_confirmation,
             });
@@ -85,6 +100,10 @@ export const VerificationPage = () => {
         setConfirm(!showConfirm);
     };
 
+    useEffect(() => {
+        VerifyToken();
+    });
+
     return (
         <Stack minH={"100vh"} color="black">
             <Flex
@@ -95,6 +114,7 @@ export const VerificationPage = () => {
             >
                 <Formik
                     initialValues={{
+                        email: user,
                         password: "",
                         password_confirmation: "",
                     }}
@@ -114,14 +134,23 @@ export const VerificationPage = () => {
                                         fontWeight={"500"}
                                         mt={"5"}
                                     >
-                                        Verify and Change Your Password
+                                        Verify and Set Your Password
                                     </Heading>
+                                    <FormControl id="email">
+                                        <FormLabel>Email address</FormLabel>
+                                        <Field
+                                            as={Input}
+                                            type="email"
+                                            value={user}
+                                            disabled={user ? true : false}
+                                        />
+                                    </FormControl>
                                     <FormControl
                                         id="password"
                                         colorScheme={"white"}
                                     >
                                         <FormLabel fontWeight={"500"}>
-                                            New Password
+                                            Set Password
                                         </FormLabel>
                                         <InputGroup
                                             size="md"
@@ -151,6 +180,7 @@ export const VerificationPage = () => {
                                         <ErrorMessage
                                             name="password"
                                             component="div"
+                                            style={{ color: "red" }}
                                         />
                                     </FormControl>
                                     <FormControl id="confirm password">
@@ -189,6 +219,7 @@ export const VerificationPage = () => {
                                         <ErrorMessage
                                             name="password_confirmation"
                                             component="div"
+                                            style={{ color: "red" }}
                                         />
                                     </FormControl>
                                     <Stack spacing={6}>
