@@ -25,6 +25,7 @@ import {
     MenuDivider,
     MenuItem,
     MenuList,
+    useToast,
 } from "@chakra-ui/react";
 
 import { FiChevronDown } from "react-icons/fi";
@@ -53,6 +54,8 @@ export const AdminPage = () => {
     const token = localStorage.getItem("token");
     const decodedToken = decode(token);
     const dispatch = useDispatch();
+    const toast = useToast();
+
     const TabContent = () => {
         const items =
             decodedToken.role === 3
@@ -169,12 +172,22 @@ export const AdminPage = () => {
     };
 
     const Navbar = () => {
-        const onLogout = async () => {
-            dispatch(logout());
-            localStorage.removeItem("token");
-            navigate("/");
-        };
         const navigate = useNavigate();
+        const onLogout = () => {
+            toast({
+                title: "Logging out",
+                status: "warning",
+                position: "top",
+                duration: 2000,
+                isClosable: true,
+            });
+
+            setTimeout(() => {
+                dispatch(logout());
+                localStorage.removeItem("token");
+                navigate("/");
+            }, 2000);
+        };
 
         return (
             <Flex
@@ -248,7 +261,6 @@ export const AdminPage = () => {
                                 <MenuItem
                                     onClick={() => {
                                         onLogout();
-                                        navigate("/");
                                     }}
                                 >
                                     Sign out

@@ -27,7 +27,7 @@ export const ProductPage = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(
-                `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}`
+                `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}&has_stock=true`
             );
             console.log(response);
             setProducts(response.data.result);
@@ -58,7 +58,7 @@ export const ProductPage = () => {
                 {products.map((product) => (
                     <Box
                         key={product.id}
-                        bg="white"
+                        bg={product.stock === 0 ? "#CED4DA" : "white"}
                         p={2}
                         borderRadius="md"
                         boxShadow="md"
@@ -76,6 +76,11 @@ export const ProductPage = () => {
                                 h="200px"
                                 objectFit="cover"
                                 borderRadius="lg"
+                                style={
+                                    product.stock === 0
+                                        ? { filter: "grayscale(100%)" }
+                                        : {}
+                                }
                             />
                         </Box>
 
@@ -102,6 +107,16 @@ export const ProductPage = () => {
                         <Text mt={2} fontSize="sm" fontWeight="500">
                             Category: {product.category.name}
                         </Text>
+                        {product.stock === 0 && (
+                            <Text
+                                mt={2}
+                                fontSize="md"
+                                fontWeight="600"
+                                color="red"
+                            >
+                                Out of Stock
+                            </Text>
+                        )}
                     </Box>
                 ))}
             </Grid>

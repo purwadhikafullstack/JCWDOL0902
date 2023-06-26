@@ -180,6 +180,7 @@ export const ResetPasswordPage = () => {
                                         <ErrorMessage
                                             name="password"
                                             component="div"
+                                            style={{ color: "red" }}
                                         />
                                     </FormControl>
                                     <FormControl id="password_confirmation">
@@ -214,6 +215,7 @@ export const ResetPasswordPage = () => {
                                         <ErrorMessage
                                             name="password_confirmation"
                                             component="div"
+                                            style={{ color: "red" }}
                                         />
                                     </FormControl>
                                     <Stack spacing={6}>
