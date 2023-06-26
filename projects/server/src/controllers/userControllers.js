@@ -40,9 +40,12 @@ module.exports = {
                 name,
                 email,
                 phone_number,
-                password: await hashPassword("DefaultPass1234"),
                 is_verified: false,
                 role: 1,
+            });
+
+            const token = createToken({
+                id: email,
             });
 
             const template = await fs.readFile(
@@ -53,7 +56,7 @@ module.exports = {
             const newTemplate = templateToCompile({
                 name,
                 email,
-                url: `${process.env.URL}/activation/${createUser.dataValues.id}`,
+                url: `${process.env.URL}/activation/${token}`,
             });
             await transporter.sendMail({
                 from: "HobbyZone (No Reply)",
@@ -66,6 +69,7 @@ module.exports = {
                 status: true,
                 message: "Register Success",
                 data: createUser,
+                token: token,
             });
         } catch (error) {
             console.log(error);
@@ -77,12 +81,11 @@ module.exports = {
     },
     activation: async (req, res) => {
         try {
-            let { id } = req.params;
-            let { password, password_confirmation } = req.body;
+            const { email, password, password_confirmation } = req.body;
 
             let dataUser = await user.findOne({
                 where: {
-                    id,
+                    email,
                     is_verified: false,
                 },
             });
@@ -104,20 +107,19 @@ module.exports = {
                 };
 
             await user.update(
-                { is_verified: true, password: await hashPassword(password) },
+                { password: await hashPassword(password), is_verified: true },
                 {
                     where: {
-                        id,
+                        email: email,
                     },
                 }
             );
             res.status(200).send({
                 status: true,
-                message: "Account verified!",
+                message: "Sucessfully Activating Your Account",
             });
         } catch (error) {
-            console.log(error);
-            res.status(404).send({
+            res.status(400).send({
                 status: false,
                 message: error.message,
             });

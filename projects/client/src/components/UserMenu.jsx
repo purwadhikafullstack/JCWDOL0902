@@ -48,9 +48,6 @@ export const UserMenu = () => {
 
     const dispatch = useDispatch();
     const onLogout = () => {
-        dispatch(logout());
-        localStorage.removeItem("token");
-
         toast({
             title: "Logging out",
             status: "warning",
@@ -60,6 +57,8 @@ export const UserMenu = () => {
         });
 
         setTimeout(() => {
+            dispatch(logout());
+            localStorage.removeItem("token");
             navigate("/");
         }, 2000);
     };

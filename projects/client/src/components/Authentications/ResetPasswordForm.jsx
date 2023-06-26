@@ -52,10 +52,7 @@ export const ResetPassword = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message
-                    : err.response.data,
-
+                text: err.response.data.message,
                 customClass: {
                     container: "my-swal",
                 },

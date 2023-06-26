@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
 import decode from "jwt-decode";
 import Axios from "axios";
@@ -19,6 +19,9 @@ import {
     FormControl,
     FormLabel,
     Input,
+    InputGroup,
+    InputRightElement,
+    useToast,
 } from "@chakra-ui/react";
 
 import { ResetPassword } from "./ResetPasswordForm";
@@ -32,10 +35,13 @@ export const LoginForm = () => {
     } = useDisclosure();
 
     const navigate = useNavigate();
+    const toast = useToast();
 
     const inputEmail = useRef("");
     const inputPass = useRef("");
     const dispatch = useDispatch();
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const onLogin = async (e) => {
         e.preventDefault();
@@ -46,39 +52,46 @@ export const LoginForm = () => {
             };
 
             const result = await Axios.post(`${url}/login`, user);
-            dispatch(
-                login({
-                  id: result.data.id,
-                  email: result.data.email,
-                  name: result.data.name,
-                  is_verified: result.data.is_verified,
-                  role: result.data.role,
-                  photo_profile: result.data.photo_profile,
-                })
-              );
-            // console.log(result.data.data.token);
 
-            localStorage.setItem("token", result.data.data.token);
-            const decodedToken = decode(result.data.data.token);
-
-            console.log(decodedToken);
-
-            Swal.fire({
-                icon: "success",
-                title: "Login Success",
-                text: `${result.data.message}`,
-
-                customClass: {
-                    container: "my-swal",
-                },
+            toast({
+                title: "Logging you in..",
+                status: "success",
+                position: "top",
+                duration: 2000,
+                isClosable: true,
             });
-            onCloseLogin();
 
-            if (decodedToken.role === 2 || decodedToken.role === 3) {
-                navigate("/admin");
-            } else {
-                navigate("/");
-            }
+            setTimeout(() => {
+                dispatch(
+                    login({
+                        id: result.data.id,
+                        email: result.data.email,
+                        name: result.data.name,
+                        is_verified: result.data.is_verified,
+                        role: result.data.role,
+                        photo_profile: result.data.photo_profile,
+                    })
+                );
+                localStorage.setItem("token", result.data.data.token);
+                const decodedToken = decode(result.data.data.token);
+
+                if (decodedToken.role === 2 || decodedToken.role === 3) {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Login Success",
+                    text: `${result.data.message}`,
+
+                    customClass: {
+                        container: "my-swal",
+                    },
+                });
+                onCloseLogin();
+            }, 2000);
         } catch (err) {
             console.log(err);
             Swal.fire({
@@ -94,6 +107,10 @@ export const LoginForm = () => {
             });
             onCloseLogin();
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -125,11 +142,24 @@ export const LoginForm = () => {
                                     ref={inputEmail}
                                 />
                                 <FormLabel mt={5}>Password</FormLabel>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    ref={inputPass}
-                                />
+                                <InputGroup>
+                                    <Input
+                                        id="password"
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
+                                        ref={inputPass}
+                                    />
+                                    <InputRightElement width="4.5rem">
+                                        <Button
+                                            h="1.75rem"
+                                            size="sm"
+                                            onClick={togglePasswordVisibility}
+                                        >
+                                            {showPassword ? "Hide" : "Show"}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
                                 <ResetPassword />
                             </FormControl>
                             <ModalFooter>
