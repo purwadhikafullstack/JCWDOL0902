@@ -20,7 +20,7 @@ module.exports = {
                 city_id,
                 province,
                 province_id,
-                user_id,
+                email,
             } = req.body;
 
             let warehouseAddress = `${address}%20${city}%20${province}`;
@@ -32,7 +32,7 @@ module.exports = {
 
             let dataUser = await user.findOne({
                 where: {
-                    id: user_id,
+                    email: email,
                 },
             });
 
@@ -49,6 +49,10 @@ module.exports = {
                         },
                     }
                 );
+            } else {
+                throw {
+                    message: "One admin can only be asigned to one warehouse!",
+                };
             }
 
             const result = await warehouse.create({
@@ -58,7 +62,8 @@ module.exports = {
                 city_id,
                 province,
                 province_id,
-                user_id,
+                email,
+                user_id: dataUser.id,
                 latitude: response.data.results[0].geometry.lat,
                 longitude: response.data.results[0].geometry.lng,
             });

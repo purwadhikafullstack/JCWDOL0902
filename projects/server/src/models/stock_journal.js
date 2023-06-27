@@ -19,7 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     }
     stock_journal.init(
         {
-            journal_date: DataTypes.DATE,
+            journal_date: {
+                type: DataTypes.DATEONLY,
+                defaultValue: DataTypes.NOW,
+            },
             type: DataTypes.STRING,
             increment_change: DataTypes.INTEGER,
             decrement_change: DataTypes.INTEGER,
