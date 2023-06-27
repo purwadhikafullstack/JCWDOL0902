@@ -37,22 +37,24 @@ module.exports = {
             const productToUpdate = await product.findByPk(product_id);
             if (productToUpdate) {
                 const updatedStock = productToUpdate.stock + parseInt(qty);
+                const total_qty_before = productToUpdate.stock;
                 await productToUpdate.update({ stock: updatedStock });
+
+                // Create initial stock_journal entry
+                await stock_journal.create({
+                    journal_date: new Date(),
+                    type: "Add Initial Stock",
+                    increment_change: qty,
+                    decrement_change: 0,
+                    total_qty_before,
+                    new_total_qty: updatedStock,
+                    description: "Add Initial Stock",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    product_id,
+                    warehouse_location_id,
+                });
             }
-            // Create initial stock_journal entry
-            await stock_journal.create({
-                journal_date: new Date(),
-                type: "Add Initial Stock",
-                increment_change: qty,
-                decrement_change: 0,
-                total_qty_before_change: 0,
-                new_total_qty: qty,
-                description: "Add Initial Stock",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                product_id,
-                warehouse_location_id,
-            });
             // Send response
             res.status(200).send({
                 status: true,
@@ -71,7 +73,6 @@ module.exports = {
                 type,
                 increment_change,
                 decrement_change,
-                total_qty_before_change,
                 new_total_qty,
                 description,
                 product_id,
@@ -79,6 +80,15 @@ module.exports = {
                 product_location_id,
                 product_stock,
             } = req.body;
+
+            const currentProductStock = await product.findByPk(product_id);
+
+            if (!currentProductStock) {
+                throw { message: "Product not found" };
+            }
+
+            const total_qty_before = currentProductStock.stock;
+
             // Update Stock in Product
             await product.update(
                 {
@@ -91,6 +101,7 @@ module.exports = {
                     },
                 }
             );
+
             // Update qty in product_location
             await product_location.update(
                 {
@@ -102,20 +113,23 @@ module.exports = {
                     },
                 }
             );
+
             // Create stock_journal entry
             await stock_journal.create({
                 journal_date: new Date(),
                 type,
-                increment_change,
-                decrement_change,
-                total_qty_before_change,
-                new_total_qty,
+                increment_change: increment_change,
+                decrement_change: decrement_change,
+                total_qty_before,
+                new_total_qty:
+                    product_stock + increment_change - decrement_change,
                 description,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 product_id,
                 warehouse_location_id,
             });
+
             // Send response
             res.status(200).send({
                 status: true,
@@ -153,7 +167,7 @@ module.exports = {
                 journal_date: new Date(),
                 type: "Stock Deleted by Admin",
                 decrement_change: deletedQty,
-                total_qty_before_change: deletedQty,
+                total_qty_before: deletedQty,
                 new_total_qty: 0,
                 description: "Stock Deleted by Admin",
                 createdAt: new Date(),
@@ -217,7 +231,6 @@ module.exports = {
                 order: [[sort ? sort : "id", order ? order : "ASC"]],
                 limit: 10,
                 offset: page ? +page * 10 : 0,
-                subQuery: false,
             });
             res.status(200).send({
                 pages: Math.ceil(count / 10),

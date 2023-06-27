@@ -135,6 +135,9 @@ module.exports = {
                         include: [{ model: warehouse_location }],
                     },
                 ],
+                where: {
+                    is_active: true,
+                },
             });
 
             const { count, rows } = await product.findAndCountAll({
