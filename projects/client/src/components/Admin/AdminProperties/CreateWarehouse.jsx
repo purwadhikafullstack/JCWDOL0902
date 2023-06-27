@@ -76,7 +76,7 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
     const validation = Yup.object().shape({
         warehouse_name: Yup.string().required("Cannot be Empty"),
         address: Yup.string().required("Cannot be Empty"),
-        user_id: Yup.string().required("Cannot be Empty"),
+        email: Yup.string().required("Cannot be Empty"),
     });
 
     const getCities = useCallback(async () => {
@@ -97,7 +97,7 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
                 province_id: +provinceId,
                 city: city,
                 city_id: +cityId,
-                user_id: value.user_id,
+                email: value.email,
             };
 
             const result = await Axios.post(url + "/create-warehouse", data, {
@@ -137,7 +137,7 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
             <Formik
                 initialValues={{
                     warehouse_name: "",
-                    user_id: "",
+                    email: "",
                     address: "",
                 }}
                 validationSchema={validation}
@@ -221,27 +221,17 @@ const AddForm = ({ close, getWarehouse, provinces }) => {
                                 </Select>
                             </>
                         ) : null}
-                        <FormLabel>User ID</FormLabel>
+                        <FormLabel>User Email</FormLabel>
                         <Input
                             as={Field}
-                            name={"user_id"}
-                            placeholder="You can find the ID in the Users Tab"
+                            name={"email"}
+                            placeholder="You can find the email in the Users Tab"
                         />
                         <ErrorMessage
                             style={{ color: "red" }}
                             component="div"
-                            name="user_id"
+                            name="email"
                         />
-                        {/* <FormLabel>Admin Id</FormLabel>
-                        <Select ref={UserId} placeholder={"- Select -"}>
-                            {admin.map((item, index) => {
-                                return (
-                                    <option value={item.id} key={index}>
-                                        {item.id}
-                                    </option>
-                                );
-                            })}
-                        </Select> */}
                         <Center paddingTop={"10px"} gap={"10px"}>
                             <IconButton
                                 icon={<RxCheck />}

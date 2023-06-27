@@ -39,6 +39,7 @@ import {
 } from "react-icons/fa";
 import { BsInboxesFill } from "react-icons/bs";
 import { ImCheckmark } from "react-icons/im";
+import { TbReportAnalytics } from "react-icons/tb";
 
 import logo from "../assets/hobbyzone_logo.png";
 import simple from "../assets/hobbyzone_logo_simple.png";
@@ -66,6 +67,7 @@ export const AdminPage = () => {
                       { label: "Products", icon: FaBox },
                       { label: "Stock Management", icon: BsInboxesFill },
                       { label: "Stock Mutations", icon: FaExchangeAlt },
+                      { label: "Stock Journal", icon: TbReportAnalytics },
                   ]
                 : [
                       { label: "Categories", icon: FaListAlt },
@@ -79,6 +81,7 @@ export const AdminPage = () => {
                           label: "Approve Stock Mutation Requests",
                           icon: ImCheckmark,
                       },
+                      { label: "My Stock Journal", icon: TbReportAnalytics },
                   ];
 
         return (

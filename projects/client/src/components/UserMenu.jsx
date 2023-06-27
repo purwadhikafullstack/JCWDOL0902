@@ -24,11 +24,13 @@ import {
     FaHistory,
 } from "react-icons/fa";
 
+import { RiAdminFill } from "react-icons/ri";
+
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 
 import userLogin from "../assets/default_avatar.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
@@ -45,9 +47,13 @@ export const UserMenu = () => {
     } else {
         decodedToken = null;
     }
+    const { role } = useSelector((state) => state.userSlice.value);
 
     const dispatch = useDispatch();
     const onLogout = () => {
+        dispatch(logout());
+        localStorage.removeItem("token");
+
         toast({
             title: "Logging out",
             status: "warning",
@@ -57,8 +63,6 @@ export const UserMenu = () => {
         });
 
         setTimeout(() => {
-            dispatch(logout());
-            localStorage.removeItem("token");
             navigate("/");
         }, 2000);
     };
@@ -104,6 +108,19 @@ export const UserMenu = () => {
                     <PopoverBody display="flex" flexDir="column">
                         {token ? (
                             <Stack>
+                                {role !== 1 ? (
+                                    <Button
+                                        as={Link}
+                                        to="/admin"
+                                        fontWeight="600"
+                                        colorScheme="teal"
+                                    >
+                                        <RiAdminFill
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
+                                        Admin Page
+                                    </Button>
+                                ) : null}
                                 <Button
                                     as={Link}
                                     to="/profile/settings"
@@ -115,7 +132,7 @@ export const UserMenu = () => {
                                 </Button>
                                 <Button
                                     as={Link}
-                                    to="/profile/settings"
+                                    to="/profile/address"
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >

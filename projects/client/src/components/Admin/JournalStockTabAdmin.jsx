@@ -2,142 +2,93 @@ import Axios from "axios";
 import { useEffect, useState, useCallback, useRef } from "react";
 
 import {
-    Thead,
-    Box,
     Table,
-    Tr,
+    Thead,
     Tbody,
-    Td,
+    Tr,
     Th,
+    Td,
     TableContainer,
-    Center,
     Flex,
+    Box,
+    Center,
     InputGroup,
-    InputRightElement,
     Input,
+    InputRightElement,
     IconButton,
-    Skeleton,
     Stack,
+    Skeleton,
     Text,
 } from "@chakra-ui/react";
 
-import Swal from "sweetalert2";
-
 import { BiSearch } from "react-icons/bi";
-import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
+import { BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { RxReload } from "react-icons/rx";
 
-import { CreateWarehouse } from "./AdminProperties/CreateWarehouse";
-import { EditWarehouse } from "./AdminProperties/EditWarehouse";
-
-export const WarehouseList = () => {
+export const ReportList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
-    const [admin, setAdmin] = useState();
-    const [warehouse, setWarehouse] = useState();
+    const [report, setReport] = useState();
     const [sort, setSort] = useState("id");
-    const [provinces, setProvinces] = useState();
-    const [page, setPage] = useState(0);
     const [order, setOrder] = useState("ASC");
+    const [page, setPage] = useState(0);
     const [pages, setPages] = useState();
     const [search, setSearch] = useState(``);
 
     const searchValue = useRef(``);
 
-    const getWarehouse = useCallback(async () => {
+    const getReport = useCallback(async () => {
         try {
-            const warehouseURL =
+            const reportURL =
                 url +
-                `/fetch-warehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`;
-            const resultWarehouse = await Axios.get(warehouseURL, {
+                `/fetch-all-stock-reports?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+
+            const resultReport = await Axios.get(reportURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            setWarehouse(resultWarehouse.data.result);
-            setPages(resultWarehouse.data.pages);
+
+            setReport(resultReport.data.result);
+            setPages(resultReport.data.pages);
+
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
         } catch (err) {}
-    }, [sort, order, page, search, url, token]);
-
-    const getProvince = async () => {
-        try {
-            const resultProvinces = await Axios.get(
-                process.env.REACT_APP_API_BASE_URL + "/province"
-            );
-            setProvinces(resultProvinces.data.result);
-        } catch (err) {}
-    };
-
-    const getAdmin = useCallback(async () => {
-        try {
-            const resultAdmin = await Axios.get(url + "/fetch-admins", {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-            setAdmin(resultAdmin.data);
-        } catch (err) {}
-    }, [url, token]);
-
-    const deleteWarehouse = async (id) => {
-        try {
-            await Axios.delete(url + `/delete-warehouse/${id}`, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-            getWarehouse();
-        } catch (err) {}
-    };
-
-    const deleteWarning = async (id) => {
-        try {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteWarehouse(id);
-                    Swal.fire("Deleted!", "Warehouse deleted.", "success");
-                }
-            });
-        } catch (err) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
-            });
-        }
-    };
+    }, [url, order, page, search, sort, token]);
 
     useEffect(() => {
-        getWarehouse();
-        getAdmin();
-        getProvince();
-    }, [getWarehouse, getAdmin]);
+        getReport();
+    }, [getReport]);
 
     const tableHead = [
-        { name: "ID", origin: "id", width: "100px" },
-        { name: "Warehouse Name", origin: "warehouse_name", width: "" },
-        { name: "Province", origin: "province", width: "250px" },
-        { name: "City", origin: "city", width: "150px" },
-        { name: "Email", origin: "email", width: "50px" },
+        { name: "Date", origin: "journal_date", width: "200px" },
+        { name: "Type", origin: "type", width: "200px" },
+        { name: "Product", origin: "product_id", width: "" },
+        { name: "Warehouse", origin: "warehouse_location_id", width: "150px" },
+        { name: "Increment", origin: "increment_change", width: "100px" },
+        { name: "Decrement", origin: "decrement_change", width: "100px" },
+        {
+            name: "Total Stock Before",
+            origin: "total_qty_before",
+            width: "100px",
+        },
+        {
+            name: "Updated Total Stock",
+            origin: "new_total_qty",
+            width: "100px",
+        },
+        {
+            name: "Remarks",
+            origin: "description",
+            width: "100px",
+        },
     ];
 
     return (
         <Box padding={{ base: "10px", lg: "0" }}>
-            <Center paddingBottom={"5px"}>
+            <Center paddingBottom={"12px"}>
                 <Stack>
                     <Flex>
                         <Box paddingRight={"5px"}>
@@ -161,25 +112,15 @@ export const WarehouseList = () => {
                                             setSearch(
                                                 searchValue.current.value
                                             );
+                                            setSort("id");
+                                            setPage(0);
+                                            setOrder("ASC");
                                         }}
                                     />
                                 </InputRightElement>
                             </InputGroup>
                         </Box>
-                        <IconButton
-                            icon={<RxReload />}
-                            onClick={() => {
-                                getWarehouse();
-                            }}
-                        />
                     </Flex>
-                    <Center>
-                        <CreateWarehouse
-                            getWarehouse={getWarehouse}
-                            provinces={provinces}
-                            admin={admin}
-                        />
-                    </Center>
                 </Stack>
             </Center>
             <TableContainer borderRadius={"10px"}>
@@ -193,7 +134,7 @@ export const WarehouseList = () => {
                                         bg={"#3182CE"}
                                         textAlign={"center"}
                                         color={"white"}
-                                        width={item.width}
+                                        w={item.width}
                                         borderY={"none"}
                                     >
                                         <Center>
@@ -232,19 +173,10 @@ export const WarehouseList = () => {
                                     </Th>
                                 );
                             })}
-                            <Th
-                                bg={"#3182CE"}
-                                textAlign={"center"}
-                                color={"white"}
-                                width={"200px"}
-                                borderY={"none"}
-                            >
-                                Action
-                            </Th>
                         </Tr>
                     </Thead>
-                    {warehouse ? (
-                        warehouse?.map((item, index) => {
+                    {report ? (
+                        report?.map((item, index) => {
                             return (
                                 <Tbody
                                     key={index}
@@ -252,38 +184,35 @@ export const WarehouseList = () => {
                                     _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
-                                        <Td textAlign={"center"}>{item.id}</Td>
-                                        <Td>{item.warehouse_name}</Td>
                                         <Td textAlign={"center"}>
-                                            {item.province}
+                                            {item.journal_date}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.city}
+                                            {item.type}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.email}
+                                            {item.product?.name}
                                         </Td>
-                                        <Td>
-                                            <Flex
-                                                gap={"20px"}
-                                                justifyContent={"center"}
-                                                alignItems={"center"}
-                                            >
-                                                <EditWarehouse
-                                                    warehouse={item}
-                                                    admin={admin}
-                                                    getWarehouse={getWarehouse}
-                                                    provinces={provinces}
-                                                />
-                                                <IconButton
-                                                    onClick={() => {
-                                                        deleteWarning(item.id);
-                                                    }}
-                                                    bg={"none"}
-                                                    color={"#ff4d4d"}
-                                                    icon={<BsFillTrashFill />}
-                                                />
-                                            </Flex>
+                                        <Td textAlign={"center"}>
+                                            {
+                                                item.warehouse_location
+                                                    ?.warehouse_name
+                                            }
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.increment_change}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.decrement_change}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.total_qty_before}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.new_total_qty}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {item.description}
                                         </Td>
                                     </Tr>
                                 </Tbody>
@@ -299,9 +228,6 @@ export const WarehouseList = () => {
                                         </Td>
                                     );
                                 })}
-                                <Td>
-                                    <Skeleton h={"10px"} />
-                                </Td>
                             </Tr>
                         </Tbody>
                     )}

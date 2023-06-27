@@ -10,6 +10,8 @@ import { ProductStockList } from "./StockTabAdmin";
 import { MutationList } from "./MutationTabAdmin";
 import { WarehouseMutationApproveList } from "./ApproveMutationTabAdmin";
 import { WarehouseMutationRequestList } from "./RequestMutationTabAdmin";
+import { ReportList } from "./JournalStockTabAdmin";
+import { WarehouseReportList } from "./JournalStockTabWarehouseAdmin";
 
 export const AdminContent = ({ tabNum, role }) => {
     const tabs =
@@ -21,6 +23,7 @@ export const AdminContent = ({ tabNum, role }) => {
                   ProductList,
                   ProductStockList,
                   MutationList,
+                  ReportList,
               ]
             : [
                   CategoryList,
@@ -28,6 +31,7 @@ export const AdminContent = ({ tabNum, role }) => {
                   ProductStockList,
                   WarehouseMutationRequestList,
                   WarehouseMutationApproveList,
+                  WarehouseReportList,
               ];
     const TabBody = tabs[tabNum];
 

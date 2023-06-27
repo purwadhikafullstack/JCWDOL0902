@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             address: DataTypes.STRING,
             latitude: DataTypes.STRING,
             longitude: DataTypes.STRING,
+            email: DataTypes.STRING,
         },
         {
             sequelize,
