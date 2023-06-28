@@ -10,7 +10,6 @@ const userProfileRouters = require("./userProfileRouters");
 const adminMutationRouters = require("./adminMutationRouters");
 const userOrderRouters = require("./userOrderRouters");
 const userAddressRouters = require("./userAddressRouters");
-const userCheckoutRouters = require("./userCheckoutRouters");
 
 module.exports = {
     userRouters,
@@ -25,5 +24,4 @@ module.exports = {
     adminMutationRouters,
     userOrderRouters,
     userAddressRouters,
-    userCheckoutRouters,
 };

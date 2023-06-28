@@ -94,6 +94,7 @@ module.exports = {
                 province_id,
                 city,
                 city_id,
+                default_address,
             } = req.body;
 
             let address = `${user_address}%20${city}%20${province}`;
@@ -102,6 +103,15 @@ module.exports = {
                 `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=131027ee43a64fa5b70071a1c676d1b0`
             );
             // console.log(response.data.results[0].geometry.lat);
+            const checkMainAddress = await userAddress.findOne({
+                where: { default_address: true },
+            });
+            if (checkMainAddress && default_address === true) {
+                await userAddress.update(
+                    { default_address: false },
+                    { where: { default_address: true } }
+                );
+            }
 
             await userAddress.update(
                 {
@@ -113,6 +123,7 @@ module.exports = {
                     city_id,
                     latitude: response.data.results[0].geometry.lat,
                     longitude: response.data.results[0].geometry.lng,
+                    default_address,
                 },
                 {
                     where: {
