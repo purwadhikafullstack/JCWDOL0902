@@ -9,6 +9,7 @@ import { ProfilePage } from "./pages/UserProfilePage";
 import { ProductFilteredPage } from "./pages/ProductFiltered";
 import { ProductBySearchPage } from "./pages/ProductBySearchPage";
 import { CartPage } from "./pages/CartPage";
+import { CheckoutPage } from "././pages/CheckoutPage";
 
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +43,11 @@ const router = createBrowserRouter([
         element: <CartPage />,
         errorElement: <ErrorPage />,
     },
-    ,
+    {
+        path: "/checkout",
+        element: <CheckoutPage />,
+        errorElement: <ErrorPage />,
+    },
     { path: "/productlist/:category", element: <ProductFilteredPage /> },
     { path: "/product-results/:querry", element: <ProductBySearchPage /> },
 ]);

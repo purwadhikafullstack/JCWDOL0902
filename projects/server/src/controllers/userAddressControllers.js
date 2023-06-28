@@ -4,6 +4,7 @@ const axios = require("axios");
 //import model
 const db = require("../models");
 const userAddress = db.user_address;
+const user = db.user;
 
 module.exports = {
     addUserAddress: async (req, res) => {
@@ -16,6 +17,7 @@ module.exports = {
                 province_id,
                 city,
                 city_id,
+                default_address,
             } = req.body;
 
             let checkData = await userAddress.findOne({
@@ -30,6 +32,16 @@ module.exports = {
                 `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=131027ee43a64fa5b70071a1c676d1b0`
             );
             // console.log(response.data.results);
+
+            const checkMainAddress = await userAddress.findOne({
+                where: { default_address: true },
+            });
+            if (checkMainAddress && default_address === true) {
+                await userAddress.update(
+                    { default_address: false },
+                    { where: { default_address: true } }
+                );
+            }
 
             if (!checkData) {
                 await userAddress.create({
@@ -55,7 +67,7 @@ module.exports = {
                     city_id,
                     latitude: response.data.results[0].geometry.lat,
                     longitude: response.data.results[0].geometry.lng,
-                    default_address: false,
+                    default_address,
                 });
             }
 
@@ -181,6 +193,7 @@ module.exports = {
             const userData = dataToken;
 
             const result = await userAddress.findAll({
+                include: { model: user },
                 where: { user_id: userData.id },
             });
 

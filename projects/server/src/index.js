@@ -48,6 +48,7 @@ const {
     userOrderRouters,
     adminMutationRouters,
     userAddressRouters,
+    userCheckoutRouters,
 } = require("./routes/index");
 
 //users
@@ -55,6 +56,7 @@ app.use("/api/users", userRouters);
 app.use("/api/users", userProfileRouters);
 app.use("/api/users", userAddressRouters);
 app.use("/api/users", userOrderRouters);
+app.use("/api/users", userCheckoutRouters);
 
 //admin
 app.use("/api/admin", adminUserRouters);

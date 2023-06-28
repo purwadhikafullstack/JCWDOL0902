@@ -19,7 +19,7 @@ module.exports = {
         } catch (error) {
             return res.status(400).send({
                 status: false,
-                message: message.error,
+                message: error.message,
             });
         }
     },
@@ -44,7 +44,7 @@ module.exports = {
         } catch (error) {
             return res.status(400).send({
                 status: false,
-                message: message.error,
+                message: error.message,
             });
         }
     },
