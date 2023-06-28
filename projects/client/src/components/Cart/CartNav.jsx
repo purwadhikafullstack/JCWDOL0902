@@ -130,7 +130,8 @@ export const CartNav = () => {
                                                 .replace(
                                                     /\B(?=(\d{3})+(?!\d))/g,
                                                     "."
-                                                )}
+                                                )
+                                                }
                                         </Text>
                                     </Stack>
                                 </Stack>

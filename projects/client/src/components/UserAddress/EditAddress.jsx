@@ -34,13 +34,13 @@ export const EditAddress = ({ baseApi, item, id }) => {
     const [selectedProvince, setSelectedProvince] = useState([]);
     const [city, setCity] = useState([]);
     const [selectedCity, setSelectedCity] = useState([]);
-    const [defaultAddress, setDefaultAddress] = useState(false);
-    const handleDefaultAddress = () => setDefaultAddress(!defaultAddress);
+    const [defaultAddress, setDefaultAddress] = useState(item.default_address);
+    const handleDefaultAddress = (e) => setDefaultAddress(e.target.checked);
     const token = localStorage.getItem("token");
 
     const getProvince = useCallback(async () => {
         try {
-            const response = await await axios(`${baseApi}/province`);
+            const response = await axios(`${baseApi}/province`);
             setProvince(response.data.result);
         } catch (error) {}
     }, [baseApi]);
@@ -131,9 +131,7 @@ export const EditAddress = ({ baseApi, item, id }) => {
                     city: selectedCity[1],
                     city_id: selectedCity[0],
                     user_address: value.user_address,
-                    defaultAddress: item.defaultAddress
-                        ? item.defaultAddress
-                        : defaultAddress,
+                    default_address: defaultAddress,
                 },
                 {
                     headers: {
@@ -197,6 +195,7 @@ export const EditAddress = ({ baseApi, item, id }) => {
                         initialValues={{
                             receiver_name: item?.receiver_name,
                             user_address: item?.user_address,
+                            default_address: item?.default_address,
                         }}
                         validationSchema={addressValid}
                         onSubmit={(value) => {
@@ -274,23 +273,19 @@ export const EditAddress = ({ baseApi, item, id }) => {
                                                     <Checkbox
                                                         colorScheme={"teal"}
                                                         mt={2}
-                                                        onChange={() =>
-                                                            handleDefaultAddress()
+                                                        onChange={(e) =>
+                                                            handleDefaultAddress(
+                                                                e
+                                                            )
                                                         }
                                                         defaultChecked={
-                                                            item?.defaultAddress
+                                                            item.default_address
+                                                        }
+                                                        isDisabled={
+                                                            item.default_address ===
+                                                            true
                                                                 ? true
                                                                 : false
-                                                        }
-                                                        disabled={
-                                                            item?.defaultAddress
-                                                                ? true
-                                                                : false
-                                                        }
-                                                        title={
-                                                            item?.defaultAddress
-                                                                ? "This main address"
-                                                                : "Main"
                                                         }
                                                     >
                                                         Make it the Main Address

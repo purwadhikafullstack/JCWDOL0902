@@ -12,11 +12,12 @@ import {
     Text,
     Image,
 } from "@chakra-ui/react";
-import { CartItem } from "./CartItem";
-import { CartOrderSummary } from "./CartOrderSummary";
-import pict from "../../../assets/empty-cart-ilustration.png";
+import { CheckoutItem } from "./CheckoutItem";
+import { CheckoutSummary } from "./CheckoutSummary";
+import { CheckoutAddress } from "./CheckoutAddress";
+import pict from "../../assets/empty-cart-ilustration.png";
 
-export const CartForm = () => {
+export const CheckoutForm = () => {
     const cart = useSelector((state) => state.cartSlice.value);
     const cartQty = useSelector((state) =>
         state.cartSlice.value.reduce(function (acc, obj) {
@@ -47,7 +48,7 @@ export const CartForm = () => {
             );
         }
 
-        return cart.map((item) => <CartItem key={item.id} {...item} />);
+        return cart.map((item) => <CheckoutItem key={item.id} {...item} />);
     };
 
     return (
@@ -88,22 +89,36 @@ export const CartForm = () => {
                     }}
                     flex="2"
                 >
-                    <Heading fontSize="2xl" fontWeight="extrabold">
-                        Shopping Cart ({cartQty} Item(s))
-                    </Heading>
-                    <Divider orientation="horizontal" />
+                    <Stack flex="2">
+                        <Heading fontSize="2xl" fontWeight="extrabold">
+                            Addresses
+                        </Heading>
+                        <Divider orientation="horizontal" />
+                        <CheckoutAddress />
+                    </Stack>
+                    <Stack flex="2">
+                        <Heading fontSize="2xl" fontWeight="extrabold">
+                            Shipment Methods
+                        </Heading>
+                        <Divider orientation="horizontal" />
+                        {/* Insert Shipment Form */}
+                    </Stack>
+                    <Stack flex="2">
+                        <Heading fontSize="2xl" fontWeight="extrabold">
+                            Shopping Cart ({cartQty} Item(s))
+                        </Heading>
+                        <Divider orientation="horizontal" />
 
-                    <Stack spacing="10">{renderCartItems()}</Stack>
+                        <Stack spacing="10">{renderCartItems()}</Stack>
+                    </Stack>
                 </Stack>
 
-                {cart.length !== 0 ? (
-                    <Flex direction="column" align="center" flex="1">
-                        <CartOrderSummary
-                            cartQty={cartQty}
-                            totalPrice={totalPrice}
-                        />
-                    </Flex>
-                ) : null}
+                <Flex direction="column" align="center" flex="1">
+                    <CheckoutSummary
+                        cartQty={cartQty}
+                        totalPrice={totalPrice}
+                    />
+                </Flex>
             </Stack>
         </Box>
     );

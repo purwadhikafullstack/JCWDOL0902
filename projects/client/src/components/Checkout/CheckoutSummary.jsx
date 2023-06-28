@@ -2,7 +2,7 @@ import { Button, Flex, Heading, Stack, Text, Divider } from "@chakra-ui/react";
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export const CartOrderSummary = (props) => {
+export const CheckoutSummary = (props) => {
     const { cartQty, totalPrice } = props;
     return (
         <Stack
@@ -33,7 +33,7 @@ export const CartOrderSummary = (props) => {
                 as={Link}
                 to={"/checkout"}
             >
-                Checkout
+                Choose Payment Method
             </Button>
         </Stack>
     );
