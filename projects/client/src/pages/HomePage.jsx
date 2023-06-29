@@ -57,7 +57,7 @@ export const HomePage = () => {
                         >
                             <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-full text-white">
                                 <p className="text-2xl font-semibold">
-                                    All Available Products
+                                    All Products
                                 </p>
                             </div>
                             {isSmallScreen && (

@@ -43,12 +43,14 @@ const router = createBrowserRouter([
         element: <CartPage />,
         errorElement: <ErrorPage />,
     },
+    ,
+    { path: "/category/:category", element: <ProductFilteredPage /> },
     {
         path: "/checkout",
         element: <CheckoutPage />,
         errorElement: <ErrorPage />,
     },
-    { path: "/productlist/:category", element: <ProductFilteredPage /> },
+
     { path: "/product-results/:querry", element: <ProductBySearchPage /> },
 ]);
 

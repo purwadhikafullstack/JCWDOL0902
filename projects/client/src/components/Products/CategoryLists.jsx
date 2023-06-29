@@ -51,7 +51,7 @@ export const CategoryList = () => {
     };
 
     const handleCardClick = (categoryName) => {
-        navigate(`/productlist/${categoryName}`);
+        navigate(`/category/${categoryName}`);
     };
 
     return (

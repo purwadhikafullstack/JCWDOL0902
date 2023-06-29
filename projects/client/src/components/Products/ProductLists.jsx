@@ -8,6 +8,7 @@ import {
     Tooltip,
     Center,
     IconButton,
+    Select,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
@@ -20,15 +21,23 @@ export const ProductPage = () => {
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState("");
     const [totalPages, setTotalPages] = useState(0);
+    const [sort, setSort] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
     const [direction, setDirection] = useState("DESC");
     const navigate = useNavigate();
 
+    let productData;
+
+    switch (parseInt(sort)) {
+        case 1:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}`;
+            break;
+        default:
+            productData = `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}&has_stock=true`;
+    }
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(
-                `${url}/products/fetch-all-products?page=${page}&search_query=${searchQuery}&order=${order}&by=${direction}&has_stock=true`
-            );
+            const response = await axios.get(productData);
             console.log(response);
             setProducts(response.data.result);
             setTotalPages(response.data.totalPage);
@@ -39,7 +48,7 @@ export const ProductPage = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [page, searchQuery, order, direction]);
+    }, [page, searchQuery, order, direction, sort]);
 
     const handleCardClick = (productName) => {
         navigate(`/product/${productName}`);
@@ -47,6 +56,19 @@ export const ProductPage = () => {
 
     return (
         <Box p={4}>
+            <Select
+                placeholder="Ready Stock"
+                mb={5}
+                backgroundColor={"#3182CE"}
+                fontWeight={"600"}
+                borderRadius={"lg"}
+                color={"white"}
+                size={"sm"}
+                maxW="250px"
+                onChange={(e) => setSort(e.target.value)}
+            >
+                <option value="1">All Products</option>
+            </Select>
             <Grid
                 templateColumns={{
                     base: "1fr",
