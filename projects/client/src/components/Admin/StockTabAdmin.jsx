@@ -43,10 +43,10 @@ export const ProductStockList = () => {
     const token = localStorage.getItem("token");
     const decodedToken = decode(token);
 
-    const [product, setProduct] = useState();
     const [productStock, setProductStock] = useState();
     const [warehouse, setWarehouse] = useState("All Warehouse");
     const [allWarehouse, setAllWarehouse] = useState();
+    const [allWarehouseStock, setAllWarehouseStock] = useState();
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
     const [page, setPage] = useState(0);
@@ -88,7 +88,9 @@ export const ProductStockList = () => {
 
             setProductStock(resultProductStockList.data.result);
             setPages(resultProductStockList.data.pages);
-            setProduct(resultProducts.data.result);
+            setAllWarehouseStock(
+                resultProductStockList.data.allProductStock
+            );
             setAllWarehouse(resultWarehouse.data.allWarehouse);
             setAllProduct(resultProducts.data.allProduct);
 
@@ -193,11 +195,8 @@ export const ProductStockList = () => {
                             onChange={(e) => setWarehouse(e.target.value)}
                         >
                             <option value="All Warehouse">All Warehouse</option>
-                            {productStock
-                                ?.map(
-                                    (item) =>
-                                        item.warehouse_location.warehouse_name
-                                )
+                            {allWarehouseStock
+                                ?.map((item) => item.warehouse_location.warehouse_name)
                                 .filter(
                                     (value, index, self) =>
                                         self.indexOf(value) === index

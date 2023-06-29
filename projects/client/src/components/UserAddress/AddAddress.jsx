@@ -35,12 +35,11 @@ export const AddAddress = ({ address, baseApi, name }) => {
     const [city, setCity] = useState([]);
     const [selectedCity, setSelectedCity] = useState([]);
     const [defaultAddress, setDefaultAddress] = useState(false);
-    const handleDefaultAddress = () => setDefaultAddress(!defaultAddress);
+    const handleDefaultAddress = (e) => setDefaultAddress(e.target.checked);
     const token = localStorage.getItem("token");
-
     const getProvince = useCallback(async () => {
         try {
-            const response = await await axios(`${baseApi}/province`);
+            const response = await axios(`${baseApi}/province`);
             setProvince(response.data.result);
         } catch (error) {}
     }, [baseApi]);
@@ -64,7 +63,7 @@ export const AddAddress = ({ address, baseApi, name }) => {
 
     const getCity = useCallback(async () => {
         try {
-            const response = await await axios(
+            const response = await axios(
                 `${baseApi}/city/${selectedProvince ? selectedProvince[0] : ""}`
             );
             setCity(response.data.result);
@@ -269,8 +268,10 @@ export const AddAddress = ({ address, baseApi, name }) => {
                                                     <Checkbox
                                                         colorScheme={"blue"}
                                                         mt={2}
-                                                        onChange={() =>
-                                                            handleDefaultAddress()
+                                                        onChange={(e) =>
+                                                            handleDefaultAddress(
+                                                                e
+                                                            )
                                                         }
                                                         title={
                                                             address?.length
