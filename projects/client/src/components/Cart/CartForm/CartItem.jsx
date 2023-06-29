@@ -38,8 +38,8 @@ export const CartItem = (props) => {
                 product_id: product.id,
                 newQty: parseInt(updatedQty),
             };
-            const fetchCartURL = url + `/fetch-cart`;
-            const editCartURL = url + `/edit-cart-qty`;
+            const fetchCartURL = url + "/fetch-cart";
+            const editCartURL = url + "/edit-cart-qty";
 
             await axios.patch(`${editCartURL}/${id}`, data, {
                 headers: {
@@ -139,7 +139,7 @@ export const CartItem = (props) => {
                     draggable="false"
                     loading="lazy"
                 />
-                <Box pt="4">
+                <Box pt="4" flex={"1"}>
                     <Text fontWeight="medium">{product.name}</Text>
                 </Box>
             </Stack>

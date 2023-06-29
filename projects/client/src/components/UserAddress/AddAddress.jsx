@@ -12,7 +12,6 @@ import {
     FormLabel,
     Input,
     Divider,
-    FormHelperText,
     Checkbox,
     Text,
     Flex,
@@ -203,7 +202,8 @@ export const AddAddress = ({ address, baseApi, name }) => {
                                     <Form>
                                         <ModalBody pb={6} mt={4}>
                                             <Text as={"b"} fontSize={"20px"}>
-                                                Complete the address details
+                                                Please complete the address
+                                                details
                                             </Text>
                                             <FormControl mt={4}>
                                                 <Flex direction={"column"}>
@@ -289,7 +289,8 @@ export const AddAddress = ({ address, baseApi, name }) => {
                                                                 : true
                                                         }
                                                     >
-                                                        Make it the Main Address
+                                                        Set it as the Main
+                                                        Address
                                                     </Checkbox>
                                                 </Flex>
                                             </FormControl>
@@ -300,19 +301,6 @@ export const AddAddress = ({ address, baseApi, name }) => {
                                             gap={4}
                                             textAlign={"center"}
                                         >
-                                            <FormControl>
-                                                <FormHelperText>
-                                                    By clicking "Save", you
-                                                    agree to the{" "}
-                                                    <Text
-                                                        as={"span"}
-                                                        color={"#D54B79"}
-                                                    >
-                                                        Terms & Conditions
-                                                    </Text>
-                                                    .
-                                                </FormHelperText>
-                                            </FormControl>
                                             <Button
                                                 colorScheme="teal"
                                                 type="submit"

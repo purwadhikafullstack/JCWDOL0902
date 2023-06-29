@@ -67,7 +67,10 @@ export const AdminPage = () => {
                       { label: "Products", icon: FaBox },
                       { label: "Stock Management", icon: BsInboxesFill },
                       { label: "Stock Mutations", icon: FaExchangeAlt },
-                      { label: "Stock Journal", icon: TbReportAnalytics },
+                      {
+                          label: "Stock Journal Report",
+                          icon: TbReportAnalytics,
+                      },
                   ]
                 : [
                       { label: "Categories", icon: FaListAlt },

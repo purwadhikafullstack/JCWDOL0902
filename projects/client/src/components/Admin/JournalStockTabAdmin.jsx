@@ -35,6 +35,8 @@ export const ReportList = () => {
     const [page, setPage] = useState(0);
     const [pages, setPages] = useState();
     const [search, setSearch] = useState(``);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     const searchValue = useRef(``);
 
@@ -42,7 +44,7 @@ export const ReportList = () => {
         try {
             const reportURL =
                 url +
-                `/fetch-all-stock-reports?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-all-stock-reports?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
 
             const resultReport = await Axios.get(reportURL, {
                 headers: {
@@ -56,7 +58,7 @@ export const ReportList = () => {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
         } catch (err) {}
-    }, [url, order, page, search, sort, token]);
+    }, [url, order, page, search, sort, token, startDate, endDate]);
 
     useEffect(() => {
         getReport();
@@ -115,12 +117,31 @@ export const ReportList = () => {
                                             setSort("id");
                                             setPage(0);
                                             setOrder("ASC");
+                                            setStartDate(startDate);
+                                            setEndDate(endDate);
                                         }}
                                     />
                                 </InputRightElement>
                             </InputGroup>
                         </Box>
                     </Flex>
+                    <Stack direction="row" spacing={4} alignItems="center">
+                        <InputGroup>
+                            <Input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                        </InputGroup>
+                        <Text>to</Text>
+                        <InputGroup>
+                            <Input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+                        </InputGroup>
+                    </Stack>
                 </Stack>
             </Center>
             <TableContainer borderRadius={"10px"}>
