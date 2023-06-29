@@ -1,11 +1,11 @@
 import { FooterComponent } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import { Box, useMediaQuery } from "@chakra-ui/react";
-import divider from "../assets/divider_result.jpg";
-import { CartForm } from "../components/Cart/CartForm/CartForm";
+import divider from "../assets/divider.jpeg";
+import { CheckoutForm } from "../components/Checkout/CheckoutForm";
 import { ErrorPage } from "./ErrorPage";
 
-export const CartPage = () => {
+export const CheckoutPage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
     const token = localStorage.getItem("token");
 
@@ -41,19 +41,19 @@ export const CartPage = () => {
                             >
                                 <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-full text-white">
                                     <p className="text-2xl font-semibold">
-                                        Your Cart
+                                        Checkout
                                     </p>
                                 </div>
                                 {isSmallScreen && (
                                     <div className="flex flex-col gap-1 w-full text-white">
                                         <p className="text-2xl font-semibold">
-                                            Your Cart
+                                            Checkout
                                         </p>
                                     </div>
                                 )}
                             </div>
                         </Box>
-                        <CartForm />
+                        <CheckoutForm />
                     </Box>
                 </Box>
             </Box>

@@ -232,9 +232,14 @@ module.exports = {
                 limit: 10,
                 offset: page ? +page * 10 : 0,
             });
+
+            const allProductStock = await product_location.findAll({
+                include: { model: warehouse_location },
+            });
             res.status(200).send({
                 pages: Math.ceil(count / 10),
                 result: rows,
+                allProductStock,
             });
         } catch (error) {
             console.log(error);
