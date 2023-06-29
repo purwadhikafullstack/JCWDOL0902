@@ -12,7 +12,6 @@ import {
     FormLabel,
     Input,
     Divider,
-    FormHelperText,
     Checkbox,
     Text,
     Flex,
@@ -26,7 +25,7 @@ import { Formik, ErrorMessage, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
-export const EditAddress = ({ baseApi, item, id }) => {
+export const EditAddress = ({ baseApi, item }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isLoading, setLoading] = useState(false);
     const toast = useToast();
@@ -209,8 +208,7 @@ export const EditAddress = ({ baseApi, item, id }) => {
                                     <Form>
                                         <ModalBody pb={6} mt={4}>
                                             <Text as={"b"} fontSize={"20px"}>
-                                                Please make sure your address is
-                                                correct
+                                                Update Your Current Address
                                             </Text>
                                             <FormControl mt={4}>
                                                 <Flex direction={"column"}>
@@ -293,7 +291,8 @@ export const EditAddress = ({ baseApi, item, id }) => {
                                                                 : "Main"
                                                         }
                                                     >
-                                                        Make it the Main Address
+                                                        Set it as the Main
+                                                        Address
                                                     </Checkbox>
                                                 </Flex>
                                             </FormControl>
@@ -304,19 +303,6 @@ export const EditAddress = ({ baseApi, item, id }) => {
                                             gap={4}
                                             textAlign={"center"}
                                         >
-                                            <FormControl>
-                                                <FormHelperText>
-                                                    By clicking "Save", you
-                                                    agree to the{" "}
-                                                    <Text
-                                                        as={"span"}
-                                                        color={"#D54B79"}
-                                                    >
-                                                        Terms & Conditions
-                                                    </Text>
-                                                    .
-                                                </FormHelperText>
-                                            </FormControl>
                                             <Button
                                                 colorScheme="teal"
                                                 type="submit"

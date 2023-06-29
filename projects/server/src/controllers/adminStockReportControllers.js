@@ -9,7 +9,7 @@ const warehouse = db.warehouse_location;
 module.exports = {
     fetchAllStockReport: async (req, res) => {
         try {
-            const { search, sort, order, page } = req.query;
+            const { search, sort, order, page, startDate, endDate } = req.query;
 
             const { count, rows } = await journal.findAndCountAll({
                 include: [
@@ -23,17 +23,28 @@ module.exports = {
                     },
                 ],
                 where: {
-                    [Op.or]: [
+                    [Op.and]: [
                         {
-                            "$product.name$": {
-                                [Op.like]: `%${search}%`,
-                            },
+                            [Op.or]: [
+                                {
+                                    "$product.name$": {
+                                        [Op.like]: `%${search}%`,
+                                    },
+                                },
+                                {
+                                    "$warehouse_location.warehouse_name$": {
+                                        [Op.like]: `%${search}%`,
+                                    },
+                                },
+                            ],
                         },
-                        {
-                            "$warehouse_location.warehouse_name$": {
-                                [Op.like]: `%${search}%`,
-                            },
-                        },
+                        startDate && endDate
+                            ? {
+                                  journal_date: {
+                                      [Op.between]: [startDate, endDate],
+                                  },
+                              }
+                            : {},
                     ],
                 },
                 order: [[sort ? sort : "id", order ? order : "ASC"]],
