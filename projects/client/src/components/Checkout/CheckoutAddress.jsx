@@ -21,7 +21,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 
-export const CheckoutAddress = () => {
+export const CheckoutAddress = ({ setDestination }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [address, setAddress] = useState([]);
     const [name, setName] = useState("");
@@ -39,6 +39,10 @@ export const CheckoutAddress = () => {
                 },
             });
             setAddress(result.data.result);
+            setDestination(
+                result.data.result.find((item) => item.default_address === true)
+                    .city_id
+            );
         } catch (err) {}
     }, [url, token]);
     const selectDefaultAddress = async (item) => {
@@ -270,6 +274,12 @@ export const CheckoutAddress = () => {
                                                                 }
                                                                 size={"sm"}
                                                                 onClick={() => {
+                                                                    console.log(
+                                                                        item
+                                                                    );
+                                                                    setDestination(
+                                                                        item.city_id
+                                                                    );
                                                                     selectDefaultAddress(
                                                                         item
                                                                     );
@@ -310,7 +320,11 @@ export const CheckoutAddress = () => {
                                     );
                                 })
                             ) : (
-                                <Text textAlign="center" mt={6} fontWeight={"600"}>
+                                <Text
+                                    textAlign="center"
+                                    mt={6}
+                                    fontWeight={"600"}
+                                >
                                     You Don't Have an Address Yet
                                 </Text>
                             )}

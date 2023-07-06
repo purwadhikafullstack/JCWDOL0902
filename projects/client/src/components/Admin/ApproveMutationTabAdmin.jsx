@@ -169,9 +169,9 @@ export const WarehouseMutationApproveList = () => {
                                                 />
                                                 {/* <IconButton
                                                         onClick={() => {
-                                                            deleteWarning(
-                                                                item.id
-                                                            );
+                                                            // deleteWarning(
+                                                            //     item.id
+                                                            // );
                                                         }}
                                                         bg={"none"}
                                                         color={"#ff4d4d"}
