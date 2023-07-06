@@ -30,7 +30,7 @@ import Swal from "sweetalert2";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle  } from "react-icons/ai";
 
-export const ApproveMutation = ({ category, getCategory }) => {
+export const ApproveMutation = ({ getMutation }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -49,8 +49,7 @@ export const ApproveMutation = ({ category, getCategory }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <EditForm
-                            categoryValue={category}
-                            getCategory={getCategory}
+                            getMutation={getMutation}
                             close={onClose}
                         />
                     </ModalBody>
@@ -60,10 +59,10 @@ export const ApproveMutation = ({ category, getCategory }) => {
     );
 };
 
-const EditForm = ({ close, categoryValue, getCategory }) => {
+const EditForm = ({ close, warehouseLocation, getMutation }) => {
     const url =
         process.env.REACT_APP_API_BASE_URL +
-        `/admin/edit-category/${categoryValue.id}`;
+        `/admin/fetch-mutation-requests/${warehouseLocation.id}`;
     const token = localStorage.getItem("token");
 
     const validation = Yup.object().shape({
@@ -72,7 +71,7 @@ const EditForm = ({ close, categoryValue, getCategory }) => {
 
     const ApproveMutation = async (value) => {
         try {
-            if (value.name !== categoryValue.name) {
+            if (value.name !== warehouseLocation.name) {
                 const editData = {
                     name: value.name,
                 };
@@ -81,7 +80,7 @@ const EditForm = ({ close, categoryValue, getCategory }) => {
                         authorization: `Bearer ${token}`,
                     },
                 });
-                getCategory();
+                getMutation();
 
                 Swal.fire({
                     icon: "success",
@@ -106,7 +105,7 @@ const EditForm = ({ close, categoryValue, getCategory }) => {
             <Formik
                 initialValues={{
                     // category: "",
-                    name: categoryValue.name,
+                    name: warehouseLocation.name,
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
@@ -117,7 +116,7 @@ const EditForm = ({ close, categoryValue, getCategory }) => {
                     return (
                         <Form>
                             <FormControl>
-                                <FormLabel>Category</FormLabel>
+                                <FormLabel>Confirmation</FormLabel>
                                 <Input as={Field} name={"name"} />
                                 <ErrorMessage
                                     style={{ color: "red" }}

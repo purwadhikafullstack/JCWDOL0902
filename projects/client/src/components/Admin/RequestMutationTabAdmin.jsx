@@ -21,7 +21,7 @@ import {
 import { BsArrowUp, BsArrowDown } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
-import {CreateRequestMutation} from "./AdminProperties/CreateRequestMutation"
+import { CreateRequestMutation } from "./AdminProperties/CreateRequestMutation";
 
 export const WarehouseMutationRequestList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -34,6 +34,7 @@ export const WarehouseMutationRequestList = () => {
     const [order, setOrder] = useState("ASC");
     const [pages, setPages] = useState();
     const [search, setSearch] = useState(``);
+    const [product, setProduct] = useState();
 
     const getMutation = useCallback(async () => {
         try {
@@ -55,9 +56,19 @@ export const WarehouseMutationRequestList = () => {
                     },
                 }
             );
+            const resultProduct = await Axios.get(
+                url +
+                    `/fetch-productlist?search=${search}&sort=${sort}&order=${order}&page=${page}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-            setWarehouse(resultWarehouse.data.result);
+            setWarehouse(resultWarehouse.data.allWarehouse);
             setMutation(resultMutation.data.result);
+            setProduct(resultProduct.data.allProduct)
             setPages(resultMutation.data.pages);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -88,13 +99,10 @@ export const WarehouseMutationRequestList = () => {
                 <Stack>
                     <Center>
                         <CreateRequestMutation
-                                getMutation={getMutation}
-                                
-                            />
-                        {/* <AddProduct
-                                getProducts={getProducts}
-                                category={category}
-                            /> */}
+                            getMutation={getMutation}
+                            warehouse={warehouse}
+                            product={product}
+                        />
                     </Center>
                 </Stack>
             </Center>

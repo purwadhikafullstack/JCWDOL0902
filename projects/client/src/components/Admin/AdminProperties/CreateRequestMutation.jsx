@@ -1,6 +1,6 @@
 // react
 import Axios from "axios";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 // validation
 import { Formik, ErrorMessage, Form, Field, FastField } from "formik";
@@ -23,6 +23,11 @@ import {
     Select,
     Center,
     IconButton,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
 } from "@chakra-ui/react";
 
 // swal
@@ -32,7 +37,7 @@ import Swal from "sweetalert2";
 import { CgMathPlus } from "react-icons/cg";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 
-export const CreateRequestMutation = ({ getMutation, warehouses }) => {
+export const CreateRequestMutation = ({ getMutation, warehouse, product }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -48,13 +53,14 @@ export const CreateRequestMutation = ({ getMutation, warehouses }) => {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader textAlign={"center"}>
-                        Create Request Mutation and Assign to
+                        Request Mutation Form
                     </ModalHeader>
                     <ModalBody>
                         <AddForm
                             close={onClose}
                             getMutation={getMutation}
-                            warehouses={warehouses}
+                            warehouse_name={warehouse}
+                            product_name={product}
                         />
                     </ModalBody>
                 </ModalContent>
@@ -63,62 +69,41 @@ export const CreateRequestMutation = ({ getMutation, warehouses }) => {
     );
 };
 
-const AddForm = ({ close, getMutation, warehouses }) => {
+const AddForm = ({ close, getMutation, warehouse_name, product_name }) => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
-    const [cities, setCities] = useState();
-    const [warehouse, setWarehouse] = useState();
-    const [warehouseId, setWarehouseId] = useState();
-    const [city, setCity] = useState();
-    const [cityId, setCityId] = useState();
-    const [productId, setProductId] = useState();
-    const [qty, setQty] = useState();
 
+    const product_id = useRef("")
+    const warehouse_location_id = useRef("")
     const validation = Yup.object().shape({
-        product_id: Yup.string().required("Cannot be Empty"),
-        address: Yup.string().required("Cannot be Empty"),
-        user_id: Yup.string().required("Cannot be Empty"),
+        qty: Yup.number().required("Cannot be Empty"),
+       
     });
-
-    const getWarehouses = useCallback(async () => {
-        try {
-            const resultWarehouse = await Axios.get(
-                process.env.REACT_APP_API_BASE_URL + `/fetch-warehouses/${warehouseId}`
-            );
-            setWarehouse(resultWarehouse.data.result);
-        } catch (err) {}
-    }, [warehouseId]);
 
     const reqMutation = async (value) => {
         try {
             const data = {
-                product_id: value.product_id.name,
-                address: value.address,
-                warehouse: warehouse,
-                warehouse_id: +warehouseId,
-                city: city,
-                city_id: +cityId,
-                user_id: value.user_id,
-                qty: value.qty
-            };
-
-            const result = await Axios.post(url + "/req-mutation", data, {
+                product_id : product_id.current.value,
+                warehouse_location_id : warehouse_location_id.current.value,
+                qty : value.qty,
+                remarks : value.remarks
+            }
+            await Axios.post(url + "/req-mutation", data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-
-            console.log(result.data.message);
-
+        
             Swal.fire({
                 icon: "success",
                 title: "Success",
-                text: result.data.message,
+                text: "Request Mutation Successfuly Created",
             });
 
             getMutation();
             close();
+
         } catch (err) {
             console.log(err);
             Swal.fire({
@@ -127,123 +112,89 @@ const AddForm = ({ close, getMutation, warehouses }) => {
                 text: err.response.data.message,
             });
         }
-    };
-
-    useEffect(() => {
-        if (warehouse) {
-            getWarehouses();
-        }
-    }, [warehouse, getWarehouses]);
+    }
 
     return (
         <Box>
             <Formik
                 initialValues={{
-                    product_id: "",
-                    user_id: "",
-                    address: "",
+                    qty: ""
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
                     reqMutation(value);
                 }}
-            >
+            > 
+            {(props) => {
+                return (
                 <Form>
                     <FormControl isRequired>
                         <FormLabel>Product ID</FormLabel>
-                        <Input as={Field} name={"product_id"} />
+                        <Select
+                            ref={product_id}
+                            placeholder={"-- Select --"}
+                        >
+                            {product_name?.map((item, index) => {
+                                return (
+                                    <option
+                                        key={index}
+                                        value={[
+                                            item.name
+                                        ]}
+                                    >
+                                        {item.name}
+                                    </option>
+                                );
+                            })}
+                        </Select>
                         <ErrorMessage
                             style={{ color: "red" }}
                             component="div"
                             name="product_id"
                         />
                         <FormLabel>Qty</FormLabel>
-                        <FastField name="qty">
-                            {({ field, form }) => (
-                                <Textarea
-                                    {...field}
-                                    size="lg"
-                                    isInvalid={
-                                        form.errors.qty &&
-                                        form.touched.qty
-                                    }
-                                />
-                            )}
-                        </FastField>
+                        <NumberInput defaultValue={0} min={0}>
+                        <NumberInputField />
+                         <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                         </NumberInputStepper>
+                        </NumberInput>
                         <ErrorMessage
                             style={{ color: "red" }}
                             component="div"
                             name="address"
                         />
-                        <FormLabel>Destination Warehouse</FormLabel>
+                        
+                        <FormLabel>Request to Warehouse</FormLabel>
                         <Select
+                            ref={warehouse_location_id}
                             placeholder={"-- Select --"}
-                            onChange={(e) => {
-                                setWarehouseId(e.target.value.split(",")[0]);
-                                setWarehouse(e.target.value.split(",")[1]);
-                            }}
                         >
-                            {warehouses?.map((item, index) => {
+                            {warehouse_name?.map((item, index) => {
                                 return (
                                     <option
                                         key={index}
                                         value={[
-                                            item.warehouse_id,
-                                            item.warehouse,
+                                            item.warehouse_name
                                         ]}
                                     >
-                                        {item.warehouse}
+                                        {item.warehouse_name}
                                     </option>
                                 );
                             })}
                         </Select>
-                        {cities ? (
-                            <>
-                                <FormLabel>City</FormLabel>
-                                <Select
-                                    placeholder={"-- Select --"}
-                                    onChange={(e) => {
-                                        setCityId(e.target.value.split(",")[0]);
-                                        setCity(e.target.value.split(",")[1]);
-                                    }}
-                                >
-                                    {cities?.map((item, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={[
-                                                    item.city_id,
-                                                    item.city_name,
-                                                ]}
-                                            >
-                                                {item.city_name}
-                                            </option>
-                                        );
-                                    })}
-                                </Select>
-                            </>
-                        ) : null}
-                        <FormLabel>User ID</FormLabel>
+                        <FormLabel>Remarks</FormLabel>
                         <Input
                             as={Field}
-                            name={"user_id"}
-                            placeholder="You can find the ID in the Users Tab"
+                            name={"Remarks"}
+                            placeholder="Remarks"
                         />
                         <ErrorMessage
                             style={{ color: "red" }}
                             component="div"
-                            name="user_id"
+                            name="remarks"
                         />
-                        {/* <FormLabel>Admin Id</FormLabel>
-                        <Select ref={UserId} placeholder={"- Select -"}>
-                            {admin.map((item, index) => {
-                                return (
-                                    <option value={item.id} key={index}>
-                                        {item.id}
-                                    </option>
-                                );
-                            })}
-                        </Select> */}
                         <Center paddingTop={"10px"} gap={"10px"}>
                             <IconButton
                                 icon={<RxCheck />}
@@ -260,6 +211,8 @@ const AddForm = ({ close, getMutation, warehouses }) => {
                         </Center>
                     </FormControl>
                 </Form>
+                )
+            }}
             </Formik>
         </Box>
     );

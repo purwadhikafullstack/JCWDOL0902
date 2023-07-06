@@ -11,6 +11,7 @@ const adminMutationRouters = require("./adminMutationRouters");
 const userOrderRouters = require("./userOrderRouters");
 const userAddressRouters = require("./userAddressRouters");
 const adminStockReportRouters = require("./adminStockReportRouters");
+const adminTransactionRouters = require("./adminTransactionsRouters");
 
 module.exports = {
     userRouters,
@@ -26,4 +27,5 @@ module.exports = {
     userOrderRouters,
     userAddressRouters,
     adminStockReportRouters,
+    adminTransactionRouters,
 };

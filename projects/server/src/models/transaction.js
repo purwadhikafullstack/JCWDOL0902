@@ -28,18 +28,29 @@ module.exports = (sequelize, DataTypes) => {
     }
     transaction.init(
         {
+            id: {
+                allowNull: false,
+                autoIncrement: false,
+                primaryKey: true,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
+            },
             shipping: DataTypes.INTEGER,
             shipping_method: DataTypes.STRING,
             courier: DataTypes.STRING,
             upload_payment: DataTypes.STRING,
-            expired: DataTypes.DATE,
+            expired: DataTypes.DATEONLY,
             total_price: DataTypes.INTEGER,
             total_qty: DataTypes.INTEGER,
-            transaction_date: DataTypes.DATE,
+            transaction_date: {
+                type: DataTypes.DATEONLY,
+                defaultValue: DataTypes.NOW,
+            },
         },
         {
             sequelize,
             modelName: "transaction",
+            timestamps: false,
         }
     );
     return transaction;
