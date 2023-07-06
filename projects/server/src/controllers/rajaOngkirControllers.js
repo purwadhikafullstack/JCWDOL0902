@@ -48,4 +48,40 @@ module.exports = {
             });
         }
     },
+    getOngkir: async (req, res) => {
+        try {
+            const { destination, origin, courier } = req.query;
+
+            const response = await (
+                await axios.post(
+                    `${RAJAONGKIR_URL}/cost`,
+                    {
+                        origin: origin,
+                        destination: destination,
+                        weight: 1000,
+                        courier: courier,
+                    },
+                    {
+                        headers: {
+                            key: RAJAONGKIR_KEY,
+                            "content-type": "application/x-www-form-urlencoded",
+                        },
+                    }
+                )
+            ).data;
+
+            // console.log(JSON.stringify(response.rajaongkir.results, null, 2));
+
+            return res.status(200).json({
+                status: true,
+                data: response.rajaongkir.results,
+            });
+        } catch (error) {
+            console.log(JSON.stringify(error.response.data));
+            return res.status(500).send({
+                status: false,
+                message: error.message,
+            });
+        }
+    },
 };
