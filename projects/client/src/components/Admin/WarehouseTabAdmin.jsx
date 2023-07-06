@@ -24,7 +24,11 @@ import {
 import Swal from "sweetalert2";
 
 import { BiSearch } from "react-icons/bi";
-import { BsFillTrashFill, BsArrowUp, BsArrowDown } from "react-icons/bs";
+import {
+    BsFillTrashFill,
+    BsFillCaretDownFill,
+    BsFillCaretUpFill,
+} from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { RxReload } from "react-icons/rx";
 
@@ -201,9 +205,11 @@ export const WarehouseList = () => {
                                                 <Center>{item.name}</Center>
                                                 <Stack>
                                                     <IconButton
-                                                        icon={<BsArrowUp />}
+                                                        icon={
+                                                            <BsFillCaretUpFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -214,9 +220,11 @@ export const WarehouseList = () => {
                                                         bg={"none"}
                                                     />
                                                     <IconButton
-                                                        icon={<BsArrowDown />}
+                                                        icon={
+                                                            <BsFillCaretDownFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin

@@ -18,10 +18,10 @@ import {
     Text,
 } from "@chakra-ui/react";
 
-import { BsArrowUp, BsArrowDown } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
-import {CreateRequestMutation} from "./AdminProperties/CreateRequestMutation"
+import { CreateRequestMutation } from "./AdminProperties/CreateRequestMutation";
 
 export const WarehouseMutationRequestList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -87,10 +87,7 @@ export const WarehouseMutationRequestList = () => {
             <Center paddingBottom={"12px"}>
                 <Stack>
                     <Center>
-                        <CreateRequestMutation
-                                getMutation={getMutation}
-                                
-                            />
+                        <CreateRequestMutation getMutation={getMutation} />
                         {/* <AddProduct
                                 getProducts={getProducts}
                                 category={category}
@@ -117,9 +114,11 @@ export const WarehouseMutationRequestList = () => {
                                                 <Center>{item.name}</Center>
                                                 <Stack>
                                                     <IconButton
-                                                        icon={<BsArrowUp />}
+                                                        icon={
+                                                            <BsFillCaretUpFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -130,9 +129,11 @@ export const WarehouseMutationRequestList = () => {
                                                         bg={"none"}
                                                     />
                                                     <IconButton
-                                                        icon={<BsArrowDown />}
+                                                        icon={
+                                                            <BsFillCaretDownFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin

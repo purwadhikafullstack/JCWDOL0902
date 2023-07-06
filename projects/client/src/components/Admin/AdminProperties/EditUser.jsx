@@ -25,7 +25,7 @@ import {
 import Swal from "sweetalert2";
 
 // icons
-import { BsFillGearFill } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 
 export const EditUser = ({ user, getUsers }) => {
@@ -33,11 +33,7 @@ export const EditUser = ({ user, getUsers }) => {
 
     return (
         <Box>
-            <IconButton
-                icon={<BsFillGearFill />}
-                bg={"none"}
-                onClick={onOpen}
-            />
+            <IconButton icon={<FaEdit />} bg={"none"} onClick={onOpen} />
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

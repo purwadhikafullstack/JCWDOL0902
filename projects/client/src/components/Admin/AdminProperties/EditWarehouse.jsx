@@ -24,7 +24,7 @@ import {
 import Swal from "sweetalert2";
 
 // icons
-import { BsFillGearFill } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 
 export const EditWarehouse = ({
@@ -37,11 +37,7 @@ export const EditWarehouse = ({
 
     return (
         <Box>
-            <IconButton
-                icon={<BsFillGearFill />}
-                bg={"none"}
-                onClick={onOpen}
-            />
+            <IconButton icon={<FaEdit />} bg={"none"} onClick={onOpen} />
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -191,16 +187,6 @@ const EditForm = ({ close, getWarehouse, admin, provinces, warehouse }) => {
                                         value={[item.city_id, item.city_name]}
                                     >
                                         {item.city_name}
-                                    </option>
-                                );
-                            })}
-                        </Select>
-                        <FormLabel>Admin Id</FormLabel>
-                        <Select ref={UserId} defaultValue={warehouse.UserId}>
-                            {admin.map((item, index) => {
-                                return (
-                                    <option value={item.id} key={index}>
-                                        {item.id}
                                     </option>
                                 );
                             })}

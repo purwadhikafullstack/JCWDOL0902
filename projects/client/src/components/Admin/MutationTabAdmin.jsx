@@ -18,7 +18,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 
-import { BsArrowUp, BsArrowDown } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
 export const MutationList = () => {
@@ -92,9 +92,11 @@ export const MutationList = () => {
                                                 <Center>{item.name}</Center>
                                                 <Stack>
                                                     <IconButton
-                                                        icon={<BsArrowUp />}
+                                                        icon={
+                                                            <BsFillCaretUpFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -105,9 +107,11 @@ export const MutationList = () => {
                                                         bg={"none"}
                                                     />
                                                     <IconButton
-                                                        icon={<BsArrowDown />}
+                                                        icon={
+                                                            <BsFillCaretDownFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin

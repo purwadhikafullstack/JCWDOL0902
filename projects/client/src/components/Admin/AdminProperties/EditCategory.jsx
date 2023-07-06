@@ -26,19 +26,15 @@ import {
 import Swal from "sweetalert2";
 
 // icons
-import { BsFillGearFill } from "react-icons/bs";
 import { RxCheck, RxCross1 } from "react-icons/rx";
+import { FaEdit } from "react-icons/fa";
 
 export const EditCategory = ({ category, getCategory }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <Box>
-            <IconButton
-                icon={<BsFillGearFill />}
-                bg={"none"}
-                onClick={onOpen}
-            />
+            <IconButton icon={<FaEdit />} bg={"none"} onClick={onOpen} />
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

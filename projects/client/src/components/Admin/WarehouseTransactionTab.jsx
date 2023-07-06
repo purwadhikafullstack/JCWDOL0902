@@ -25,11 +25,11 @@ import { BiSearch } from "react-icons/bi";
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
-export const ReportList = () => {
+export const WarehouseTransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
 
-    const [report, setReport] = useState();
+    const [transaction, setTransaction] = useState();
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
     const [page, setPage] = useState(0);
@@ -40,20 +40,20 @@ export const ReportList = () => {
 
     const searchValue = useRef(``);
 
-    const getReport = useCallback(async () => {
+    const getTransaction = useCallback(async () => {
         try {
-            const reportURL =
+            const transactionURL =
                 url +
-                `/fetch-all-stock-reports?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
+                `/fetch-warehouse-transactions?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
 
-            const resultReport = await Axios.get(reportURL, {
+            const transactionResult = await Axios.get(transactionURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
 
-            setReport(resultReport.data.result);
-            setPages(resultReport.data.pages);
+            setTransaction(transactionResult.data.result);
+            setPages(transactionResult.data.pages);
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -61,31 +61,16 @@ export const ReportList = () => {
     }, [url, order, page, search, sort, token, startDate, endDate]);
 
     useEffect(() => {
-        getReport();
-    }, [getReport]);
+        getTransaction();
+    }, [getTransaction]);
 
     const tableHead = [
-        { name: "Date", origin: "journal_date", width: "200px" },
-        { name: "Type", origin: "type", width: "200px" },
-        { name: "Product", origin: "product_id", width: "" },
-        { name: "Warehouse", origin: "warehouse_location_id", width: "150px" },
-        { name: "Increment", origin: "increment_change", width: "100px" },
-        { name: "Decrement", origin: "decrement_change", width: "100px" },
-        {
-            name: "Total Stock Before",
-            origin: "total_qty_before",
-            width: "100px",
-        },
-        {
-            name: "Updated Total Stock",
-            origin: "new_total_qty",
-            width: "100px",
-        },
-        {
-            name: "Remarks",
-            origin: "description",
-            width: "100px",
-        },
+        { name: "Transaction ID", origin: "id", width: "200px" },
+        { name: "Date", origin: "transaction_date", width: "200px" },
+        { name: "User Name", origin: "user_id", width: "200px" },
+        { name: "User Address", origin: "user_address_id", width: "150px" },
+        { name: "Order Status", origin: "order_status_id", width: "100px" },
+        { name: "Expire Date", origin: "expired", width: "100px" },
     ];
 
     return (
@@ -200,8 +185,8 @@ export const ReportList = () => {
                             })}
                         </Tr>
                     </Thead>
-                    {report ? (
-                        report?.map((item, index) => {
+                    {transaction ? (
+                        transaction?.map((item, index) => {
                             return (
                                 <Tbody
                                     key={index}
@@ -209,35 +194,21 @@ export const ReportList = () => {
                                     _hover={{ bg: "#CAF0F8" }}
                                 >
                                     <Tr>
+                                        <Td textAlign={"center"}>{item.id}</Td>
                                         <Td textAlign={"center"}>
-                                            {item.journal_date}
+                                            {item.transaction_date}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.type}
+                                            {item.user?.name}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.product?.name}
+                                            {item.user_address?.user_address}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {
-                                                item.warehouse_location
-                                                    ?.warehouse_name
-                                            }
+                                            {item.order_status?.status}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.increment_change}
-                                        </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.decrement_change}
-                                        </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.total_qty_before}
-                                        </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.new_total_qty}
-                                        </Td>
-                                        <Td textAlign={"center"}>
-                                            {item.description}
+                                            {item.expired}
                                         </Td>
                                     </Tr>
                                 </Tbody>

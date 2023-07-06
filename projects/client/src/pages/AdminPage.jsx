@@ -40,6 +40,7 @@ import {
 import { BsInboxesFill } from "react-icons/bs";
 import { ImCheckmark } from "react-icons/im";
 import { TbReportAnalytics } from "react-icons/tb";
+import { BsFillCartCheckFill } from "react-icons/bs";
 
 import logo from "../assets/hobbyzone_logo.png";
 import simple from "../assets/hobbyzone_logo_simple.png";
@@ -71,6 +72,7 @@ export const AdminPage = () => {
                           label: "Stock Journal Report",
                           icon: TbReportAnalytics,
                       },
+                      { label: "Transactions", icon: BsFillCartCheckFill },
                   ]
                 : [
                       { label: "Categories", icon: FaListAlt },
@@ -85,6 +87,10 @@ export const AdminPage = () => {
                           icon: ImCheckmark,
                       },
                       { label: "My Stock Journal", icon: TbReportAnalytics },
+                      {
+                          label: "My Warehouse Transactions",
+                          icon: BsFillCartCheckFill,
+                      },
                   ];
 
         return (
@@ -102,7 +108,7 @@ export const AdminPage = () => {
                 </Flex>
                 <Stack paddingTop={"2"}>
                     {items.map((item, index) => {
-                        const Icon = item.icon; // Dynamically set the icon component
+                        const Icon = item.icon;
 
                         return (
                             <Button

@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "order_status",
+            timestamps: false,
         }
     );
     return order_status;
