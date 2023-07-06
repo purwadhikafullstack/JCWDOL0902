@@ -11,6 +11,7 @@ import {
   Divider,
   Text,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
 import { CheckoutItem } from "./CheckoutItem";
 import { CheckoutSummary } from "./CheckoutSummary";
@@ -44,6 +45,7 @@ export const CheckoutForm = () => {
   const [selectedCourier, setSelectedCourier] = useState({});
   const [services, setServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const cart = useSelector((state) => state.cartSlice.value);
   const cartQty = useSelector((state) =>
@@ -54,6 +56,12 @@ export const CheckoutForm = () => {
   const totalPrice = useSelector((state) =>
     state.cartSlice.value.reduce(function (acc, obj) {
       return acc + obj.qty * obj.product.price;
+    }, 0)
+  );
+
+  const totalWeight = useSelector((state) =>
+    state.cartSlice.value.reduce(function (acc, obj) {
+      return acc + obj.qty * obj.product.weight;
     }, 0)
   );
 
@@ -87,15 +95,18 @@ export const CheckoutForm = () => {
       if (!selectedCourier.id || !address) {
         return;
       }
+      setLoading(true);
       const BASE_API = process.env.REACT_APP_API_BASE_URL;
       const { data } = await axios.get(
         BASE_API +
-          `/cost?courier=${selectedCourier.id}&origin=115&destination=${address} `
+          `/cost?courier=${selectedCourier.id}&origin=115&destination=${address}&weight=${totalWeight}`
       );
 
       setServices(data.data[0].costs);
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error.message);
+      setLoading(false);
     }
   };
 
@@ -170,7 +181,9 @@ export const CheckoutForm = () => {
               ))}
             </Stack>
             <Flex gap={5}>
-              {services &&
+              {loading ? (
+                <Spinner size={"lg"} colorScheme="blue" />
+              ) : (
                 services.map((item) => (
                   <Flex
                     flexDirection={"column"}
@@ -200,7 +213,8 @@ export const CheckoutForm = () => {
                       {Intl.NumberFormat("id-ID").format(item.cost[0].value)}
                     </Text>
                   </Flex>
-                ))}
+                ))
+              )}
             </Flex>
             {/* Insert Shipment Form */}
           </Stack>
