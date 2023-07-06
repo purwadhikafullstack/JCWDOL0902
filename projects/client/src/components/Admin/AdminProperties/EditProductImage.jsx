@@ -21,7 +21,7 @@ import {
 // swal
 import Swal from "sweetalert2";
 
-import { AiOutlineFileImage } from "react-icons/ai";
+import { RiImageEditFill } from "react-icons/ri";
 import { RxCheck, RxCross1 } from "react-icons/rx";
 import React from "react";
 
@@ -31,7 +31,7 @@ export const EditProductImage = ({ getProducts, item }) => {
     return (
         <Box>
             <IconButton
-                icon={<AiOutlineFileImage />}
+                icon={<RiImageEditFill />}
                 bg={"none"}
                 onClick={onOpen}
             />

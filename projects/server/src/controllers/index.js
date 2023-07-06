@@ -11,6 +11,7 @@ const adminMutationControllers = require("./adminMutationControllers");
 const userOrderControllers = require("./userOrderControllers");
 const userAddressControllers = require("./userAddressControllers");
 const adminStockReportControllers = require("./adminStockReportControllers");
+const adminTransactionsControllers = require("./adminTransactionControllers");
 
 module.exports = {
     userControllers,
@@ -26,4 +27,5 @@ module.exports = {
     userOrderControllers,
     userAddressControllers,
     adminStockReportControllers,
+    adminTransactionsControllers,
 };

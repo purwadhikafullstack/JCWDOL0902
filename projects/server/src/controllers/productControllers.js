@@ -93,6 +93,9 @@ module.exports = {
                     name: req.params.name,
                 },
             });
+            if (!result) {
+                throw { message: "Product not found!" };
+            }
             const weight = result.weight >= 1000 ? result.weight / 1000 : "";
             res.status(200).send({
                 result: result,

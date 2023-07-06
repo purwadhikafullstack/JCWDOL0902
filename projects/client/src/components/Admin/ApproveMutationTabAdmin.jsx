@@ -18,10 +18,10 @@ import {
     Text,
 } from "@chakra-ui/react";
 
-import { BsArrowUp, BsArrowDown } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
-import {ApproveMutation} from "./AdminProperties/ApproveMutation"
+import { ApproveMutation } from "./AdminProperties/ApproveMutation";
 
 export const WarehouseMutationApproveList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -90,9 +90,11 @@ export const WarehouseMutationApproveList = () => {
                                                 <Center>{item.name}</Center>
                                                 <Stack>
                                                     <IconButton
-                                                        icon={<BsArrowUp />}
+                                                        icon={
+                                                            <BsFillCaretUpFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -103,9 +105,11 @@ export const WarehouseMutationApproveList = () => {
                                                         bg={"none"}
                                                     />
                                                     <IconButton
-                                                        icon={<BsArrowDown />}
+                                                        icon={
+                                                            <BsFillCaretDownFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -150,26 +154,20 @@ export const WarehouseMutationApproveList = () => {
                                             {item.remarks}
                                         </Td>
                                         <Td>
-                                                <Flex
-                                                    gap={"20px"}
-                                                    justifyContent={"center"}
-                                                    alignItems={"center"}
-                                                >
-                                                    <ApproveMutation
-                                                        mutation={
-                                                            mutation[index]
-                                                        }
-                                                        getMutation={
-                                                            getMutation
-                                                        }
-                                                    />
-                                                    <ApproveMutation
-                                                        item={item}
-                                                        getMutation={
-                                                            getMutation
-                                                        }
-                                                    />
-                                                    {/* <IconButton
+                                            <Flex
+                                                gap={"20px"}
+                                                justifyContent={"center"}
+                                                alignItems={"center"}
+                                            >
+                                                <ApproveMutation
+                                                    mutation={mutation[index]}
+                                                    getMutation={getMutation}
+                                                />
+                                                <ApproveMutation
+                                                    item={item}
+                                                    getMutation={getMutation}
+                                                />
+                                                {/* <IconButton
                                                         onClick={() => {
                                                             deleteWarning(
                                                                 item.id
@@ -181,8 +179,8 @@ export const WarehouseMutationApproveList = () => {
                                                             <BsFillTrashFill />
                                                         }
                                                     /> */}
-                                                </Flex>
-                                            </Td>
+                                            </Flex>
+                                        </Td>
                                     </Tr>
                                 </Tbody>
                             );
