@@ -21,7 +21,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 
-export const CheckoutAddress = ({ setDestination }) => {
+export const CheckoutAddress = ({ setDestination, setFullAddress }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [address, setAddress] = useState([]);
     const [name, setName] = useState("");
@@ -39,6 +39,7 @@ export const CheckoutAddress = ({ setDestination }) => {
                 },
             });
             setAddress(result.data.result);
+            setFullAddress(result.data.result);
             setDestination(
                 result.data.result.find((item) => item.default_address === true)
                     .city_id
@@ -274,9 +275,6 @@ export const CheckoutAddress = ({ setDestination }) => {
                                                                 }
                                                                 size={"sm"}
                                                                 onClick={() => {
-                                                                    console.log(
-                                                                        item
-                                                                    );
                                                                     setDestination(
                                                                         item.city_id
                                                                     );
