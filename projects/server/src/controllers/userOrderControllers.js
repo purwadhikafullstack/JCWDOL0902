@@ -330,7 +330,7 @@ module.exports = {
                 });
             }
 
-            res.status(200).send({status: true});
+            res.status(200).send({ status: true });
         } catch (error) {
             res.status(400).send(error);
         }

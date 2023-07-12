@@ -50,6 +50,7 @@ const {
     userAddressRouters,
     adminStockReportRouters,
     adminTransactionRouters,
+    userTransactionRouters,
     adminSalesReportRouters,
 } = require("./routes/index");
 
@@ -58,6 +59,7 @@ app.use("/api/users", userRouters);
 app.use("/api/users", userProfileRouters);
 app.use("/api/users", userAddressRouters);
 app.use("/api/users", userOrderRouters);
+app.use("/api/users", userTransactionRouters);
 
 //admin
 app.use("/api/admin", adminUserRouters);

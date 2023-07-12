@@ -17,6 +17,7 @@ import { login } from "./redux/userSlice";
 import { cartUser } from "./redux/cartSlice";
 import Axios from "axios";
 import { AddressPage } from "./pages/UserAddressPage";
+import OrderListPage from "./pages/OrderListPage";
 
 const router = createBrowserRouter([
     {
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
         element: <CartPage />,
         errorElement: <ErrorPage />,
     },
-    ,
+    {
+        path: "/order-list",
+        element: <OrderListPage />,
+        errorElement: <ErrorPage />,
+    },
+
     { path: "/category/:category", element: <ProductFilteredPage /> },
     {
         path: "/checkout",
