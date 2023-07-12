@@ -81,7 +81,7 @@ import {
                 text: `Please Upload Your Payment Proof!`,
             });
             // navigate("/order-list");
-            navigate("/");
+            navigate("/order-list");
         } catch (err) {}
     };
   
