@@ -15,6 +15,11 @@ router.get(
     superAdminLogin,
     adminTransactionsControllers.fetchAllTransactions
 );
+router.patch(
+    "/transaction/:id",
+    superAdminLogin,
+    adminTransactionsControllers.updateStatusTransaction
+);
 router.get(
     "/fetch-warehouse-transactions",
     login,

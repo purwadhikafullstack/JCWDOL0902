@@ -16,17 +16,17 @@ import {
     ModalFooter,
     RadioGroup,
     Radio,
-} from "@chakra-ui/react";
-import { FaArrowRight } from "react-icons/fa";
-import Swal from "sweetalert2";
-import axios from "axios";
-import decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-
-
-const baseApi = process.env.REACT_APP_API_BASE_URL;
-
-export const CheckoutSummary = (props) => {
+  } from "@chakra-ui/react";
+  import { FaArrowRight } from "react-icons/fa";
+  import Swal from "sweetalert2";
+  import axios from "axios";
+  import decode from "jwt-decode";
+  import { useNavigate } from "react-router-dom";
+  
+  
+  const baseApi = process.env.REACT_APP_API_BASE_URL;
+  
+  export const CheckoutSummary = (props) => {
     const navigate = useNavigate();
     const {
         cartQty,
@@ -38,10 +38,10 @@ export const CheckoutSummary = (props) => {
         warehouseId,
     } = props;
     const { onOpen, onClose, isOpen } = useDisclosure();
-
+  
     const token = localStorage.getItem("token");
     const decodedToken = decode(token);
-
+  
     const handleCheckout = () => {
         if (!address) {
             return Swal.fire({
@@ -57,7 +57,7 @@ export const CheckoutSummary = (props) => {
         }
         onOpen();
     };
-
+  
     const createOrder = async () => {
         try {
             const transactionData = {
@@ -69,22 +69,22 @@ export const CheckoutSummary = (props) => {
                 total_qty: cartQty,
                 user_address_id: fullAddress.filter((item) => item.default_address === true)[0].id,
             };
-
+  
             await axios.post(
                 `${baseApi}/users/create-order/${decodedToken.id}`,
                 transactionData
             );
-
+  
             Swal.fire({
                 icon: "success",
                 title: "Payment on Process",
                 text: `Please Upload Your Payment Proof!`,
             });
             // navigate("/order-list");
-            navigate("/");
+            navigate("/order-list");
         } catch (err) {}
     };
-
+  
     return (
         <Stack
             spacing="5"
@@ -132,7 +132,7 @@ export const CheckoutSummary = (props) => {
             >
                 Choose Payment Method
             </Button>
-
+  
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -212,4 +212,4 @@ export const CheckoutSummary = (props) => {
             </Modal>
         </Stack>
     );
-};
+  };
