@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import decode from "jwt-decode";
 
 // redux
 import { useSelector } from "react-redux";
@@ -42,10 +43,19 @@ const COURIER = [
 
 export const CheckoutForm = () => {
   const [address, setAddress] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
   const [selectedCourier, setSelectedCourier] = useState({});
   const [services, setServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState({});
   const [loading, setLoading] = useState(false);
+  const [warehouse, setWarehouse] = useState("");
+  const [warehouseCity, setWarehouseCity] = useState("");
+  const [warehouseCityId, setWarehouseCityId] = useState("");
+  const [warehouseProvince, setWarehouseProvince] = useState("");
+  const BASE_API = process.env.REACT_APP_API_BASE_URL;
+
+  const token = localStorage.getItem("token");
+  const decodedToken = decode(token);
 
   const cart = useSelector((state) => state.cartSlice.value);
   const cartQty = useSelector((state) =>
@@ -89,6 +99,9 @@ export const CheckoutForm = () => {
   const handleSetDestination = (arg) => {
     setAddress(arg);
   };
+  const handleSetFullAddress = (arg) => {
+    setFullAddress(arg);
+  };
 
   const getOngkir = async () => {
     try {
@@ -99,7 +112,7 @@ export const CheckoutForm = () => {
       const BASE_API = process.env.REACT_APP_API_BASE_URL;
       const { data } = await axios.get(
         BASE_API +
-          `/cost?courier=${selectedCourier.id}&origin=115&destination=${address}&weight=${totalWeight}`
+          `/cost?courier=${selectedCourier.id}&origin=${warehouseCityId}&destination=${address}&weight=${totalWeight}`
       );
 
       setServices(data.data[0].costs);
@@ -109,10 +122,25 @@ export const CheckoutForm = () => {
       setLoading(false);
     }
   };
+  const getNearestWarehouse = async () => {
+    try {
+      const originWarehouse = await axios.get(
+        `${BASE_API}/users/get-warehouse/${decodedToken.id}`
+      );
+
+      setWarehouse(originWarehouse.data.origin[0].id);
+      setWarehouseCity(originWarehouse.data.origin[0].city);
+      setWarehouseCityId(originWarehouse.data.origin[0].city_id);
+      setWarehouseProvince(originWarehouse.data.origin[0].province);
+    } catch (err) {}
+  };
 
   useEffect(() => {
     getOngkir();
   }, [selectedCourier, address]);
+  useEffect(() => {
+    getNearestWarehouse();
+  }, [address]);
 
   return (
     <Box
@@ -157,13 +185,19 @@ export const CheckoutForm = () => {
               Addresses
             </Heading>
             <Divider orientation="horizontal" />
-            <CheckoutAddress setDestination={handleSetDestination} />
+            <CheckoutAddress
+              setDestination={handleSetDestination}
+              setFullAddress={handleSetFullAddress}
+            />
           </Stack>
           <Stack flex="2">
             <Heading fontSize="2xl" fontWeight="extrabold">
               Shipment Methods
             </Heading>
             <Divider orientation="horizontal" />
+            <Text fontSize="lg">
+              Sent From: {warehouseCity}, {warehouseProvince}
+            </Text>
             <Stack flexDirection={"row"} alignItems={"center"} mb={"3"}>
               {COURIER.map((item) => (
                 <Flex
@@ -180,12 +214,13 @@ export const CheckoutForm = () => {
                 </Flex>
               ))}
             </Stack>
-            <Flex gap={5}>
+            <Flex gap={5} flexWrap={"wrap"}>
               {loading ? (
                 <Spinner size={"lg"} colorScheme="blue" />
               ) : (
                 services.map((item) => (
                   <Flex
+                    minW={"10rem"}
                     flexDirection={"column"}
                     flex={1}
                     border={"2px"}
@@ -232,11 +267,15 @@ export const CheckoutForm = () => {
           <CheckoutSummary
             cartQty={cartQty}
             totalPrice={totalPrice}
+            fullAddress={fullAddress}
+            address={address}
             shipmentCost={
               Object.keys(selectedServices).length > 0
                 ? selectedServices?.cost[0]?.value
                 : 0
             }
+            selectedServices={selectedServices}
+            warehouseId={warehouse}
           />
         </Flex>
       </Stack>

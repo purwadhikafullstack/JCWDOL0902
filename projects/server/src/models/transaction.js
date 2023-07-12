@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.user, {
                 foreignKey: "user_id",
             });
-            this.hasOne(models.transaction_item, {
+            this.hasMany(models.transaction_item, {
                 foreignKey: "transaction_id",
             });
         }
