@@ -10,6 +10,7 @@ const product_location = db.product_location;
 const transaction = db.transaction;
 const transaction_item = db.transaction_item;
 const warehouse_location = db.warehouse_location;
+const stock_journal = db.stock_journal;
 
 module.exports = {
     fetchCart: async (req, res) => {
@@ -281,7 +282,7 @@ module.exports = {
             });
 
             // Set expired at 1 hour
-            const expired = new Date(Date.now() + 10 * 60 * 60 * 1000);
+            const expired = new Date(Date.now() + 2 * 60 * 60 * 1000);
 
             // Create Transaction
             const createOrder = await transaction.create({
@@ -319,6 +320,36 @@ module.exports = {
                     transaction_id: createOrder.id,
                 });
             }
+
+            // update stock
+            await Promise.all(
+                product_id.map(async (item, i) => {
+                    console.log(product_locations);
+                    const qtyBefore = product_locations.find(
+                        (item) => item.product_id === item
+                    );
+
+                    await product_location.decrement("qty", {
+                        by: quantity[i],
+                        where: {
+                            product_id: item,
+                            warehouse_location_id: nearestWarehouse_id,
+                        },
+                    });
+                    await stock_journal.create({
+                        journal_date: new Date(),
+                        type: "Sold",
+                        decrement_change: quantity[i],
+                        total_qty_before: +qtyBefore.qty,
+                        new_total_qty: +qtyBefore.qty - quantity[i],
+                        description: "Sold",
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        product_id: item,
+                        warehouse_location_id: nearestWarehouse_id,
+                    });
+                })
+            );
 
             // Destory cart by cart id
             const cartDestroy = Item.map((item) => item.id);

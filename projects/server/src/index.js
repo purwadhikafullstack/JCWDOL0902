@@ -1,9 +1,10 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-const express = require('express');
-const cors = require('cors');
-const { join } = require('path');
-const db = require('./models');
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+const express = require("express");
+const cors = require("cors");
+const { join } = require("path");
+const db = require("./models");
+const scheduler = require("node-schedule");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -17,20 +18,20 @@ app.use(cors());
 // );
 
 app.use(express.json());
-app.use('/Public', express.static(path.join(__dirname, 'Public')));
+app.use("/Public", express.static(path.join(__dirname, "Public")));
 
 //#region API ROUTES
 
 // ===========================
 // NOTE : Add your routes here
 
-app.get('/api', (req, res) => {
+app.get("/api", (req, res) => {
     res.send(`Hello, this is my API`);
 });
 
-app.get('/api/greetings', (req, res, next) => {
+app.get("/api/greetings", (req, res, next) => {
     res.status(200).json({
-        message: 'Hello, Student !',
+        message: "Hello, Student !",
     });
 });
 
@@ -52,38 +53,38 @@ const {
     adminTransactionRouters,
     userTransactionRouters,
     adminSalesReportRouters,
-} = require('./routes/index');
+} = require("./routes/index");
 
 //users
-app.use('/api/users', userRouters);
-app.use('/api/users', userProfileRouters);
-app.use('/api/users', userAddressRouters);
-app.use('/api/users', userOrderRouters);
-app.use('/api/users', userTransactionRouters);
+app.use("/api/users", userRouters);
+app.use("/api/users", userProfileRouters);
+app.use("/api/users", userAddressRouters);
+app.use("/api/users", userOrderRouters);
+app.use("/api/users", userTransactionRouters);
 
 //admin
-app.use('/api/admin', adminUserRouters);
-app.use('/api/admin', adminWarehouseRouters);
-app.use('/api/admin', categoryRouters);
-app.use('/api/admin', adminProductRouters);
-app.use('/api/admin', adminStockRouters);
-app.use('/api/admin', adminMutationRouters);
-app.use('/api/admin', adminStockReportRouters);
-app.use('/api/admin', adminTransactionRouters);
-app.use('/api/admin', adminSalesReportRouters);
+app.use("/api/admin", adminUserRouters);
+app.use("/api/admin", adminWarehouseRouters);
+app.use("/api/admin", categoryRouters);
+app.use("/api/admin", adminProductRouters);
+app.use("/api/admin", adminStockRouters);
+app.use("/api/admin", adminMutationRouters);
+app.use("/api/admin", adminStockReportRouters);
+app.use("/api/admin", adminTransactionRouters);
+app.use("/api/admin", adminSalesReportRouters);
 
 //products
-app.use('/api/products', productRouters);
+app.use("/api/products", productRouters);
 
 //rajaongkir
-app.use('/api', rajaOngkirRouters);
+app.use("/api", rajaOngkirRouters);
 
 // ===========================
 
 // not found
 app.use((req, res, next) => {
-    if (req.path.includes('/api/')) {
-        res.status(404).send('Not found !');
+    if (req.path.includes("/api/")) {
+        res.status(404).send("Not found !");
     } else {
         next();
     }
@@ -91,9 +92,9 @@ app.use((req, res, next) => {
 
 // error
 app.use((err, req, res, next) => {
-    if (req.path.includes('/api/')) {
-        console.error('Error : ', err.stack);
-        res.status(500).send('Error !');
+    if (req.path.includes("/api/")) {
+        console.error("Error : ", err.stack);
+        res.status(500).send("Error !");
     } else {
         next();
     }
@@ -102,12 +103,12 @@ app.use((err, req, res, next) => {
 //#endregion
 
 //#region CLIENT
-const clientPath = '../../client/build';
+const clientPath = "../../client/build";
 app.use(express.static(join(__dirname, clientPath)));
 
 // Serve the HTML page
-app.get('*', (req, res) => {
-    res.sendFile(join(__dirname, clientPath, 'index.html'));
+app.get("*", (req, res) => {
+    res.sendFile(join(__dirname, clientPath, "index.html"));
 });
 
 //#endregion
