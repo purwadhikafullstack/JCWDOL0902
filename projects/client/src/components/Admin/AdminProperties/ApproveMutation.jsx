@@ -22,15 +22,14 @@ import {
     Center,
 } from "@chakra-ui/react";
 
-
 // swal
 import Swal from "sweetalert2";
 
 // icons
 import { RxCheck, RxCross1 } from "react-icons/rx";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle  } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
-export const ApproveMutation = ({ getMutation }) => {
+export const ApproveMutation = ({ category, getCategory }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -49,7 +48,8 @@ export const ApproveMutation = ({ getMutation }) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <EditForm
-                            getMutation={getMutation}
+                            categoryValue={category}
+                            getCategory={getCategory}
                             close={onClose}
                         />
                     </ModalBody>
@@ -59,10 +59,10 @@ export const ApproveMutation = ({ getMutation }) => {
     );
 };
 
-const EditForm = ({ close, warehouseLocation, getMutation }) => {
+const EditForm = ({ close, categoryValue, getCategory }) => {
     const url =
         process.env.REACT_APP_API_BASE_URL +
-        `/admin/fetch-mutation-requests/${warehouseLocation.id}`;
+        `/admin/edit-category/${categoryValue.id}`;
     const token = localStorage.getItem("token");
 
     const validation = Yup.object().shape({
@@ -71,7 +71,7 @@ const EditForm = ({ close, warehouseLocation, getMutation }) => {
 
     const ApproveMutation = async (value) => {
         try {
-            if (value.name !== warehouseLocation.name) {
+            if (value.name !== categoryValue.name) {
                 const editData = {
                     name: value.name,
                 };
@@ -80,7 +80,7 @@ const EditForm = ({ close, warehouseLocation, getMutation }) => {
                         authorization: `Bearer ${token}`,
                     },
                 });
-                getMutation();
+                getCategory();
 
                 Swal.fire({
                     icon: "success",
@@ -105,7 +105,7 @@ const EditForm = ({ close, warehouseLocation, getMutation }) => {
             <Formik
                 initialValues={{
                     // category: "",
-                    name: warehouseLocation.name,
+                    name: categoryValue.name,
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
@@ -116,7 +116,7 @@ const EditForm = ({ close, warehouseLocation, getMutation }) => {
                     return (
                         <Form>
                             <FormControl>
-                                <FormLabel>Confirmation</FormLabel>
+                                <FormLabel>Category</FormLabel>
                                 <Input as={Field} name={"name"} />
                                 <ErrorMessage
                                     style={{ color: "red" }}

@@ -45,6 +45,7 @@ export const UserMenu = () => {
     } else {
         decodedToken = null;
     }
+    const { role } = useSelector((state) => state.userSlice.value);
 
     const dispatch = useDispatch();
     const onLogout = () => {
@@ -104,6 +105,19 @@ export const UserMenu = () => {
                     <PopoverBody display="flex" flexDir="column">
                         {token ? (
                             <Stack>
+                                {role !== 1 ? (
+                                    <Button
+                                        as={Link}
+                                        to="/admin"
+                                        fontWeight="600"
+                                        colorScheme="teal"
+                                    >
+                                        <RiAdminFill
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
+                                        Admin Page
+                                    </Button>
+                                ) : null}
                                 <Button
                                     as={Link}
                                     to="/profile/settings"
@@ -115,7 +129,7 @@ export const UserMenu = () => {
                                 </Button>
                                 <Button
                                     as={Link}
-                                    to="/profile/settings"
+                                    to="/profile/address"
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >
@@ -137,7 +151,7 @@ export const UserMenu = () => {
                                 </Button>
                                 <Button
                                     as={Link}
-                                    to="/cart"
+                                    to="/order-list"
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >
