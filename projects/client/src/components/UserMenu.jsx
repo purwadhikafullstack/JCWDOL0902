@@ -153,7 +153,7 @@ export const UserMenu = () => {
                                 </Button>
                                 <Button
                                     as={Link}
-                                    to="/cart"
+                                    to="/order-list"
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >

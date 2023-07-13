@@ -125,4 +125,23 @@ module.exports = {
             res.status(400).send(error);
         }
     },
+    updateStatusTransaction: async (req, res) => {
+        try {
+            const { body, params } = req;
+            console.log({ body, params });
+            await transaction.update(
+                {
+                    order_status_id: body.status,
+                },
+                { where: { id: params.id } }
+            );
+
+            res.status(200).send({
+                message: "status updated!",
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    },
 };

@@ -39,7 +39,7 @@ import {
 } from "react-icons/fa";
 import { BsInboxesFill } from "react-icons/bs";
 import { ImCheckmark } from "react-icons/im";
-import { TbReportAnalytics } from "react-icons/tb";
+import { TbReportAnalytics, TbReportSearch } from "react-icons/tb";
 import { BsFillCartCheckFill } from "react-icons/bs";
 
 import logo from "../assets/hobbyzone_logo.png";
@@ -73,6 +73,7 @@ export const AdminPage = () => {
                           icon: TbReportAnalytics,
                       },
                       { label: "Transactions", icon: BsFillCartCheckFill },
+                      { label: "Sales Report", icon: TbReportSearch },
                   ]
                 : [
                       { label: "Categories", icon: FaListAlt },
@@ -90,6 +91,10 @@ export const AdminPage = () => {
                       {
                           label: "My Warehouse Transactions",
                           icon: BsFillCartCheckFill,
+                      },
+                      {
+                          label: "Sales Report",
+                          icon: TbReportSearch,
                       },
                   ];
 

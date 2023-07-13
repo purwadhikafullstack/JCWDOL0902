@@ -38,7 +38,9 @@ module.exports = {
                 offset: page ? +page * 10 : 0,
             });
 
-            res.status(200).send({ result, pages });
+            const allCategory = await category.findAll();
+
+            res.status(200).send({ result, pages, allCategory });
         } catch (error) {
             res.status(400).send({
                 status: false,
