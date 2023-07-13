@@ -10,6 +10,7 @@ const order_status = db.order_status;
 const user_address = db.user_address;
 const product_location = db.product_location;
 const warehouse_location = db.warehouse_location;
+const stock_journal = db.stock_journal;
 
 module.exports = {
     fetchAll: async (req, res) => {
@@ -56,7 +57,7 @@ module.exports = {
                 ],
             });
 
-            console.log(data);
+            // console.log(data);
             res.json(data);
         } catch (error) {
             console.log(error);
@@ -69,6 +70,44 @@ module.exports = {
             const { id } = params;
             if (Object.keys(files).length > 0) {
                 body.upload_payment = `Public/images/${req.files.images[0].filename}`;
+            }
+
+            console.log("BODY", body.order_status_id);
+
+            if (body.order_status_id === 6) {
+                const currTransactionItems = await transaction_item.findAll({
+                    where: { transaction_id: id },
+                    includes: [
+                        {
+                            model: product_location,
+                        },
+                    ],
+                });
+
+                await Promise.all(
+                    currTransactionItems.map(async (item, i) => {
+                        const { product_location: pl } = item;
+                        await product_location.increment("qty", {
+                            by: item.qty,
+                            where: {
+                                id: item.product_location_id,
+                            },
+                        });
+                        await stock_journal.create({
+                            journal_date: new Date(),
+                            type: "Cancel Order",
+                            increment_change: item.qty,
+                            decrement_change: 0,
+                            total_qty_before: pl.qty,
+                            new_total_qty: pl.qty + item.qty,
+                            description: "Cancel Order",
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            product_id: item,
+                            warehouse_location_id: item.warehouse_location_id,
+                        });
+                    })
+                );
             }
 
             // console.log(body);
