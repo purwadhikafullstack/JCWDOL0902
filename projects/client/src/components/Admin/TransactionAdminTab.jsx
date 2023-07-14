@@ -38,6 +38,9 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+const serverApi = process.env.REACT_APP_SERVER;
+
+
 export const TransactionList = () => {
   const url = process.env.REACT_APP_API_BASE_URL + "/admin";
   const token = localStorage.getItem("token");
@@ -335,7 +338,7 @@ export const TransactionList = () => {
                       <ModalCloseButton />
                       <ModalBody>
                         <Box>
-                          <img src={item.upload_payment} alt="payment-proof" />
+                          <img src={serverApi+item.upload_payment} alt="payment-proof" />
                         </Box>
                       </ModalBody>
                       <ModalFooter>

@@ -72,12 +72,10 @@ module.exports = {
                 body.upload_payment = `Public/images/${req.files.images[0].filename}`;
             }
 
-            console.log("BODY", body.order_status_id);
-
-            if (body.order_status_id === 6) {
+            if (+body.order_status_id === 6) {
                 const currTransactionItems = await transaction_item.findAll({
                     where: { transaction_id: id },
-                    includes: [
+                    include: [
                         {
                             model: product_location,
                         },
@@ -95,15 +93,15 @@ module.exports = {
                         });
                         await stock_journal.create({
                             journal_date: new Date(),
-                            type: "Cancel Order",
+                            type: "Canceled",
                             increment_change: item.qty,
                             decrement_change: 0,
                             total_qty_before: pl.qty,
                             new_total_qty: pl.qty + item.qty,
-                            description: "Cancel Order",
+                            description: "Canceled",
                             createdAt: new Date(),
                             updatedAt: new Date(),
-                            product_id: item,
+                            product_id: pl.product_id,
                             warehouse_location_id: item.warehouse_location_id,
                         });
                     })
