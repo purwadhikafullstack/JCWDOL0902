@@ -77,7 +77,10 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
     const warehouse_location_id = useRef("");
 
     const validation = Yup.object().shape({
-        qty: Yup.number("Must be Integer").required("Cannot be Empty"),
+        qty: Yup.number("Must be a number")
+            .typeError("Must be a number")
+            .positive("Must be a positive number")
+            .required("Cannot be empty"),
     });
 
     const AddProductStock = async (value) => {
@@ -91,7 +94,7 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
                               (product_name) =>
                                   product_name.warehouse_location.user_id ===
                                   decodedToken.id
-                          ).warehouse_location.id,
+                          )[0].warehouse_location.id,
                 qty: value.qty,
             };
 
