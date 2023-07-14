@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React from "react";
+import { useState } from "react";
 import {
     Popover,
     PopoverTrigger,
@@ -14,24 +14,24 @@ import {
     Box,
     Stack,
     useToast,
-} from '@chakra-ui/react';
-import decode from 'jwt-decode';
-import { useNavigate, Link } from 'react-router-dom';
+} from "@chakra-ui/react";
+import decode from "jwt-decode";
+import { useNavigate, Link } from "react-router-dom";
 import {
     FaUser,
     FaMapMarkerAlt,
     FaShoppingCart,
     FaHistory,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
-import { RiAdminFill } from 'react-icons/ri';
+import { RiAdminFill } from "react-icons/ri";
 
-import { RegisterationForm } from './Authentications/RegisterationForm';
-import { LoginForm } from './Authentications/LoginForm';
+import { RegisterationForm } from "./Authentications/RegisterationForm";
+import { LoginForm } from "./Authentications/LoginForm";
 
-import userLogin from '../assets/default_avatar.jpg';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/userSlice';
+import userLogin from "../assets/default_avatar.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
 
@@ -40,7 +40,7 @@ export const UserMenu = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     let decodedToken;
     if (token) {
         decodedToken = decode(token);
@@ -52,17 +52,17 @@ export const UserMenu = () => {
     const dispatch = useDispatch();
     const onLogout = () => {
         toast({
-            title: 'Logging out',
-            status: 'warning',
-            position: 'top',
+            title: "Logging out",
+            status: "warning",
+            position: "top",
             duration: 2000,
             isClosable: true,
         });
 
         setTimeout(() => {
             dispatch(logout());
-            localStorage.removeItem('token');
-            navigate('/');
+            localStorage.removeItem("token");
+            navigate("/");
         }, 2000);
     };
 
@@ -100,7 +100,7 @@ export const UserMenu = () => {
                             <Box fontWeight="600" fontSize="lg">
                                 {token
                                     ? `Hi, ${decodedToken.name}`
-                                    : 'Login Menu'}
+                                    : "Login Menu"}
                             </Box>
                         </Box>
                     </PopoverHeader>
@@ -115,8 +115,8 @@ export const UserMenu = () => {
                                         colorScheme="teal"
                                     >
                                         <RiAdminFill
-                                            style={{ marginRight: '0.5rem' }}
-                                        />{' '}
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
                                         Admin Page
                                     </Button>
                                 ) : null}
@@ -126,7 +126,7 @@ export const UserMenu = () => {
                                     fontWeight="600"
                                     colorScheme="linkedin"
                                 >
-                                    <FaUser style={{ marginRight: '0.5rem' }} />{' '}
+                                    <FaUser style={{ marginRight: "0.5rem" }} />{" "}
                                     Profile
                                 </Button>
                                 <Button
@@ -136,8 +136,8 @@ export const UserMenu = () => {
                                     colorScheme="linkedin"
                                 >
                                     <FaMapMarkerAlt
-                                        style={{ marginRight: '0.5rem' }}
-                                    />{' '}
+                                        style={{ marginRight: "0.5rem" }}
+                                    />{" "}
                                     Address
                                 </Button>
                                 <Button
@@ -147,8 +147,8 @@ export const UserMenu = () => {
                                     colorScheme="linkedin"
                                 >
                                     <FaShoppingCart
-                                        style={{ marginRight: '0.5rem' }}
-                                    />{' '}
+                                        style={{ marginRight: "0.5rem" }}
+                                    />{" "}
                                     Cart
                                 </Button>
                                 <Button
@@ -158,8 +158,8 @@ export const UserMenu = () => {
                                     colorScheme="linkedin"
                                 >
                                     <FaHistory
-                                        style={{ marginRight: '0.5rem' }}
-                                    />{' '}
+                                        style={{ marginRight: "0.5rem" }}
+                                    />{" "}
                                     My Order History
                                 </Button>
                             </Stack>
