@@ -349,6 +349,36 @@ module.exports = {
                 });
             }
 
+            // update stock
+            await Promise.all(
+                product_id.map(async (item, i) => {
+                    console.log(product_locations);
+                    const qtyBefore = product_locations.find(
+                        (item) => item.product_id === item
+                    );
+
+                    await product_location.decrement("qty", {
+                        by: quantity[i],
+                        where: {
+                            product_id: item,
+                            warehouse_location_id: nearestWarehouse_id,
+                        },
+                    });
+                    await stock_journal.create({
+                        journal_date: new Date(),
+                        type: "Sold",
+                        decrement_change: quantity[i],
+                        total_qty_before: +qtyBefore.qty,
+                        new_total_qty: +qtyBefore.qty - quantity[i],
+                        description: "Sold",
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        product_id: item,
+                        warehouse_location_id: nearestWarehouse_id,
+                    });
+                })
+            );
+
             // Destory cart by cart id
             const cartDestroy = Item.map((item) => item.id);
             for (let i = 0; i < cartDestroy.length; i++) {
