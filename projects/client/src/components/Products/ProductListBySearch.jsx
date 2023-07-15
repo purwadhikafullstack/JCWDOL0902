@@ -73,10 +73,10 @@ export const ProductListBySearch = () => {
             <Select
                 placeholder="Sort by"
                 mb={5}
-                backgroundColor={"#3182CE"}
+                backgroundColor={"#CAF0F8"}
                 fontWeight={"600"}
                 borderRadius={"lg"}
-                color={"white"}
+                color={"023E8A"}
                 size={"sm"}
                 maxW="250px"
                 onChange={(e) => setSort(e.target.value)}

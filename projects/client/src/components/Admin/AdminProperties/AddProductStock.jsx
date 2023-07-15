@@ -96,7 +96,7 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
                               (product_name) =>
                                   product_name.warehouse_location.user_id ===
                                   decodedToken.id
-                          ).warehouse_location.id,
+                          )[0].warehouse_location.id,
                 qty: value.qty,
             };
 

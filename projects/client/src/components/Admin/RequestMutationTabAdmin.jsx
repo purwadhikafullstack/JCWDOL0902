@@ -18,7 +18,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 
-import { BsArrowUp, BsArrowDown } from "react-icons/bs";
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 
 import { CreateRequestMutation } from "./AdminProperties/CreateRequestMutation";
@@ -68,7 +68,7 @@ export const WarehouseMutationRequestList = () => {
 
             setWarehouse(resultWarehouse.data.allWarehouse);
             setMutation(resultMutation.data.result);
-            setProduct(resultProduct.data.allProduct)
+            setProduct(resultProduct.data.allProduct);
             setPages(resultMutation.data.pages);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -125,9 +125,11 @@ export const WarehouseMutationRequestList = () => {
                                                 <Center>{item.name}</Center>
                                                 <Stack>
                                                     <IconButton
-                                                        icon={<BsArrowUp />}
+                                                        icon={
+                                                            <BsFillCaretUpFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
@@ -138,9 +140,11 @@ export const WarehouseMutationRequestList = () => {
                                                         bg={"none"}
                                                     />
                                                     <IconButton
-                                                        icon={<BsArrowDown />}
+                                                        icon={
+                                                            <BsFillCaretDownFill />
+                                                        }
                                                         size={"xs"}
-                                                        color={"black"}
+                                                        color={"white"}
                                                         onClick={() => {
                                                             setSort(
                                                                 item.origin
