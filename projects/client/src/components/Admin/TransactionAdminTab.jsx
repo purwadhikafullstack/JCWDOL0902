@@ -27,6 +27,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    useDisclosure,
 } from "@chakra-ui/react";
 
 import { BiSearch } from "react-icons/bi";
@@ -152,7 +153,6 @@ export const TransactionList = () => {
             }
         });
     };
-
     const handleAcceptPayment = (id) => {
         setOpenModal("");
         Swal.fire({
@@ -206,6 +206,7 @@ export const TransactionList = () => {
     const handleOpenModal = async (transactionId) => {
         setSelectedTransactionId(transactionId);
         await getTransactionItems(transactionId);
+
     };
 
     return (
