@@ -19,12 +19,31 @@ import {
     Stack,
     Skeleton,
     Text,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
 } from "@chakra-ui/react";
 
 import { BiSearch } from "react-icons/bi";
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-
+import Swal from "sweetalert2";
+import axios from "axios";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+const serverApi = process.env.REACT_APP_SERVER;
+function formatDate(val) {
+    const date = new Date(val)
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear());
+    
+    return `${day}-${month}-${year}`;
+  }
 export const WarehouseTransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
@@ -37,6 +56,7 @@ export const WarehouseTransactionList = () => {
     const [search, setSearch] = useState(``);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [openModal, setOpenModal] = useState('');
 
     const searchValue = useRef(``);
 
@@ -57,7 +77,7 @@ export const WarehouseTransactionList = () => {
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-        } catch (err) {}
+        } catch (err) { }
     }, [url, order, page, search, sort, token, startDate, endDate]);
 
     useEffect(() => {
@@ -71,7 +91,99 @@ export const WarehouseTransactionList = () => {
         { name: "User Address", origin: "user_address_id", width: "150px" },
         { name: "Order Status", origin: "order_status_id", width: "100px" },
         { name: "Expire Date", origin: "expired", width: "100px" },
+        { name: "Payment", origin: "", width: "100px" },
+        { name: "confirmation", origin: "", width: "100px" },
     ];
+
+    const TEXT_MESSAGE = {
+        1: "Payment rejected!",
+        3: "Payment accepted!",
+        4: "Order accepted!",
+        6: "Order rejected!",
+    }
+
+    const handleAcceptOrder = (id) => {
+        Swal.fire({
+            text: "Apakah anda ingin menerima pesanan?",
+            icon: "warning",
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: "#4BB543",
+            confirmButtonText: "Accept",
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await updateStatusTransaction(id, 4)
+            }
+        });
+    };
+
+    const handleRejectOrder = (id) => {
+        Swal.fire({
+            text: "Apakah anda yakin ingin menolak pesanan?",
+            icon: "warning",
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: "red",
+            confirmButtonText: "Reject",
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await updateStatusTransaction(id, 6)
+            }
+        });
+    };
+
+    const handleAcceptPayment = (id) => {
+        setOpenModal('')
+        Swal.fire({
+            text: "Apakah anda ingin menerima pembayaran?",
+            icon: "warning",
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: "#4BB543",
+            confirmButtonText: "Accept",
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await updateStatusTransaction(id, 3)
+            }
+        });
+    };
+
+    const handleRejectPayment = (id) => {
+        setOpenModal('')
+
+        Swal.fire({
+            text: "Apakah anda yakin ingin menolak pembayaran?",
+            icon: "warning",
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: "red",
+            confirmButtonText: "Reject",
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await updateStatusTransaction(id, 1)
+
+            }
+        });
+    };
+
+
+    const updateStatusTransaction = async (id, status) => {
+        try {
+            const { data: res } = await axios.patch(url + `/transaction/${id}`, { status }, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            })
+            console.log(res);
+            await getTransaction()
+            Swal.fire({
+                text: TEXT_MESSAGE[status],
+                icon: 'success'
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <Box padding={{ base: "10px", lg: "0" }}>
@@ -196,7 +308,7 @@ export const WarehouseTransactionList = () => {
                                     <Tr>
                                         <Td textAlign={"center"}>{item.id}</Td>
                                         <Td textAlign={"center"}>
-                                            {item.transaction_date}
+                                            {formatDate(item.transaction_date)}
                                         </Td>
                                         <Td textAlign={"center"}>
                                             {item.user?.name}
@@ -208,9 +320,59 @@ export const WarehouseTransactionList = () => {
                                             {item.order_status?.status}
                                         </Td>
                                         <Td textAlign={"center"}>
-                                            {item.expired}
+                                            {formatDate(item.expired)}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            <Button colorScheme="blue" isDisabled={item.order_status_id === 1} onClick={() => setOpenModal(item.id)}>View</Button>
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {
+                                                item.order_status_id < 4 ? <Flex gap={"3"}>
+                                                    <Button
+                                                        onClick={() => handleAcceptOrder(item.id)}
+                                                        variant={"unstyled"}
+                                                        color={"green.500"}
+                                                        fontSize={"3xl"}
+                                                    >
+                                                        <AiFillCheckCircle />
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleRejectOrder(item.id)}
+                                                        variant={"unstyled"}
+                                                        color={"red.500"}
+                                                        fontSize={"3xl"}
+                                                    >
+                                                        <AiFillCloseCircle />
+                                                    </Button>
+                                                </Flex> : <Text>{item.order_status_id === 6 ? 'Rejected' : 'Confirmed'}</Text>
+                                            }
                                         </Td>
                                     </Tr>
+                                    <Modal isOpen={openModal === item.id} onClose={() => setOpenModal('')}>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader>Payment Proof</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <Box>
+                                                    <img src={serverApi + item.upload_payment} alt="payment-proof" />
+                                                </Box>
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                {
+                                                    +item.order_status_id < 3 && (
+                                                        <Flex>
+                                                            <Button colorScheme="whatsapp" mr={3} onClick={() => handleAcceptPayment(item.id)}>Confirm Payment</Button>
+                                                            <Button colorScheme='red' onClick={() => handleRejectPayment(item.id)} >
+                                                                Reject Payment
+                                                            </Button>
+                                                        </Flex>
+                                                    )
+                                                }
+                                            </ModalFooter>
+                                        </ModalContent>
+
+                                    </Modal>
                                 </Tbody>
                             );
                         })

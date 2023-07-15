@@ -7,6 +7,7 @@ const db = require("./models");
 const scheduler = require("node-schedule");
 const transaction = db.transaction;
 const { Op } = require("sequelize");
+const moment = require("moment");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -128,12 +129,12 @@ const checkPayment = async () => {
                         currentDate.getFullYear(),
                         currentDate.getMonth(),
                         currentDate.getDate()
-                    ),
+                    ).setUTCHours(0, 0, 0, 0),
                     [Op.lt]: new Date(
                         currentDate.getFullYear(),
                         currentDate.getMonth(),
                         currentDate.getDate() + 1
-                    ),
+                    ).setUTCHours(0, 0, 0, 0),
                 },
             },
         });
