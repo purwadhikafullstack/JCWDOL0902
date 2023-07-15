@@ -23,6 +23,11 @@ import {
     Select,
     Center,
     IconButton,
+    NumberInputField,
+    NumberInput,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInputStepper,
 } from "@chakra-ui/react";
 
 // swal
@@ -77,7 +82,7 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
     const warehouse_location_id = useRef("");
 
     const validation = Yup.object().shape({
-        qty: Yup.number("Must be Integer").required("Cannot be Empty"),
+        qty: Yup.number().required("Cannot be Empty").min(1, "Cannot be Empty"),
     });
 
     const AddProductStock = async (value) => {
@@ -124,7 +129,7 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
         <Box>
             <Formik
                 initialValues={{
-                    qty: "",
+                    qty: 0,
                 }}
                 validationSchema={validation}
                 onSubmit={(value) => {
@@ -174,7 +179,24 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
                                     </>
                                 ) : null}
                                 <FormLabel>Add Stock</FormLabel>
-                                <Input name={"qty"} as={Field} />
+                                <NumberInput
+                                    defaultValue={0}
+                                    min={0}
+                                    onChange={(value) => {
+                                        props.setFieldValue(
+                                            "qty",
+                                            parseInt(value)
+                                        );
+                                    }}
+                                    type="number"
+                                    name="qty"
+                                >
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
                                 <ErrorMessage
                                     style={{ color: "red" }}
                                     component="div"
