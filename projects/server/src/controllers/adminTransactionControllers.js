@@ -5,6 +5,7 @@ const db = require("../models");
 const transaction = db.transaction;
 const transaction_item = db.transaction_item;
 const product_location = db.product_location;
+const product = db.product;
 const user = db.user;
 const orderStatus = db.order_status;
 const userAddress = db.user_address;
@@ -157,6 +158,11 @@ module.exports = {
                                 id: trx.product_location_id,
                             },
                         });
+                        await product.increment("stock", {
+                            by: trx.qty,
+                            where: { id: pl.product_id },
+                        });
+
                         await stock_journal.create({
                             journal_date: new Date(),
                             type: "Canceled",
