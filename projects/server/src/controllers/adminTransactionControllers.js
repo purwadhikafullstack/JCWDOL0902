@@ -10,6 +10,9 @@ const user = db.user;
 const orderStatus = db.order_status;
 const userAddress = db.user_address;
 const warehouse = db.warehouse_location;
+const transactionItem = db.transaction_item;
+const productLocation = db.product_location;
+const TransItems = require("../resources/transactionItem");
 
 module.exports = {
     fetchAllTransactions: async (req, res) => {
@@ -183,6 +186,33 @@ module.exports = {
             res.status(200).send({
                 message: "status updated!",
             });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    },
+    fetchSelectedTransItem: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const items = await transactionItem.findAll({
+                where: { transaction_id: id },
+                include: [
+                    {
+                        model: productLocation,
+                        include: [
+                            {
+                                model: product,
+                                attributes: ["name"],
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            console.log(items);
+
+            res.status(200).send({ data: TransItems.collection(items) });
         } catch (error) {
             console.log(error);
             res.status(400).send(error);

@@ -24,11 +24,13 @@ import {
     FaHistory,
 } from "react-icons/fa";
 
+import { RiAdminFill } from "react-icons/ri";
+
 import { RegisterationForm } from "./Authentications/RegisterationForm";
 import { LoginForm } from "./Authentications/LoginForm";
 
 import userLogin from "../assets/default_avatar.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
