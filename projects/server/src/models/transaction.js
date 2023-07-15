@@ -39,11 +39,11 @@ module.exports = (sequelize, DataTypes) => {
             shipping_method: DataTypes.STRING,
             courier: DataTypes.STRING,
             upload_payment: DataTypes.STRING,
-            expired: DataTypes.DATEONLY,
+            expired: DataTypes.DATE,
             total_price: DataTypes.INTEGER,
             total_qty: DataTypes.INTEGER,
             transaction_date: {
-                type: DataTypes.DATEONLY,
+                type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
         },

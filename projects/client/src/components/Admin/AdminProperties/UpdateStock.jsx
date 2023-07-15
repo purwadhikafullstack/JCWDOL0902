@@ -1,6 +1,6 @@
 // react
 import Axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // validation
 import { Formik, ErrorMessage, Form, Field } from "formik";
@@ -83,8 +83,6 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
     const [newStock, setNewStock] = useState(stockValue.qty);
     const [selectedType, setSelectedType] = useState();
 
-    const increment = useRef(``);
-    const decrement = useRef(``);
     const typeValue = useRef(``);
 
     const editStock = async (value) => {
@@ -140,7 +138,6 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                 validationSchema={validation}
                 onSubmit={(value) => {
                     editStock(value);
-                    console.log(value);
                 }}
             >
                 {(props) => {
@@ -161,7 +158,7 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                     placeholder="Select Type of Journal"
                                     name={"type"}
                                     ref={typeValue}
-                                    onClick={() => {
+                                    onChange={() => {
                                         setSelectedType(
                                             typeValue.current.value
                                         );
@@ -218,25 +215,15 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                                     defaultValue={0}
                                                     min={0}
                                                     name={"increment_change"}
-                                                    ref={increment}
-                                                    onClick={() => {
+                                                    // ref={increment}
+                                                    onChange={(e) => {
                                                         setNewStock(
                                                             stockValue.qty +
-                                                                parseInt(
-                                                                    increment
-                                                                        .current
-                                                                        .firstChild
-                                                                        .value
-                                                                )
+                                                                parseInt(e)
                                                         );
                                                         props.setFieldValue(
                                                             "increment_change",
-                                                            parseInt(
-                                                                increment
-                                                                    .current
-                                                                    .firstChild
-                                                                    .value
-                                                            )
+                                                            parseInt(e)
                                                         );
                                                     }}
                                                 >
@@ -255,29 +242,16 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                                 <NumberInput
                                                     defaultValue={0}
                                                     min={0}
-                                                    max={
-                                                        stockValue.product.stock
-                                                    }
+                                                    max={stockValue.qty}
                                                     name={"decrement_change"}
-                                                    ref={decrement}
-                                                    onClick={() => {
+                                                    onChange={(e) => {
                                                         setNewStock(
                                                             stockValue.qty -
-                                                                parseInt(
-                                                                    decrement
-                                                                        .current
-                                                                        .firstChild
-                                                                        .value
-                                                                )
+                                                                parseInt(e)
                                                         );
                                                         props.setFieldValue(
                                                             "decrement_change",
-                                                            parseInt(
-                                                                decrement
-                                                                    .current
-                                                                    .firstChild
-                                                                    .value
-                                                            )
+                                                            parseInt(e)
                                                         );
                                                     }}
                                                 >
@@ -298,7 +272,6 @@ const EditForm = ({ close, stockValue, getProductStock }) => {
                                         </FormLabel>
                                         <FormLabel
                                             textAlign={"center"}
-                                            paddingTop={"5px"}
                                             name={"new_total_qty"}
                                         >
                                             {newStock}

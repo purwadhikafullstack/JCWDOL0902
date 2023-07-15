@@ -70,19 +70,23 @@ import {
                 user_address_id: fullAddress.filter((item) => item.default_address === true)[0].id,
             };
   
-            await axios.post(
+            const {data: res} = await axios.post(
                 `${baseApi}/users/create-order/${decodedToken.id}`,
                 transactionData
             );
+  
+            console.log(res);
   
             Swal.fire({
                 icon: "success",
                 title: "Payment on Process",
                 text: `Please Upload Your Payment Proof!`,
             });
-            // navigate("/order-list");
             navigate("/order-list");
-        } catch (err) {}
+          //   navigate("/");
+        } catch (err) {
+          console.log(err);
+        }
     };
   
     return (

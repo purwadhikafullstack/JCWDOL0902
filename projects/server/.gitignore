@@ -10,7 +10,6 @@
 /build
 
 # misc
-Public
 .DS_Store
 .env
 .env.local
