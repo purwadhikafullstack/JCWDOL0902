@@ -64,7 +64,7 @@ export const ProductStockList = () => {
         try {
             const productStockURL =
                 url +
-                `/fetch-product-stock?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-product-stock?search=${search}&sort=${sort}&order=${order}&page=${page}&warehouse=${warehouse}`;
 
             const resultProductStockList = await Axios.get(productStockURL, {
                 headers: {
@@ -99,7 +99,7 @@ export const ProductStockList = () => {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
         } catch (err) {}
-    }, [url, order, page, search, sort, token]);
+    }, [url, order, page, search, sort, token, warehouse]);
 
     const deleteProductStock = async (id) => {
         try {
@@ -194,21 +194,20 @@ export const ProductStockList = () => {
                         <Select
                             paddingRight={"5px"}
                             defaultValue={"All Warehouse"}
-                            onChange={(e) => setWarehouse(e.target.value)}
+                            onChange={(e) => {
+                                setWarehouse(e.target.value);
+                            }}
                         >
                             <option value="All Warehouse">All Warehouse</option>
-                            {allWarehouseStock
-                                ?.map(
-                                    (item) =>
-                                        item.warehouse_location.warehouse_name
-                                )
-                                .filter(
-                                    (value, index, self) =>
-                                        self.indexOf(value) === index
-                                )
-                                .map((item, index) => {
-                                    return <option value={item}>{item}</option>;
-                                })}
+                            {allWarehouse?.map((item, index) => {
+                                return (
+                                    <option
+                                        value={item.id}
+                                    >
+                                        {item.warehouse_name}
+                                    </option>
+                                );
+                            })}
                         </Select>
                     ) : null}
                     {decodedToken.role === 3 ? (
@@ -296,66 +295,76 @@ export const ProductStockList = () => {
                                       productStock.warehouse_location
                                           .user_id === decodedToken.id
                               )
-                            : warehouse === "All Warehouse"
-                            ? productStock
-                            : productStock.filter(
-                                  (productStock) =>
-                                      productStock.warehouse_location
-                                          .warehouse_name === warehouse
-                              )
-                        ).map((item, index) => {
-                            return (
-                                <Tbody
-                                    key={index}
-                                    bg={"#ADE8F4"}
-                                    _hover={{ bg: "#CAF0F8" }}
-                                >
-                                    <Tr>
-                                        <Td textAlign={"center"}>{item.id}</Td>
-                                        <Td textAlign={"center"}>
-                                            {item.product.name}
-                                        </Td>
-                                        <Td textAlign={"center"}>
-                                            {
-                                                item.warehouse_location
-                                                    .warehouse_name
-                                            }
-                                        </Td>
-                                        <Td textAlign={"center"}>{item.qty}</Td>
-                                        {decodedToken.role === 3 ? (
-                                            <Td>
-                                                <Flex
-                                                    gap={"20px"}
-                                                    justifyContent={"center"}
-                                                    alignItems={"center"}
-                                                >
-                                                    <UpdateStock
-                                                        product={
-                                                            productStock[index]
-                                                        }
-                                                        getProductStock={
-                                                            getProductStock
-                                                        }
-                                                    />
-                                                    <IconButton
-                                                        onClick={() => {
-                                                            deleteWarning(
-                                                                item.id
-                                                            );
-                                                        }}
-                                                        bg={"none"}
-                                                        color={"#ff4d4d"}
-                                                        icon={
-                                                            <BsFillTrashFill />
-                                                        }
-                                                    />
-                                                </Flex>
+                            : productStock
+                        )
+                            // : warehouse === "All Warehouse"
+                            // ? productStock
+                            // : productStock.filter(
+                            //       (productStock) =>
+                            //           productStock.warehouse_location
+                            //               .warehouse_name === warehouse
+                            //   )
+                            .map((item, index) => {
+                                return (
+                                    <Tbody
+                                        key={index}
+                                        bg={"#ADE8F4"}
+                                        _hover={{ bg: "#CAF0F8" }}
+                                    >
+                                        <Tr>
+                                            <Td textAlign={"center"}>
+                                                {item.id}
                                             </Td>
-                                        ) : null}
-                                    </Tr>
-                                </Tbody>
-                            );
-                        })
+                                            <Td textAlign={"center"}>
+                                                {item.product.name}
+                                            </Td>
+                                            <Td textAlign={"center"}>
+                                                {
+                                                    item.warehouse_location
+                                                        .warehouse_name
+                                                }
+                                            </Td>
+                                            <Td textAlign={"center"}>
+                                                {item.qty}
+                                            </Td>
+                                            {decodedToken.role === 3 ? (
+                                                <Td>
+                                                    <Flex
+                                                        gap={"20px"}
+                                                        justifyContent={
+                                                            "center"
+                                                        }
+                                                        alignItems={"center"}
+                                                    >
+                                                        <UpdateStock
+                                                            product={
+                                                                productStock[
+                                                                    index
+                                                                ]
+                                                            }
+                                                            getProductStock={
+                                                                getProductStock
+                                                            }
+                                                        />
+                                                        <IconButton
+                                                            onClick={() => {
+                                                                deleteWarning(
+                                                                    item.id
+                                                                );
+                                                            }}
+                                                            bg={"none"}
+                                                            color={"#ff4d4d"}
+                                                            icon={
+                                                                <BsFillTrashFill />
+                                                            }
+                                                        />
+                                                    </Flex>
+                                                </Td>
+                                            ) : null}
+                                        </Tr>
+                                    </Tbody>
+                                );
+                            })
                     ) : (
                         <Tbody>
                             <Tr>
