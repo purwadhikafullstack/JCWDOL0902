@@ -110,6 +110,7 @@ const AddForm = ({ close, product_name, warehouse_name, getProductStock }) => {
             getProductStock();
             close();
         } catch (err) {
+            close();
             console.log(err);
             Swal.fire({
                 icon: "error",
