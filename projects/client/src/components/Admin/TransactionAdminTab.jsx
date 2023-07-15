@@ -50,6 +50,7 @@ function formatDate(val) {
 
 export const TransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
+    const token = localStorage.getItem("token");
     const [transaction, setTransaction] = useState([]);
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
@@ -72,7 +73,11 @@ export const TransactionList = () => {
                 url +
                 `/fetch-all-transactions?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
 
-            const transactionResult = await Axios.get(transactionURL);
+            const transactionResult = await Axios.get(transactionURL, {
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            });
 
             setTransaction(transactionResult.data.result);
             setPages(transactionResult.data.pages);
