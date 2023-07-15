@@ -38,6 +38,17 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+const serverApi = process.env.REACT_APP_SERVER;
+
+function formatDate(val) {
+  const date = new Date(val)
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear());
+  
+  return `${day}-${month}-${year}`;
+}
+
 export const TransactionList = () => {
   const url = process.env.REACT_APP_API_BASE_URL + "/admin";
   const token = localStorage.getItem("token");
@@ -291,7 +302,7 @@ export const TransactionList = () => {
                   <Tbody key={index} bg={"#ADE8F4"} _hover={{ bg: "#CAF0F8" }}>
                     <Tr>
                       <Td textAlign={"center"}>{item.id}</Td>
-                      <Td textAlign={"center"}>{item.transaction_date}</Td>
+                      <Td textAlign={"center"}>{formatDate(item.transaction_date)}</Td>
                       <Td textAlign={"center"}>{item.user?.name}</Td>
                       <Td textAlign={"center"}>
                         {item.user_address?.user_address}
@@ -300,7 +311,7 @@ export const TransactionList = () => {
                         {item.warehouse_location?.warehouse_name}
                       </Td>
                       <Td textAlign={"center"}>{item.order_status?.status}</Td>
-                      <Td textAlign={"center"}>{item.expired}</Td>
+                      <Td textAlign={"center"}>{formatDate(item.expired)}</Td>
                       <Td textAlign={"center"}>
                         <Button colorScheme="blue" isDisabled={item.order_status_id === 1} onClick={() => setOpenModal(item.id)}>View</Button>
                       </Td>
@@ -335,7 +346,7 @@ export const TransactionList = () => {
                       <ModalCloseButton />
                       <ModalBody>
                         <Box>
-                          <img src={item.upload_payment} alt="payment-proof" />
+                          <img src={serverApi+item.upload_payment} alt="payment-proof" />
                         </Box>
                       </ModalBody>
                       <ModalFooter>
