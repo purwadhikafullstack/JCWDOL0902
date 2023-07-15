@@ -72,7 +72,7 @@ export const ProductListPerCategory = () => {
             <Select
                 placeholder="Sort by"
                 mb={5}
-                backgroundColor={"#CAF0F8"}
+                backgroundColor={"#48CAE4"}
                 fontWeight={"600"}
                 borderRadius={"lg"}
                 color={"#023E8A"}
