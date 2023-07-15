@@ -51,6 +51,8 @@ function formatDate(val) {
 
 export const TransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
+    const token = localStorage.getItem("token");
+
     const [transaction, setTransaction] = useState([]);
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
