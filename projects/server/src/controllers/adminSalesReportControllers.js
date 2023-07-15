@@ -45,11 +45,11 @@ module.exports = {
                             : { [Op.not]: null },
                     },
                     having: {
-                        ["transaction_item.product_location.product.category.id"]:
+                        ["transaction_item.product_location.product.category_id"]:
                             whichCategorie
                                 ? whichCategorie
                                 : { [Op.not]: null },
-                        ["transaction_item.product_location.warehouse_location.id"]:
+                        ["transaction_item.product_location.warehouse_location_id"]:
                             whichwarehouse
                                 ? whichwarehouse
                                 : { [Op.not]: null },

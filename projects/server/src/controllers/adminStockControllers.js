@@ -201,7 +201,14 @@ module.exports = {
     fetchProductStockList: async (req, res) => {
         //warehouse admin bisa access
         try {
-            const { search, sort, order, page } = req.query;
+            const { search, sort, order, page, warehouse } = req.query;
+            const warehouse_id =
+                warehouse === "All Warehouse" ? null : warehouse;
+
+            const warehouseWhere =
+                warehouse_id !== null
+                    ? { warehouse_location_id: warehouse_id }
+                    : {};
 
             const { count, rows } = await product_location.findAndCountAll({
                 include: [
@@ -228,6 +235,7 @@ module.exports = {
                         },
                     ],
                 },
+                where: warehouseWhere,
                 order: [[sort ? sort : "id", order ? order : "ASC"]],
                 limit: 10,
                 offset: page ? +page * 10 : 0,
