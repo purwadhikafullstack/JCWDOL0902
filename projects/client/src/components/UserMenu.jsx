@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React from "react";
+import { useState } from "react";
 import {
     Popover,
     PopoverTrigger,
@@ -22,18 +22,16 @@ import {
     FaMapMarkerAlt,
     FaShoppingCart,
     FaHistory,
-
 } from "react-icons/fa";
 
+import { RiAdminFill } from "react-icons/ri";
 
-import { RiAdminFill } from 'react-icons/ri';
+import { RegisterationForm } from "./Authentications/RegisterationForm";
+import { LoginForm } from "./Authentications/LoginForm";
 
-import { RegisterationForm } from './Authentications/RegisterationForm';
-import { LoginForm } from './Authentications/LoginForm';
-
-import userLogin from '../assets/default_avatar.jpg';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/userSlice';
+import userLogin from "../assets/default_avatar.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const serverApi = process.env.REACT_APP_SERVER;
 
@@ -42,9 +40,7 @@ export const UserMenu = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
-
     const token = localStorage.getItem("token");
-
     let decodedToken;
     if (token) {
         decodedToken = decode(token);
@@ -56,7 +52,6 @@ export const UserMenu = () => {
     const dispatch = useDispatch();
     const onLogout = () => {
         toast({
-
             title: "Logging out",
             status: "warning",
             position: "top",
@@ -74,7 +69,6 @@ export const UserMenu = () => {
     const onOpen = () => {
         setIsOpen(true);
     };
-
     const onClose = () => {
         setIsOpen(false);
     };
@@ -106,7 +100,6 @@ export const UserMenu = () => {
                                 {token
                                     ? `Hi, ${decodedToken.name}`
                                     : "Login Menu"}
-
                             </Box>
                         </Box>
                     </PopoverHeader>
@@ -123,7 +116,6 @@ export const UserMenu = () => {
                                         <RiAdminFill
                                             style={{ marginRight: "0.5rem" }}
                                         />{" "}
-
                                         Admin Page
                                     </Button>
                                 ) : null}
@@ -134,7 +126,6 @@ export const UserMenu = () => {
                                     colorScheme="linkedin"
                                 >
                                     <FaUser style={{ marginRight: "0.5rem" }} />{" "}
-
                                     Profile
                                 </Button>
                                 <Button
@@ -146,7 +137,6 @@ export const UserMenu = () => {
                                     <FaMapMarkerAlt
                                         style={{ marginRight: "0.5rem" }}
                                     />{" "}
-
                                     Address
                                 </Button>
                                 <Button
@@ -158,7 +148,6 @@ export const UserMenu = () => {
                                     <FaShoppingCart
                                         style={{ marginRight: "0.5rem" }}
                                     />{" "}
-
                                     Cart
                                 </Button>
                                 <Button

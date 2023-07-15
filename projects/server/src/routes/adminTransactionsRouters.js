@@ -26,5 +26,9 @@ router.get(
     warehouseAdminLogin,
     adminTransactionsControllers.fetchOwnWarehouseTransactions
 );
+router.get(
+    "/fetch-transaction-items/:id",
+    adminTransactionsControllers.fetchSelectedTransItem
+);
 
 module.exports = router;
