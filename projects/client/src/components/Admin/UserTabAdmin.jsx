@@ -77,13 +77,19 @@ export const UserList = () => {
 
     const deleteUser = async (id) => {
         try {
-            await Axios.delete(url + `delete-user/${id}`, {
+            await Axios.delete(url + `/delete-user/${id}`, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
             getUsers();
-        } catch (err) {}
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.response.data.message,
+            });
+        }
     };
 
     const deleteWarning = async (id) => {

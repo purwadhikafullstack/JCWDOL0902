@@ -102,13 +102,24 @@ module.exports = {
     },
     deleteProduct: async (req, res) => {
         try {
+            const productExist = await product.findOne({
+                where: { id: req.params.id },
+            });
+
+            if (productExist.stock > 1) {
+                throw {
+                    message:
+                        "Please delete all remaining stocks in this product before proceeding!",
+                };
+            }
+
             await product.update(
                 {
                     is_active: false,
                 },
                 {
                     where: {
-                        id: req.params.id,
+                        id: productExist.id,
                     },
                 }
             );

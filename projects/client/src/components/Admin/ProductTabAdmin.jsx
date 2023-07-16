@@ -89,7 +89,13 @@ export const ProductList = () => {
                 },
             });
             getProducts();
-        } catch (err) {}
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.response.data.message,
+            });
+        }
     };
 
     const deleteWarning = async (id) => {
