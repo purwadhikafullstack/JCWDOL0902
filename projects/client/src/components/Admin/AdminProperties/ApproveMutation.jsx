@@ -1,147 +1,94 @@
-// react
-import Axios from "axios";
+import { Flex, Button, useToast } from "@chakra-ui/react";
 
-// validation
-import { Formik, ErrorMessage, Form, Field } from "formik";
-import * as Yup from "yup";
+import { useState } from "react";
+import axios from "axios";
+import swal from "sweetalert";
 
-// chakra
-import {
-    Box,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    FormControl,
-    FormLabel,
-    Input,
-    IconButton,
-    Center,
-} from "@chakra-ui/react";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
-// swal
-import Swal from "sweetalert2";
+export const ApproveMutation = ({ mutationId }) => {
+    const baseApi = process.env.REACT_APP_API_BASE_URL;
 
-// icons
-import { RxCheck, RxCross1 } from "react-icons/rx";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-
-export const ApproveMutation = ({ category, getCategory }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
-    return (
-        <Box>
-            <IconButton
-                icon={<AiOutlineCheckCircle />}
-                bg={"none"}
-                onClick={onOpen}
-            />
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader textAlign={"center"}>
-                        Edit Category
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <EditForm
-                            categoryValue={category}
-                            getCategory={getCategory}
-                            close={onClose}
-                        />
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-        </Box>
-    );
-};
-
-const EditForm = ({ close, categoryValue, getCategory }) => {
-    const url =
-        process.env.REACT_APP_API_BASE_URL +
-        `/admin/edit-category/${categoryValue.id}`;
+    const [isLoading, setLoading] = useState(false);
     const token = localStorage.getItem("token");
 
-    const validation = Yup.object().shape({
-        name: Yup.string().required("Required"),
-    });
+    const toast = useToast();
 
-    const ApproveMutation = async (value) => {
+    const actionMutation = async (value) => {
         try {
-            if (value.name !== categoryValue.name) {
-                const editData = {
-                    name: value.name,
-                };
-                await Axios.patch(url, editData, {
+            setLoading(true);
+
+            await axios.patch(
+                `${baseApi}/admin/approve/${mutationId}`,
+                { approved: value },
+                {
                     headers: {
-                        authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`,
                     },
-                });
-                getCategory();
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: `Category Edited`,
-                });
-            }
-
-            close();
-        } catch (err) {
-            console.log(err);
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: err.response.data.message,
-            });
+                }
+            );
+            setTimeout(
+                () =>
+                    toast({
+                        position: "top",
+                        title: `Request Mutation ${value} Successfully `,
+                        status: "success",
+                        isClosable: true,
+                    }),
+                2000
+            );
+            setTimeout(() => window.location.reload(), 3000);
+        } catch (error) {
+            setLoading(false);
+            console.log(error.response.data);
         }
+    };
+    const handleApprove = (value) => {
+        swal({
+            title: "Approve Request Mutation",
+            text: "Are you sure?",
+            icon: "success",
+            buttons: ["Cancel", "Approve"],
+        }).then((confirmed) => {
+            if (confirmed) {
+                actionMutation(value);
+            }
+        });
+    };
+    const handleReject = (value) => {
+        swal({
+            title: "Delete Address",
+            text: "Are you sure?",
+            icon: "error",
+            buttons: ["Cancel", "Delete"],
+            dangerMode: true,
+        }).then((confirmed) => {
+            if (confirmed) {
+                actionMutation(value);
+            }
+        });
     };
 
     return (
-        <Box>
-            <Formik
-                initialValues={{
-                    // category: "",
-                    name: categoryValue.name,
-                }}
-                validationSchema={validation}
-                onSubmit={(value) => {
-                    ApproveMutation(value);
-                }}
-            >
-                {(props) => {
-                    return (
-                        <Form>
-                            <FormControl>
-                                <FormLabel>Category</FormLabel>
-                                <Input as={Field} name={"name"} />
-                                <ErrorMessage
-                                    style={{ color: "red" }}
-                                    component="div"
-                                    name="name"
-                                />
-                                <Center paddingTop={"10px"} gap={"10px"}>
-                                    <IconButton
-                                        icon={<RxCheck />}
-                                        fontSize={"3xl"}
-                                        color={"green"}
-                                        type={"submit"}
-                                    />
-                                    <IconButton
-                                        icon={<RxCross1 />}
-                                        fontSize={"xl"}
-                                        color={"red"}
-                                        onClick={close}
-                                    />
-                                </Center>
-                            </FormControl>
-                        </Form>
-                    );
-                }}
-            </Formik>
-        </Box>
+        <>
+            <Flex gap={"3"} justifyContent={"space-evenly"}>
+                <Button
+                    onClick={() => handleApprove("Accepted")}
+                    variant={"unstyled"}
+                    color={"green.500"}
+                    fontSize={"3xl"}
+                >
+                    <AiFillCheckCircle />
+                </Button>
+                <Button
+                    onClick={() => handleReject("Rejected")}
+                    variant={"unstyled"}
+                    color={"red.500"}
+                    fontSize={"3xl"}
+                >
+                    <AiFillCloseCircle />
+                </Button>
+            </Flex>
+        </>
     );
 };
