@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 //import model
 const db = require("../models");
 const category = db.category;
+const product = db.product;
 
 module.exports = {
     fetchAllCategory: async (req, res) => {
@@ -129,9 +130,24 @@ module.exports = {
     },
     deleteCategory: async (req, res) => {
         try {
+            const categoryExist = await category.findOne({
+                where: { id: req.params.id },
+            });
+
+            const productExist = await product.findAll({
+                where: { category_id: categoryExist.id },
+            });
+
+            if (productExist.length > 0) {
+                throw {
+                    message:
+                        "Cannot delete category! Please delete or change the remaining product in this category before proceeding!",
+                };
+            }
+
             await category.destroy({
                 where: {
-                    id: req.params.id,
+                    id: categoryExist.id,
                 },
             });
 
