@@ -95,7 +95,14 @@ export const WarehouseList = () => {
                 },
             });
             getWarehouse();
-        } catch (err) {}
+            Swal.fire("Deleted!", "Warehouse deleted.", "success");
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.response.data.message,
+            });
+        }
     };
 
     const deleteWarning = async (id) => {
@@ -118,9 +125,7 @@ export const WarehouseList = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: err.response.data.name
-                    ? err.response.data.errors[0].message.toUpperCase()
-                    : err.response.data.toUpperCase(),
+                text: err.response.data.message,
             });
         }
     };
