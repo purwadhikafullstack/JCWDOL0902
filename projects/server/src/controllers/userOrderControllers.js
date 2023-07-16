@@ -69,6 +69,13 @@ module.exports = {
                 };
             }
 
+            if (userVerified.role > 1) {
+                throw {
+                    message:
+                        "Admin accounts cannot make transactions, please login using a user account!",
+                };
+            }
+
             // Check product data stock
             const { product_id, addedQty } = req.body;
             const productData = await product.findOne({
