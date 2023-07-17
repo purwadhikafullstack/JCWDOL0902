@@ -76,7 +76,7 @@ const OrderItem = ({ data, refetch }) => {
     formData.append("images", file);
     await updateTransaction(formData);
     Swal.fire({
-      text: "Order has been confirmed!",
+      text: "Successfully upload payment proof!",
       icon: "success",
     });
   };
