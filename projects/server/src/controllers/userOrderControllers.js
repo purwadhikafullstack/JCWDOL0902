@@ -16,10 +16,9 @@ module.exports = {
     fetchCart: async (req, res) => {
         try {
             // Fetch cart data
-            const userData = dataToken;
             let cartData = await cart.findAll({
                 include: [{ model: product }],
-                where: { user_id: userData.id },
+                where: { user_id: req.params.id },
             });
 
             // Check if cart qty exceed available product
@@ -41,7 +40,7 @@ module.exports = {
             // Refetch after update invalid cart qty
             cartData = await cart.findAll({
                 include: [{ model: product }],
-                where: { user_id: userData.id },
+                where: { user_id: req.params.id },
             });
 
             // Send response
@@ -170,7 +169,6 @@ module.exports = {
     removeProductFromCart: async (req, res) => {
         try {
             const { product_id } = req.body;
-
             await cart.destroy({
                 where: {
                     user_id: req.params.id,

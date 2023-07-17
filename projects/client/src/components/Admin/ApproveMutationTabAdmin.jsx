@@ -53,7 +53,7 @@ export const WarehouseMutationApproveList = () => {
 
     useEffect(() => {
         getMutation();
-    }, []);
+    }, [getMutation]);
 
     const tableHead = [
         { name: "ID", origin: "id", width: "100px" },
@@ -158,6 +158,7 @@ export const WarehouseMutationApproveList = () => {
                                             {item.approved === "none" ? (
                                                 <ApproveMutation
                                                     mutationId={item.id}
+                                                    getMutation={getMutation}
                                                 />
                                             ) : item.approved}
                                         </Td>

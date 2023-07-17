@@ -6,18 +6,14 @@ import swal from "sweetalert";
 
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
-export const ApproveMutation = ({ mutationId }) => {
+export const ApproveMutation = ({ mutationId, getMutation }) => {
     const baseApi = process.env.REACT_APP_API_BASE_URL;
-
-    const [isLoading, setLoading] = useState(false);
     const token = localStorage.getItem("token");
 
     const toast = useToast();
 
     const actionMutation = async (value) => {
         try {
-            setLoading(true);
-
             await axios.patch(
                 `${baseApi}/admin/approve/${mutationId}`,
                 { approved: value },
@@ -37,9 +33,8 @@ export const ApproveMutation = ({ mutationId }) => {
                     }),
                 2000
             );
-            setTimeout(() => window.location.reload(), 3000);
+            getMutation();
         } catch (error) {
-            setLoading(false);
             console.log(error.response.data);
         }
     };
