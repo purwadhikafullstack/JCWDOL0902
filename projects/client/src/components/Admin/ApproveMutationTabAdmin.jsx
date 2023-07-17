@@ -16,6 +16,7 @@ import {
     Skeleton,
     Stack,
     Text,
+    Button,
 } from "@chakra-ui/react";
 
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
@@ -153,33 +154,12 @@ export const WarehouseMutationApproveList = () => {
                                         <Td textAlign={"center"}>
                                             {item.remarks}
                                         </Td>
-                                        <Td>
-                                            <Flex
-                                                gap={"20px"}
-                                                justifyContent={"center"}
-                                                alignItems={"center"}
-                                            >
+                                        <Td textAlign={"center"}>
+                                            {item.approved === "none" ? (
                                                 <ApproveMutation
-                                                    mutation={mutation[index]}
-                                                    getMutation={getMutation}
+                                                    mutationId={item.id}
                                                 />
-                                                <ApproveMutation
-                                                    item={item}
-                                                    getMutation={getMutation}
-                                                />
-                                                {/* <IconButton
-                                                        onClick={() => {
-                                                            // deleteWarning(
-                                                            //     item.id
-                                                            // );
-                                                        }}
-                                                        bg={"none"}
-                                                        color={"#ff4d4d"}
-                                                        icon={
-                                                            <BsFillTrashFill />
-                                                        }
-                                                    /> */}
-                                            </Flex>
+                                            ) : item.approved}
                                         </Td>
                                     </Tr>
                                 </Tbody>

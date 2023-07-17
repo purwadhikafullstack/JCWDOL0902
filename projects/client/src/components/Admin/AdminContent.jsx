@@ -20,6 +20,7 @@ export const AdminContent = ({ tabNum, role }) => {
     const tabs =
         role === 3
             ? [
+                  SalesList,
                   UserList,
                   WarehouseList,
                   CategoryList,
@@ -28,9 +29,9 @@ export const AdminContent = ({ tabNum, role }) => {
                   MutationList,
                   ReportList,
                   TransactionList,
-                  SalesList,
               ]
             : [
+                  SalesList,
                   CategoryList,
                   ProductList,
                   ProductStockList,
@@ -38,7 +39,6 @@ export const AdminContent = ({ tabNum, role }) => {
                   WarehouseMutationApproveList,
                   WarehouseReportList,
                   WarehouseTransactionList,
-                  SalesList,
               ];
     const TabBody = tabs[tabNum];
 
