@@ -58,6 +58,7 @@ export const WarehouseTransactionList = () => {
     const token = localStorage.getItem("token");
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const [transaction, setTransaction] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
     const [page, setPage] = useState(0);
@@ -70,10 +71,12 @@ export const WarehouseTransactionList = () => {
     const [selectedTransactionItems, setSelectedTransactionItems] = useState(
         []
     );
+    
     const searchValue = useRef("");
 
     const getTransaction = useCallback(async () => {
         try {
+            setLoading(true)
             const transactionURL =
                 url +
                 `/fetch-warehouse-transactions?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
@@ -89,16 +92,27 @@ export const WarehouseTransactionList = () => {
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-        } catch (err) { }
+            setLoading(false)
+
+        } catch (err) { 
+            setLoading(false)
+
+        }
     }, [url, order, page, search, sort, token, startDate, endDate]);
 
     const getTransactionItems = async (transactionId) => {
         try {
+            setLoading(true)
+
             const response = await axios.get(
                 `${url}/fetch-transaction-items/${transactionId}`
             );
             setSelectedTransactionItems(response.data.data);
+            setLoading(false)
+
         } catch (error) {
+            setLoading(false)
+
             console.error(error);
         }
     };
@@ -128,7 +142,7 @@ export const WarehouseTransactionList = () => {
 
     const handleAcceptOrder = (id) => {
         Swal.fire({
-            text: "Apakah anda ingin menerima pesanan?",
+            text: "Are you sure you want to send the order?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -143,7 +157,7 @@ export const WarehouseTransactionList = () => {
 
     const handleRejectOrder = (id) => {
         Swal.fire({
-            text: "Apakah anda yakin ingin menolak pesanan?",
+            text: "Are you sure you want to cancel the order?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -159,7 +173,7 @@ export const WarehouseTransactionList = () => {
     const handleAcceptPayment = (id) => {
         setOpenModal("");
         Swal.fire({
-            text: "Apakah anda ingin menerima pembayaran?",
+            text: "Are you sure you want to receive payment?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -176,7 +190,7 @@ export const WarehouseTransactionList = () => {
         setOpenModal("");
 
         Swal.fire({
-            text: "Apakah anda yakin ingin menolak pembayaran?",
+            text: "Are you sure you want to decline payment?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -191,6 +205,8 @@ export const WarehouseTransactionList = () => {
 
     const updateStatusTransaction = async (id, status) => {
         try {
+            setLoading(true)
+
             const { data: res } = await axios.patch(
                 url + `/transaction/${id}`,
                 { status }
@@ -201,8 +217,12 @@ export const WarehouseTransactionList = () => {
                 text: TEXT_MESSAGE[status],
                 icon: "success",
             });
+            setLoading(false)
+
         } catch (error) {
             console.log(error);
+            setLoading(false)
+
         }
     };
 
@@ -316,7 +336,7 @@ export const WarehouseTransactionList = () => {
                         </Tr>
                     </Thead>
                     <Tbody bg={"#ADE8F4"}>
-                        {transaction.length > 0 ? (
+                        {!loading ? (
                             transaction.map((item, index) => (
                                 <Tr key={index}>
                                     <Td textAlign={"center"}>

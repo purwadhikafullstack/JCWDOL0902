@@ -56,6 +56,7 @@ function formatCurrency(params) {
 export const TransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
     const token = localStorage.getItem("token");
+    const [loading, setLoading] = useState(false);
     const [transaction, setTransaction] = useState([]);
     const [sort, setSort] = useState("id");
     const [order, setOrder] = useState("ASC");
@@ -74,6 +75,7 @@ export const TransactionList = () => {
 
     const getTransaction = useCallback(async () => {
         try {
+            setLoading(true)
             const transactionURL =
                 url +
                 `/fetch-all-transactions?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
@@ -89,19 +91,27 @@ export const TransactionList = () => {
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
+            setLoading(false)
         } catch (err) {
             console.error(err);
+            setLoading(false)
+
         }
     }, [url, order, page, search, sort, startDate, endDate]);
 
     const getTransactionItems = async (transactionId) => {
         try {
+            setLoading(true)
+
             const response = await axios.get(
                 `${url}/fetch-transaction-items/${transactionId}`
             );
             setSelectedTransactionItems(response.data.data);
+            setLoading(false)
+
         } catch (error) {
             console.error(error);
+            setLoading(false)
         }
     };
 
@@ -130,7 +140,7 @@ export const TransactionList = () => {
 
     const handleAcceptOrder = (id) => {
         Swal.fire({
-            text: "Apakah anda ingin menerima pesanan?",
+            text: "Are you sure you want to send the order?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -145,7 +155,7 @@ export const TransactionList = () => {
 
     const handleRejectOrder = (id) => {
         Swal.fire({
-            text: "Apakah anda yakin ingin menolak pesanan?",
+            text: "Are you sure you want to cancel the order?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -160,7 +170,7 @@ export const TransactionList = () => {
     const handleAcceptPayment = (id) => {
         setOpenModal("");
         Swal.fire({
-            text: "Apakah anda ingin menerima pembayaran?",
+            text: "Are you sure you want to receive payment?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -177,7 +187,7 @@ export const TransactionList = () => {
         setOpenModal("");
 
         Swal.fire({
-            text: "Apakah anda yakin ingin menolak pembayaran?",
+            text: "Are you sure you want to decline the payment?",
             icon: "warning",
             showCancelButton: true,
             showConfirmButton: true,
@@ -192,6 +202,8 @@ export const TransactionList = () => {
 
     const updateStatusTransaction = async (id, status) => {
         try {
+            setLoading(true)
+
             const { data: res } = await axios.patch(
                 url + `/transaction/${id}`,
                 { status }
@@ -202,8 +214,10 @@ export const TransactionList = () => {
                 text: TEXT_MESSAGE[status],
                 icon: "success",
             });
+            setLoading(false)
         } catch (error) {
             // console.log(error);
+            setLoading(false)
         }
     };
 
@@ -318,7 +332,7 @@ export const TransactionList = () => {
                         </Tr>
                     </Thead>
                     <Tbody bg={"#ADE8F4"}>
-                        {transaction.length > 0 ? (
+                        {!loading ? (
                             transaction.map((item, index) => (
                                 <Tr key={index}>
                                     <Td textAlign={"center"}>
@@ -530,7 +544,7 @@ export const TransactionList = () => {
                         )}
                     </ModalBody>
                     <ModalFooter>
-                    <Flex justifyContent={'space-between'} w={'full'}>
+                        <Flex justifyContent={'space-between'} w={'full'}>
                             <VStack alignItems={'flex-start'}>
                                 <Text>Shippment Cost</Text>
                                 <Text>Total Cost</Text>
