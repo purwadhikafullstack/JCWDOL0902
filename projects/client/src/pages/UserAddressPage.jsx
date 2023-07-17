@@ -29,13 +29,13 @@ export const AddressPage = () => {
                         >
                             <div className="hidden lg:flex lg:flex-col lg:gap-1 lg:w-full text-white">
                                 <p className="text-2xl font-semibold">
-                                    Address
+                                    My Address
                                 </p>
                             </div>
                             {isSmallScreen && (
                                 <div className="flex flex-col gap-1 w-full text-white">
                                     <p className="text-2xl font-semibold">
-                                        Address
+                                        My Address
                                     </p>
                                 </div>
                             )}
