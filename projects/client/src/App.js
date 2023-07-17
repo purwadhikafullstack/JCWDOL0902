@@ -68,26 +68,28 @@ function App() {
 
     const keepLogin = useCallback(async () => {
         try {
-            const result = await Axios.get(`${url}/users/keeplogin`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            dispatch(
-                login({
-                    id: result.data.id,
-                    email: result.data.email,
-                    name: result.data.name,
-                    is_verified: result.data.is_verified,
-                    role: result.data.role,
-                    photo_profile: result.data.photo_profile,
-                })
-            );
+            if (token) {
+                const result = await Axios.get(`${url}/users/keeplogin`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                dispatch(
+                    login({
+                        id: result.data.id,
+                        email: result.data.email,
+                        name: result.data.name,
+                        is_verified: result.data.is_verified,
+                        role: result.data.role,
+                        photo_profile: result.data.photo_profile,
+                    })
+                );
 
-            // console.log(result);
-
-            const cart = await (await Axios.get(`${url}/fetch-cart`)).data;
-            dispatch(cartUser(cart.result));
+                const cart = await (
+                    await Axios.get(`${url}/users/fetch-cart/${id}`)
+                ).data;
+                dispatch(cartUser(cart.cartData));
+            }
         } catch (error) {}
     }, [dispatch, id, token]);
 

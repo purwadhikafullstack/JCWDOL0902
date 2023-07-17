@@ -3,10 +3,9 @@ const router = express.Router();
 
 //import controllers and middlewares
 const { userOrderControllers } = require('../controllers');
-const { login } = require('../middleware/authorize');
 
 //paths
-router.get("/fetch-cart", login, userOrderControllers.fetchCart);
+router.get("/fetch-cart/:id", userOrderControllers.fetchCart);
 router.get("/get-warehouse/:id", userOrderControllers.getNearestWarehouse);
 router.post("/create-order/:id", userOrderControllers.createOrder);
 router.patch("/add-to-cart/:id", userOrderControllers.addProductToCart);

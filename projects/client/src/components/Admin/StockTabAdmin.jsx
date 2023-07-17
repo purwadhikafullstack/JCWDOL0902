@@ -80,25 +80,25 @@ export const ProductStockList = () => {
                     },
                 }
             );
-            const resultWarehouse = await Axios.get(
-                url +
-                    `/fetch-warehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
 
             setProductStock(resultProductStockList.data.result);
             setPages(resultProductStockList.data.pages);
             setAllWarehouseStock(resultProductStockList.data.allProductStock);
-            setAllWarehouse(resultWarehouse.data.allWarehouse);
+            setAllWarehouse(resultProductStockList.data.allWarehouse);
             setAllProduct(resultProducts.data.allProduct);
+
+            if (decodedToken.role == 2 && isNaN(warehouse))
+                setWarehouse(
+                    allWarehouse?.filter(
+                        (item) => item.user_id === decodedToken.id
+                    )[0].id
+                );
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     }, [url, order, page, search, sort, token, warehouse]);
 
     const deleteProductStock = async (id) => {
@@ -201,9 +201,7 @@ export const ProductStockList = () => {
                             <option value="All Warehouse">All Warehouse</option>
                             {allWarehouse?.map((item, index) => {
                                 return (
-                                    <option
-                                        value={item.id}
-                                    >
+                                    <option value={item.id}>
                                         {item.warehouse_name}
                                     </option>
                                 );
@@ -296,75 +294,59 @@ export const ProductStockList = () => {
                                           .user_id === decodedToken.id
                               )
                             : productStock
-                        )
-                            // : warehouse === "All Warehouse"
-                            // ? productStock
-                            // : productStock.filter(
-                            //       (productStock) =>
-                            //           productStock.warehouse_location
-                            //               .warehouse_name === warehouse
-                            //   )
-                            .map((item, index) => {
-                                return (
-                                    <Tbody
-                                        key={index}
-                                        bg={"#ADE8F4"}
-                                        _hover={{ bg: "#CAF0F8" }}
-                                    >
-                                        <Tr>
-                                            <Td textAlign={"center"}>
-                                                {item.id}
-                                            </Td>
-                                            <Td textAlign={"center"}>
-                                                {item.product.name}
-                                            </Td>
-                                            <Td textAlign={"center"}>
-                                                {
-                                                    item.warehouse_location
-                                                        .warehouse_name
-                                                }
-                                            </Td>
-                                            <Td textAlign={"center"}>
-                                                {item.qty}
-                                            </Td>
-                                            {decodedToken.role === 3 ? (
-                                                <Td>
-                                                    <Flex
-                                                        gap={"20px"}
-                                                        justifyContent={
-                                                            "center"
+                        ).map((item, index) => {
+                            return (
+                                <Tbody
+                                    key={index}
+                                    bg={"#ADE8F4"}
+                                    _hover={{ bg: "#CAF0F8" }}
+                                >
+                                    <Tr>
+                                        <Td textAlign={"center"}>{item.id}</Td>
+                                        <Td textAlign={"center"}>
+                                            {item.product.name}
+                                        </Td>
+                                        <Td textAlign={"center"}>
+                                            {
+                                                item.warehouse_location
+                                                    .warehouse_name
+                                            }
+                                        </Td>
+                                        <Td textAlign={"center"}>{item.qty}</Td>
+                                        {decodedToken.role === 3 ? (
+                                            <Td>
+                                                <Flex
+                                                    gap={"20px"}
+                                                    justifyContent={"center"}
+                                                    alignItems={"center"}
+                                                >
+                                                    <UpdateStock
+                                                        product={
+                                                            productStock[index]
                                                         }
-                                                        alignItems={"center"}
-                                                    >
-                                                        <UpdateStock
-                                                            product={
-                                                                productStock[
-                                                                    index
-                                                                ]
-                                                            }
-                                                            getProductStock={
-                                                                getProductStock
-                                                            }
-                                                        />
-                                                        <IconButton
-                                                            onClick={() => {
-                                                                deleteWarning(
-                                                                    item.id
-                                                                );
-                                                            }}
-                                                            bg={"none"}
-                                                            color={"#ff4d4d"}
-                                                            icon={
-                                                                <BsFillTrashFill />
-                                                            }
-                                                        />
-                                                    </Flex>
-                                                </Td>
-                                            ) : null}
-                                        </Tr>
-                                    </Tbody>
-                                );
-                            })
+                                                        getProductStock={
+                                                            getProductStock
+                                                        }
+                                                    />
+                                                    <IconButton
+                                                        onClick={() => {
+                                                            deleteWarning(
+                                                                item.id
+                                                            );
+                                                        }}
+                                                        bg={"none"}
+                                                        color={"#ff4d4d"}
+                                                        icon={
+                                                            <BsFillTrashFill />
+                                                        }
+                                                    />
+                                                </Flex>
+                                            </Td>
+                                        ) : null}
+                                    </Tr>
+                                </Tbody>
+                            );
+                        })
                     ) : (
                         <Tbody>
                             <Tr>

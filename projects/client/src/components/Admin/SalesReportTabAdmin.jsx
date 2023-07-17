@@ -132,7 +132,6 @@ export const SalesList = () => {
                 },
             });
             setChartData(resultChartReportURL.data.result);
-            console.log(resultChartReportURL.data.result);
 
             dataSales = [];
             for (let i = 0; i <= 11; i++) {

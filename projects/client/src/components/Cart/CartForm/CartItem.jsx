@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import axios from "axios";
+import decode from "jwt-decode";
 
 import { useDispatch, useSelector } from "react-redux";
 import { cartUser } from "../../../redux/cartSlice";
@@ -28,7 +29,8 @@ const token = localStorage.getItem("token");
 
 export const CartItem = (props) => {
     const { product, qty } = props;
-    const { id } = useSelector((state) => state.userSlice.value);
+    const token = localStorage.getItem("token");
+    const decodedToken = decode(token);
 
     const updatedQty = useRef();
     const dispatch = useDispatch();
@@ -41,16 +43,19 @@ export const CartItem = (props) => {
             const fetchCartURL = url + "/fetch-cart";
             const editCartURL = url + "/edit-cart-qty";
 
-            await axios.patch(`${editCartURL}/${id}`, data, {
+            await axios.patch(`${editCartURL}/${decodedToken.id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            const cartData = await axios.get(fetchCartURL, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
+            const cartData = await axios.get(
+                `${fetchCartURL}/${decodedToken.id}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             dispatch(cartUser(cartData.data.cartData));
         } catch (err) {
             if (!err.response) {
@@ -74,17 +79,24 @@ export const CartItem = (props) => {
             const data = {
                 product_id: product.id,
             };
-            await axios.delete(url + `/remove-product-cart/${id}`, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-                data,
-            });
-            const cartData = await axios.get(url + `/fetch-cart`, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
+            await axios.delete(
+                url + `/remove-product-cart/${decodedToken.id}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                    data,
+                }
+            );
+
+            const cartData = await axios.get(
+                url + `/fetch-cart/${decodedToken.id}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             dispatch(cartUser(cartData.data.cartData));
         } catch (err) {}
     };
@@ -159,19 +171,15 @@ export const CartItem = (props) => {
                     min={1}
                     max={product.stock}
                     ref={updatedQty}
+                    onChange={(value) =>
+                        editCartQty(value)
+                        // console.log(value)
+                    }
                 >
                     <NumberInputField />
                     <NumberInputStepper>
-                        <NumberIncrementStepper
-                            onClick={() =>
-                                editCartQty(updatedQty.current.firstChild.value)
-                            }
-                        />
-                        <NumberDecrementStepper
-                            onClick={() =>
-                                editCartQty(updatedQty.current.firstChild.value)
-                            }
-                        />
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
                 <HStack spacing="1">
