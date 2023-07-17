@@ -94,7 +94,7 @@ export const WarehouseMutationRequestList = () => {
     ];
 
     return (
-        <Box padding={{ base: "10px", lg: "0" }} mt={"5"}>
+        <Box padding={{ base: "10px", lg: "0" }} mt={"10"}>
             <Center paddingBottom={"12px"}>
                 <Stack>
                     <Center>

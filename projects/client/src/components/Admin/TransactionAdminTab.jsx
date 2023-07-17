@@ -51,7 +51,7 @@ function formatDate(val) {
     return `${day}-${month}-${year}`;
 }
 function formatCurrency(params) {
-    return Intl.NumberFormat("id-ID").format(params);
+    return Intl.NumberFormat('id-ID').format(params)
 }
 export const TransactionList = () => {
     const url = process.env.REACT_APP_API_BASE_URL + "/admin";
@@ -75,7 +75,7 @@ export const TransactionList = () => {
 
     const getTransaction = useCallback(async () => {
         try {
-            setLoading(true);
+            setLoading(true)
             const transactionURL =
                 url +
                 `/fetch-all-transactions?search=${search}&sort=${sort}&order=${order}&page=${page}&startDate=${startDate}&endDate=${endDate}`;
@@ -91,25 +91,27 @@ export const TransactionList = () => {
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-            setLoading(false);
+            setLoading(false)
         } catch (err) {
             console.error(err);
-            setLoading(false);
+            setLoading(false)
+
         }
     }, [url, order, page, search, sort, startDate, endDate]);
 
     const getTransactionItems = async (transactionId) => {
         try {
-            setLoading(true);
+            setLoading(true)
 
             const response = await axios.get(
                 `${url}/fetch-transaction-items/${transactionId}`
             );
             setSelectedTransactionItems(response.data.data);
-            setLoading(false);
+            setLoading(false)
+
         } catch (error) {
             console.error(error);
-            setLoading(false);
+            setLoading(false)
         }
     };
 
@@ -200,7 +202,7 @@ export const TransactionList = () => {
 
     const updateStatusTransaction = async (id, status) => {
         try {
-            setLoading(true);
+            setLoading(true)
 
             const { data: res } = await axios.patch(
                 url + `/transaction/${id}`,
@@ -212,16 +214,17 @@ export const TransactionList = () => {
                 text: TEXT_MESSAGE[status],
                 icon: "success",
             });
-            setLoading(false);
+            setLoading(false)
         } catch (error) {
             // console.log(error);
-            setLoading(false);
+            setLoading(false)
         }
     };
 
     const handleOpenModal = async (transactionId) => {
         setSelectedTransactionId(transactionId);
         await getTransactionItems(transactionId);
+
     };
 
     return (
@@ -470,45 +473,35 @@ export const TransactionList = () => {
                         </Box>
                     </ModalBody>
                     <ModalFooter>
-                        <Flex justifyContent={"space-around"} w={"full"}>
-                            <Button
-                                colorScheme="blue"
-                                size={"sm"}
-                                as={Link}
-                                href={
-                                    serverApi +
-                                    transaction.find(
-                                        (item) => item.id === openModal
-                                    )?.upload_payment
-                                }
-                                target="_blank"
-                            >
-                                Download
-                            </Button>
+                        <Flex justifyContent={'space-around'} w={'full'}>
+                            <Button colorScheme="blue" size={'sm'} as={Link} href={serverApi +
+                                transaction.find(
+                                    (item) => item.id === openModal
+                                )?.upload_payment} target="_blank">Download</Button>
 
                             {+transaction.find((item) => item.id === openModal)
                                 ?.order_status_id < 3 && (
-                                <>
-                                    <Button
-                                        colorScheme="whatsapp"
-                                        size={"sm"}
-                                        onClick={() =>
-                                            handleAcceptPayment(openModal)
-                                        }
-                                    >
-                                        Confirm Payment
-                                    </Button>
-                                    <Button
-                                        colorScheme="red"
-                                        size={"sm"}
-                                        onClick={() =>
-                                            handleRejectPayment(openModal)
-                                        }
-                                    >
-                                        Reject Payment
-                                    </Button>
-                                </>
-                            )}
+                                    <>
+                                        <Button
+                                            colorScheme="whatsapp"
+                                            size={'sm'}
+                                            onClick={() =>
+                                                handleAcceptPayment(openModal)
+                                            }
+                                        >
+                                            Confirm Payment
+                                        </Button>
+                                        <Button
+                                            colorScheme="red"
+                                            size={'sm'}
+                                            onClick={() =>
+                                                handleRejectPayment(openModal)
+                                            }
+                                        >
+                                            Reject Payment
+                                        </Button>
+                                    </>
+                                )}
                         </Flex>
                     </ModalFooter>
                 </ModalContent>
@@ -551,37 +544,14 @@ export const TransactionList = () => {
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <Flex justifyContent={"space-between"} w={"full"}>
-                            <VStack alignItems={"flex-start"}>
+                        <Flex justifyContent={'space-between'} w={'full'}>
+                            <VStack alignItems={'flex-start'}>
                                 <Text>Shippment Cost</Text>
                                 <Text>Total Cost</Text>
                             </VStack>
-                            <VStack alignItems={"flex-end"}>
-                                <Text>
-                                    Rp
-                                    {formatCurrency(
-                                        transaction.find(
-                                            (item) =>
-                                                selectedTransactionId ===
-                                                item.id
-                                        )?.shipping
-                                    )}
-                                </Text>
-                                <Text>
-                                    Rp
-                                    {formatCurrency(
-                                        transaction.find(
-                                            (item) =>
-                                                selectedTransactionId ===
-                                                item.id
-                                        )?.shipping +
-                                            transaction.find(
-                                                (item) =>
-                                                    selectedTransactionId ===
-                                                    item.id
-                                            )?.total_price
-                                    )}
-                                </Text>
+                            <VStack alignItems={'flex-end'}>
+                                <Text>Rp{formatCurrency(transaction.find(item => selectedTransactionId === item.id)?.shipping)}</Text>
+                                <Text>Rp{formatCurrency(transaction.find(item => selectedTransactionId === item.id)?.shipping + transaction.find(item => selectedTransactionId === item.id)?.total_price)}</Text>
                             </VStack>
                         </Flex>
                     </ModalFooter>
