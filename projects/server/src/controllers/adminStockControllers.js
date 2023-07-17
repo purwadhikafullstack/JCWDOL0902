@@ -192,6 +192,7 @@ module.exports = {
                 message: "Product stock deleted successfully",
             });
         } catch (error) {
+            // console.log(error);
             res.status(400).send({
                 status: true,
                 message: error.message,
@@ -250,7 +251,7 @@ module.exports = {
                 allWarehouse,
             });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             res.status(400).send(error);
         }
     },

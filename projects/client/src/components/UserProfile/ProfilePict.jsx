@@ -16,17 +16,21 @@ import { useState } from "react";
 const baseApi = process.env.REACT_APP_API_BASE_URL;
 
 export const ChangeProfilePicture = ({ user, token, getUser }) => {
-    const [previewImage, setPreviewImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [showPreview, setShowPreview] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const toast = useToast();
 
-    const handlePictureChange = async (e) => {
+    const handlePictureChange = (e) => {
         const file = e.target.files[0];
+        setSelectedImage(file);
+    };
 
-        if (file) {
+    const handleSaveChanges = async () => {
+        if (selectedImage) {
             const formData = new FormData();
-            formData.append("images", file);
+            formData.append("images", selectedImage);
 
             try {
                 await axios.patch(
@@ -41,15 +45,13 @@ export const ChangeProfilePicture = ({ user, token, getUser }) => {
 
                 toast({
                     position: "top",
-                    title: "Successfuly updating profile picture, click save changes to continue",
+                    title: "Successfully updated profile picture, Please Re-Login to apply the changes",
                     status: "success",
                     isClosable: true,
                 });
-                setTimeout(() => 2000);
                 getUser();
             } catch (error) {
                 console.error("Error updating profile picture:", error);
-                // Handle error scenario
             }
         }
     };
@@ -58,13 +60,11 @@ export const ChangeProfilePicture = ({ user, token, getUser }) => {
         const file = e.target.files[0];
 
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            setSelectedImage(file);
+            setShowPreview(true);
         } else {
-            setPreviewImage(null);
+            setSelectedImage(null);
+            setShowPreview(false);
         }
     };
 
@@ -80,9 +80,9 @@ export const ChangeProfilePicture = ({ user, token, getUser }) => {
                     <ModalHeader>Change Profile Picture</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {previewImage && (
+                        {showPreview && (
                             <img
-                                src={previewImage}
+                                src={URL.createObjectURL(selectedImage)}
                                 alt="Preview"
                                 style={{ width: "100%", marginBottom: "1rem" }}
                             />
@@ -90,15 +90,15 @@ export const ChangeProfilePicture = ({ user, token, getUser }) => {
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={(e) => {
-                                handlePictureChange(e);
-                                handlePreviewImage(e);
-                            }}
+                            onChange={handlePreviewImage}
                         />
                     </ModalBody>
                     <ModalFooter>
                         <Button variant="ghost" onClick={onClose}>
                             Cancel
+                        </Button>
+                        <Button colorScheme="blue" onClick={handleSaveChanges}>
+                            Save Changes
                         </Button>
                     </ModalFooter>
                 </ModalContent>

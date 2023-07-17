@@ -17,7 +17,6 @@ router.get(
 );
 router.patch(
     "/transaction/:id",
-    superAdminLogin,
     adminTransactionsControllers.updateStatusTransaction
 );
 router.get(
@@ -25,6 +24,10 @@ router.get(
     login,
     warehouseAdminLogin,
     adminTransactionsControllers.fetchOwnWarehouseTransactions
+);
+router.get(
+    "/fetch-transaction-items/:id",
+    adminTransactionsControllers.fetchSelectedTransItem
 );
 
 module.exports = router;

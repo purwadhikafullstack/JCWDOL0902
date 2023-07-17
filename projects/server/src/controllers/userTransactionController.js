@@ -16,16 +16,19 @@ module.exports = {
     fetchAll: async (req, res) => {
         try {
             const { page, user_id, status } = req.query;
-
+            const itemsPerPage = 10;
+            const offset = (+page - 1) * itemsPerPage;
             const condition = {
                 user_id: user_id,
-                order_status_id: status ? status : { [Op.not]: null },
+                order_status_id: +status !== 0 ? +status : { [Op.not]: null },
             };
+            console.log({ page, user_id, status });
 
             const data = await transaction.findAll({
-                limit: 10,
-                offset: page ? +page * 10 : 0,
+                limit: itemsPerPage,
+                offset: offset,
                 where: condition,
+                order: [["transaction_date", "DESC"]],
                 include: [
                     {
                         model: transaction_item,
@@ -57,8 +60,11 @@ module.exports = {
                 ],
             });
 
+            const totalItems = await data.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
             // console.log(data);
-            res.json(data);
+            res.json({ data, totalPages });
         } catch (error) {
             console.log(error);
             res.status(400).send("Failed");
@@ -72,12 +78,10 @@ module.exports = {
                 body.upload_payment = `Public/images/${req.files.images[0].filename}`;
             }
 
-            console.log("BODY", body.order_status_id);
-
-            if (body.order_status_id === 6) {
+            if (+body.order_status_id === 6) {
                 const currTransactionItems = await transaction_item.findAll({
                     where: { transaction_id: id },
-                    includes: [
+                    include: [
                         {
                             model: product_location,
                         },
@@ -93,17 +97,23 @@ module.exports = {
                                 id: item.product_location_id,
                             },
                         });
+                        await product.increment("stock", {
+                            by: item.qty,
+                            where: {
+                                id: pl.product_id,
+                            },
+                        });
                         await stock_journal.create({
                             journal_date: new Date(),
-                            type: "Cancel Order",
+                            type: "Canceled",
                             increment_change: item.qty,
                             decrement_change: 0,
                             total_qty_before: pl.qty,
                             new_total_qty: pl.qty + item.qty,
-                            description: "Cancel Order",
+                            description: "Canceled",
                             createdAt: new Date(),
                             updatedAt: new Date(),
-                            product_id: item,
+                            product_id: pl.product_id,
                             warehouse_location_id: item.warehouse_location_id,
                         });
                     })

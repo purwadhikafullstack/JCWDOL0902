@@ -68,6 +68,13 @@ module.exports = {
                 };
             }
 
+            if (userVerified.role > 1) {
+                throw {
+                    message:
+                        "Admin accounts cannot make transactions, please login using a user account!",
+                };
+            }
+
             // Check product data stock
             const { product_id, addedQty } = req.body;
             const productData = await product.findOne({
@@ -299,7 +306,6 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             });
-
             // Create transaction_item
             const quantity = Item.map((item) => item.qty);
             const price = Item.map((item) => item.product.price);
@@ -307,6 +313,39 @@ module.exports = {
             const product_locations = await product_location.findAll({
                 where: { warehouse_location_id: nearestWarehouse_id },
             });
+
+            // update stock
+            await Promise.all(
+                product_id.map(async (productId, i) => {
+                    const qtyBefore = product_locations.find(
+                        (item) => item.product_id === productId
+                    );
+                    await stock_journal.create({
+                        journal_date: new Date(),
+                        type: "Sold",
+                        increment_change: 0,
+                        decrement_change: quantity[i],
+                        total_qty_before: +qtyBefore.qty,
+                        new_total_qty: +qtyBefore.qty - quantity[i],
+                        description: "Sold",
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        product_id: productId,
+                        warehouse_location_id: nearestWarehouse_id,
+                    });
+                    await product_location.decrement("qty", {
+                        by: quantity[i],
+                        where: {
+                            product_id: productId,
+                            warehouse_location_id: nearestWarehouse_id,
+                        },
+                    });
+                    await product.decrement("stock", {
+                        by: quantity[i],
+                        where: { id: productId },
+                    });
+                })
+            );
 
             for (let i = 0; i < product_id.length; i++) {
                 await transaction_item.create({
@@ -319,36 +358,6 @@ module.exports = {
                 });
             }
 
-            // update stock
-            await Promise.all(
-                product_id.map(async (item, i) => {
-                    console.log(product_locations);
-                    const qtyBefore = product_locations.find(
-                        (item) => item.product_id === item
-                    );
-
-                    await product_location.decrement("qty", {
-                        by: quantity[i],
-                        where: {
-                            product_id: item,
-                            warehouse_location_id: nearestWarehouse_id,
-                        },
-                    });
-                    await stock_journal.create({
-                        journal_date: new Date(),
-                        type: "Sold",
-                        decrement_change: quantity[i],
-                        total_qty_before: +qtyBefore.qty,
-                        new_total_qty: +qtyBefore.qty - quantity[i],
-                        description: "Sold",
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        product_id: item,
-                        warehouse_location_id: nearestWarehouse_id,
-                    });
-                })
-            );
-
             // Destory cart by cart id
             const cartDestroy = Item.map((item) => item.id);
             for (let i = 0; i < cartDestroy.length; i++) {
@@ -359,9 +368,10 @@ module.exports = {
                 });
             }
 
+            console.log("SUCCESS");
             res.status(200).send({ status: true });
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send({ message: error.message });
         }
     },
 };

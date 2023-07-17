@@ -16,6 +16,7 @@ import {
     Skeleton,
     Stack,
     Text,
+    Button,
 } from "@chakra-ui/react";
 
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
