@@ -62,8 +62,6 @@ export const AdminPage = () => {
         const items =
             decodedToken.role === 3
                 ? [
-                      { label: "Sales Report", icon: TbReportSearch },
-
                       { label: "Users", icon: FaUser },
                       { label: "Warehouses", icon: FaWarehouse },
                       { label: "Categories", icon: FaListAlt },
@@ -75,12 +73,9 @@ export const AdminPage = () => {
                           icon: TbReportAnalytics,
                       },
                       { label: "Transactions", icon: BsFillCartCheckFill },
+                      { label: "Sales Report", icon: TbReportSearch },
                   ]
                 : [
-                      {
-                          label: "Sales Report",
-                          icon: TbReportSearch,
-                      },
                       { label: "Categories", icon: FaListAlt },
                       { label: "Products", icon: FaBox },
                       { label: "My Warehouse Stock", icon: BsInboxesFill },
@@ -96,6 +91,10 @@ export const AdminPage = () => {
                       {
                           label: "My Warehouse Transactions",
                           icon: BsFillCartCheckFill,
+                      },
+                      {
+                          label: "Sales Report",
+                          icon: TbReportSearch,
                       },
                   ];
 

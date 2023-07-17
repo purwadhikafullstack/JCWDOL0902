@@ -17,6 +17,7 @@ router.get(
 );
 router.patch(
     "/transaction/:id",
+    superAdminLogin,
     adminTransactionsControllers.updateStatusTransaction
 );
 router.get(

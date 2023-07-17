@@ -7,16 +7,10 @@ const { warehouseAdminLogin, login } = require("../middleware/authorize");
 
 //paths
 router.get(
-    "/sales-report",
+    "/sale-report",
     login,
     warehouseAdminLogin,
     adminSalesReportControllers.fetchTransactionData
-);
-router.get(
-    "/sales-report-chart",
-    login,
-    warehouseAdminLogin,
-    adminSalesReportControllers.fetchChartData
 );
 
 module.exports = router;

@@ -43,10 +43,10 @@ const OrderItem = ({ data, refetch }) => {
 
   const handleCancelOrder = () => {
     Swal.fire({
-      title: "Do you want to cancel the order?",
+      title: "Apakah anda ingin membatalkan pesanan?",
       showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: `No`,
+      confirmButtonText: "Ya",
+      cancelButtonText: `Tidak`,
       confirmButtonColor: "red",
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
@@ -76,31 +76,24 @@ const OrderItem = ({ data, refetch }) => {
     formData.append("images", file);
     await updateTransaction(formData);
     Swal.fire({
-      text: "Successfully upload payment proof!",
+      text: "Order has been confirmed!",
       icon: "success",
     });
   };
 
   const handleAcceptOrder = async () => {
     const formData = new FormData();
-    formData.append("order_status_id", 5);
+    formData.append("order_status_id", 5); 
+    // await updateTransaction(formData);
     Swal.fire({
-      text: "Are you sure you have received the order?",
+      text: "Apakah anda yakin sudah menerima order?",
       icon: "warning",
-      showConfirmButton: true,
-      showCancelButton: true
-    }).then(async res => {
-      if (res.isConfirmed) {
-        await updateTransaction(formData);
-        Swal.fire({
-          icon:'success',
-          text: 'Order has been received!'
-        })
-      }
+      showConfirmButton:true,
+      showCancelButton:true
     });
   };
 
-
+  
 
   const updateTransaction = async (body) => {
     try {
@@ -121,7 +114,6 @@ const OrderItem = ({ data, refetch }) => {
       console.log(error);
     }
   };
-
 
   return (
     <Flex
@@ -158,27 +150,15 @@ const OrderItem = ({ data, refetch }) => {
           <Product data={item} key={i} />
         ))}
       </Flex>
-
       <Flex
         p={"2"}
         flexDirection={isSmallScreen ? "column" : "row"}
         gap={"2"}
         justifyContent={"space-between"}
       >
-        <Text fontSize={"lg"}>Shipping : </Text>
+        <Text fontSize={"lg"}>Total Belanja : </Text>
         <Text fontSize={"lg"} fontWeight={"bold"}>
-          Rp{Intl.NumberFormat("id-ID").format(data.shipping)}
-        </Text>
-      </Flex>
-      <Flex
-        p={"2"}
-        flexDirection={isSmallScreen ? "column" : "row"}
-        gap={"2"}
-        justifyContent={"space-between"}
-      >
-        <Text fontSize={"lg"}>Total Price : </Text>
-        <Text fontSize={"lg"} fontWeight={"bold"}>
-          Rp{Intl.NumberFormat("id-ID").format(data.total_price + data.shipping)}
+          Rp{Intl.NumberFormat("id-ID").format(data.total_price)}
         </Text>
       </Flex>
       {data.order_status.id === 1 && (
@@ -191,10 +171,10 @@ const OrderItem = ({ data, refetch }) => {
           borderColor={"gray.200"}
         >
           <Button colorScheme="green" onClick={onOpen}>
-            Upload Payment Proof
+            Upload bukti pembayaran
           </Button>
           <Button colorScheme="red" onClick={handleCancelOrder}>
-            Cancel Order
+            Batalkan Pesanan
           </Button>
         </Flex>
       )}
@@ -208,14 +188,14 @@ const OrderItem = ({ data, refetch }) => {
           borderColor={"gray.200"}
         >
           <Button colorScheme="green" onClick={handleAcceptOrder}>
-            Order Received
+            Selesaikan Pesanan
           </Button>
         </Flex>
       )}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Upload payment proof</ModalHeader>
+          <ModalHeader>Upload bukti pembayaran</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <label htmlFor="upload">
@@ -262,7 +242,7 @@ const OrderItem = ({ data, refetch }) => {
               Upload
             </Button>
             <Button variant="solid" colorScheme="red" onClick={onClose}>
-              Cancel
+              Batal
             </Button>
           </ModalFooter>
         </ModalContent>
