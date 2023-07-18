@@ -1,4 +1,15 @@
-import { Box, useMediaQuery, Text, Stack, Image, HStack, Button, Select, Flex, VStack } from "@chakra-ui/react";
+import {
+    Box,
+    useMediaQuery,
+    Text,
+    Stack,
+    Image,
+    HStack,
+    Button,
+    Select,
+    Flex,
+    VStack,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import OrderItem from "./OrderItem";
 import axios from "axios";
@@ -9,34 +20,33 @@ const BASE_API = process.env.REACT_APP_API_BASE_URL;
 const STATUS_ORDER = [
     {
         id: 0,
-        status: 'All Order'
+        status: "All Order",
     },
     {
         id: 1,
-        status: 'Menunggu Pembayaran'
+        status: "Waiting for Payment",
     },
     {
         id: 2,
-        status: 'Menunggu Konfirmasi Pembayaran'
+        status: "Waiting Payment Confirmation",
     },
     {
         id: 3,
-        status: 'Pesanan Diproses'
+        status: "Order On Process",
     },
     {
         id: 4,
-        status: 'Pesanan Dikirim'
+        status: "Order Shipped",
     },
     {
         id: 5,
-        status: 'Pesanan Selesan'
+        status: "Order Received",
     },
     {
         id: 6,
-        status: 'Pesanan Batal'
+        status: "Order Canceled",
     },
-]
-
+];
 
 const OrderList = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
@@ -56,10 +66,10 @@ const OrderList = () => {
     };
 
     const fetchOrderList = async (page, status) => {
-
         try {
             const { data } = await axios.get(
-                BASE_API + `/users/transactions?user_id=${userId}&status=${status}&page=${page}`,
+                BASE_API +
+                    `/users/transactions?user_id=${userId}&status=${status}&page=${page}`,
                 {
                     headers: {
                         authorization: `Bearer ${token}`,
@@ -68,7 +78,7 @@ const OrderList = () => {
             );
             // console.log(data);
             setOrders(data.data);
-            setTotalPages(data.totalPages)
+            setTotalPages(data.totalPages);
         } catch (error) {
             console.log(error);
         }
@@ -80,14 +90,21 @@ const OrderList = () => {
 
     return (
         <Box display={"flex"} flexDirection={"column"}>
-            <VStack mt={'4'} alignItems={'flex-start'}>
-                <Text fontSize={'lg'} fontWeight={'semibold'}>Filter Order</Text>
-                <Select border={'2px'} fontWeight={'bold'} borderColor={'gray.400'} onChange={(e) => setFilter(e.target.value)}>
-                    {
-                        STATUS_ORDER.map(status => (
-                            <option key={status.id} value={status.id}>{status.status}</option>
-                        ))
-                    }
+            <VStack mt={"4"} alignItems={"flex-start"}>
+                <Text fontSize={"lg"} fontWeight={"semibold"}>
+                    Filter Order
+                </Text>
+                <Select
+                    border={"2px"}
+                    fontWeight={"bold"}
+                    borderColor={"gray.400"}
+                    onChange={(e) => setFilter(e.target.value)}
+                >
+                    {STATUS_ORDER.map((status) => (
+                        <option key={status.id} value={status.id}>
+                            {status.status}
+                        </option>
+                    ))}
                 </Select>
             </VStack>
             {orders.length === 0 ? (
@@ -103,15 +120,31 @@ const OrderList = () => {
                 </Stack>
             ) : (
                 orders.map((item, i) => (
-                    <OrderItem key={i} refetch={() => fetchOrderList(currentPage, filter)} data={item} />
+                    <OrderItem
+                        key={i}
+                        refetch={() => fetchOrderList(currentPage, filter)}
+                        data={item}
+                    />
                 ))
             )}
-            <HStack justifyContent="center" spacing={4} mt={'5'}>
-                <Button colorScheme="blue" variant={'solid'} onClick={handlePreviousPage} isDisabled={currentPage === 1}>
+            <HStack justifyContent="center" spacing={4} mt={"5"}>
+                <Button
+                    colorScheme="blue"
+                    variant={"solid"}
+                    onClick={handlePreviousPage}
+                    isDisabled={currentPage === 1}
+                >
                     Previous
                 </Button>
-                <Text>{currentPage} of {totalPages}</Text>
-                <Button colorScheme="blue" variant={'solid'} onClick={handleNextPage} isDisabled={currentPage === totalPages}>
+                <Text>
+                    {currentPage} of {totalPages}
+                </Text>
+                <Button
+                    colorScheme="blue"
+                    variant={"solid"}
+                    onClick={handleNextPage}
+                    isDisabled={currentPage === totalPages}
+                >
                     Next
                 </Button>
             </HStack>

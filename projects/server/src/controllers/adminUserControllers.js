@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const db = require("../models");
 const user = db.user;
 const warehouse = db.warehouse_location;
+const transaction = db.transaction;
 
 //env
 const dotenv = require("dotenv");
@@ -93,10 +94,25 @@ module.exports = {
                 where: { user_id: userExist.id },
             });
 
+            const transactionExist = await transaction.findAll({
+                where: { user_id: userExist.id },
+            });
+
+            const invalidStatusExists = transactionExist.some(
+                (transaction) =>
+                    ![6, 5, 1].includes(transaction.order_status_id)
+            );
+
             if (warehouseExist.length > 0) {
                 throw {
                     message:
                         "Cannot delete a user who is still assigned to a warehouse!",
+                };
+            }
+
+            if (invalidStatusExists) {
+                throw {
+                    message: "Cannot delete a user with on going transactions!",
                 };
             }
 
