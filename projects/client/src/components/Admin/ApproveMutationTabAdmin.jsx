@@ -16,6 +16,7 @@ import {
     Skeleton,
     Stack,
     Text,
+    Button,
 } from "@chakra-ui/react";
 
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
@@ -52,7 +53,7 @@ export const WarehouseMutationApproveList = () => {
 
     useEffect(() => {
         getMutation();
-    }, []);
+    }, [getMutation]);
 
     const tableHead = [
         { name: "ID", origin: "id", width: "100px" },
@@ -153,33 +154,13 @@ export const WarehouseMutationApproveList = () => {
                                         <Td textAlign={"center"}>
                                             {item.remarks}
                                         </Td>
-                                        <Td>
-                                            <Flex
-                                                gap={"20px"}
-                                                justifyContent={"center"}
-                                                alignItems={"center"}
-                                            >
+                                        <Td textAlign={"center"}>
+                                            {item.approved === "none" ? (
                                                 <ApproveMutation
-                                                    mutation={mutation[index]}
+                                                    mutationId={item.id}
                                                     getMutation={getMutation}
                                                 />
-                                                <ApproveMutation
-                                                    item={item}
-                                                    getMutation={getMutation}
-                                                />
-                                                {/* <IconButton
-                                                        onClick={() => {
-                                                            // deleteWarning(
-                                                            //     item.id
-                                                            // );
-                                                        }}
-                                                        bg={"none"}
-                                                        color={"#ff4d4d"}
-                                                        icon={
-                                                            <BsFillTrashFill />
-                                                        }
-                                                    /> */}
-                                            </Flex>
+                                            ) : item.approved}
                                         </Td>
                                     </Tr>
                                 </Tbody>

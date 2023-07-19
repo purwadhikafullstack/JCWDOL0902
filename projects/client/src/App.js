@@ -18,6 +18,7 @@ import { cartUser } from "./redux/cartSlice";
 import Axios from "axios";
 import { AddressPage } from "./pages/UserAddressPage";
 import OrderListPage from "./pages/OrderListPage";
+import { BadRequestPage } from "./pages/BadRequestPage";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
         errorElement: <ErrorPage />,
     },
+    { path: "/bad-request", element: <BadRequestPage /> },
     { path: "/activation/:token", element: <VerificationPage /> },
     { path: "/reset-password/:token", element: <ResetPasswordPage /> },
     { path: "/admin", element: <AdminPage />, errorElement: <ErrorPage /> },
@@ -68,26 +70,28 @@ function App() {
 
     const keepLogin = useCallback(async () => {
         try {
-            const result = await Axios.get(`${url}/users/keeplogin`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            dispatch(
-                login({
-                    id: result.data.id,
-                    email: result.data.email,
-                    name: result.data.name,
-                    is_verified: result.data.is_verified,
-                    role: result.data.role,
-                    photo_profile: result.data.photo_profile,
-                })
-            );
+            if (token) {
+                const result = await Axios.get(`${url}/users/keeplogin`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                dispatch(
+                    login({
+                        id: result.data.id,
+                        email: result.data.email,
+                        name: result.data.name,
+                        is_verified: result.data.is_verified,
+                        role: result.data.role,
+                        photo_profile: result.data.photo_profile,
+                    })
+                );
 
-            // console.log(result);
-
-            const cart = await (await Axios.get(`${url}/fetch-cart`)).data;
-            dispatch(cartUser(cart.result));
+                const cart = await (
+                    await Axios.get(`${url}/users/fetch-cart/${id}`)
+                ).data;
+                dispatch(cartUser(cart.cartData));
+            }
         } catch (error) {}
     }, [dispatch, id, token]);
 

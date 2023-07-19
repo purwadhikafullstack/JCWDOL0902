@@ -5,6 +5,7 @@ const axios = require("axios");
 const db = require("../models");
 const warehouse = db.warehouse_location;
 const user = db.user;
+const productLocation = db.product_location;
 
 //env
 const dotenv = require("dotenv");
@@ -131,9 +132,30 @@ module.exports = {
     },
     deleteWarehouse: async (req, res) => {
         try {
+            const warehouseExist = await warehouse.findOne({
+                where: { id: req.params.id },
+            });
+
+            const productLocations = await productLocation.findAll({
+                where: { warehouse_location_id: req.params.id },
+            });
+
+            if (productLocations.length > 0) {
+                throw {
+                    message:
+                        "Cannot delete warehouse! Please delete the remaining stocks in this warehouse before proceeding!",
+                };
+            }
+
+            await user.update(
+                { role: 1 },
+                {
+                    where: { id: warehouseExist.user_id },
+                }
+            );
             await warehouse.destroy({
                 where: {
-                    id: req.params.id,
+                    id: warehouseExist.id,
                 },
             });
             res.status(200).send({
@@ -141,6 +163,7 @@ module.exports = {
                 message: "Warehouse Successfully Deleted",
             });
         } catch (error) {
+            // console.log(error);
             res.status(400).send({
                 status: false,
                 message: error.message,

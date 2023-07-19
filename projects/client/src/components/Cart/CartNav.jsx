@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState, useCallback } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
+import decode from "jwt-decode";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +33,9 @@ const url = process.env.REACT_APP_API_BASE_URL + "/users";
 const serverApi = process.env.REACT_APP_SERVER;
 
 export const CartNav = () => {
+    const token = localStorage.getItem("token");
+    const decodedToken = decode(token);
+
     let [cart, setCart] = useState();
     let [cartQty, setCartQty] = useState(0);
 
@@ -39,9 +43,7 @@ export const CartNav = () => {
 
     const getCart = useCallback(async () => {
         try {
-            const cartURL = url + `/fetch-cart`;
-            const token = localStorage.getItem("token");
-
+            const cartURL = url + `/fetch-cart/${decodedToken.id}`;
             const cartData = await Axios.get(cartURL, {
                 headers: {
                     authorization: `Bearer ${token}`,
@@ -125,7 +127,7 @@ export const CartNav = () => {
                                     <Stack gap="2">
                                         <Text fontSize="sm">
                                             Rp
-                                            {product.price
+                                            {(product.price * qty)
                                                 .toString()
                                                 .replace(
                                                     /\B(?=(\d{3})+(?!\d))/g,

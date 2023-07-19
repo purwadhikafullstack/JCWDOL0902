@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { cartUser } from "../../redux/cartSlice";
+import decode from "jwt-decode";
 
 import {
     Box,
@@ -28,10 +29,10 @@ export const SectionAddCart = ({
     const [limit, setLimit] = useState(1);
     const addedQty = useRef(``);
     const dispatch = useDispatch();
-    const { id } = useSelector((state) => state.userSlice.value);
     const AddCart = async (product) => {
         try {
             const token = localStorage.getItem("token");
+            const decodedToken = decode(token);
 
             const data = {
                 product_id: product.id,
@@ -40,17 +41,20 @@ export const SectionAddCart = ({
             const url = process.env.REACT_APP_API_BASE_URL + "/users";
             const fetchCartURL = url + `/fetch-cart`;
             const addCartURL = url + `/add-to-cart`;
-            await axios.patch(`${addCartURL}/${id}`, data, {
+            await axios.patch(`${addCartURL}/${decodedToken.id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
 
-            const cartData = await axios.get(fetchCartURL, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
+            const cartData = await axios.get(
+                `${fetchCartURL}/${decodedToken.id}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             dispatch(cartUser(cartData.data.cartData));
 
             Swal.fire({

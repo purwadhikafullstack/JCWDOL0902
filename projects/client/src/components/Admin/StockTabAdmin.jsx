@@ -64,7 +64,7 @@ export const ProductStockList = () => {
         try {
             const productStockURL =
                 url +
-                `/fetch-product-stock?search=${search}&sort=${sort}&order=${order}&page=${page}`;
+                `/fetch-product-stock?search=${search}&sort=${sort}&order=${order}&page=${page}&warehouse=${warehouse}`;
 
             const resultProductStockList = await Axios.get(productStockURL, {
                 headers: {
@@ -80,26 +80,26 @@ export const ProductStockList = () => {
                     },
                 }
             );
-            const resultWarehouse = await Axios.get(
-                url +
-                    `/fetch-warehouses?search=${search}&sort=${sort}&order=${order}&page=${page}`,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
 
             setProductStock(resultProductStockList.data.result);
             setPages(resultProductStockList.data.pages);
             setAllWarehouseStock(resultProductStockList.data.allProductStock);
-            setAllWarehouse(resultWarehouse.data.allWarehouse);
+            setAllWarehouse(resultProductStockList.data.allWarehouse);
             setAllProduct(resultProducts.data.allProduct);
+
+            if (decodedToken.role == 2 && isNaN(warehouse))
+                setWarehouse(
+                    allWarehouse?.filter(
+                        (item) => item.user_id === decodedToken.id
+                    )[0].id
+                );
 
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-        } catch (err) {}
-    }, [url, order, page, search, sort, token]);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [url, order, page, search, sort, token, warehouse]);
 
     const deleteProductStock = async (id) => {
         try {
@@ -194,21 +194,18 @@ export const ProductStockList = () => {
                         <Select
                             paddingRight={"5px"}
                             defaultValue={"All Warehouse"}
-                            onChange={(e) => setWarehouse(e.target.value)}
+                            onChange={(e) => {
+                                setWarehouse(e.target.value);
+                            }}
                         >
                             <option value="All Warehouse">All Warehouse</option>
-                            {allWarehouseStock
-                                ?.map(
-                                    (item) =>
-                                        item.warehouse_location.warehouse_name
-                                )
-                                .filter(
-                                    (value, index, self) =>
-                                        self.indexOf(value) === index
-                                )
-                                .map((item, index) => {
-                                    return <option value={item}>{item}</option>;
-                                })}
+                            {allWarehouse?.map((item, index) => {
+                                return (
+                                    <option value={item.id}>
+                                        {item.warehouse_name}
+                                    </option>
+                                );
+                            })}
                         </Select>
                     ) : null}
                     {decodedToken.role === 3 ? (
@@ -296,13 +293,7 @@ export const ProductStockList = () => {
                                       productStock.warehouse_location
                                           .user_id === decodedToken.id
                               )
-                            : warehouse === "All Warehouse"
-                            ? productStock
-                            : productStock.filter(
-                                  (productStock) =>
-                                      productStock.warehouse_location
-                                          .warehouse_name === warehouse
-                              )
+                            : productStock
                         ).map((item, index) => {
                             return (
                                 <Tbody

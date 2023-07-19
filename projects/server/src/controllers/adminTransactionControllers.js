@@ -3,10 +3,16 @@ const { Op } = require("sequelize");
 //import model
 const db = require("../models");
 const transaction = db.transaction;
+const transaction_item = db.transaction_item;
+const product_location = db.product_location;
+const product = db.product;
 const user = db.user;
 const orderStatus = db.order_status;
 const userAddress = db.user_address;
 const warehouse = db.warehouse_location;
+const transactionItem = db.transaction_item;
+const productLocation = db.product_location;
+const TransItems = require("../resources/transactionItem");
 
 module.exports = {
     fetchAllTransactions: async (req, res) => {
@@ -128,7 +134,7 @@ module.exports = {
     updateStatusTransaction: async (req, res) => {
         try {
             const { body, params } = req;
-            console.log({ body, params });
+            // console.log({body, params});
             await transaction.update(
                 {
                     order_status_id: body.status,
@@ -136,9 +142,77 @@ module.exports = {
                 { where: { id: params.id } }
             );
 
+            if (+body.status === 6) {
+                const transactions = await transaction_item.findAll({
+                    where: { transaction_id: params.id },
+                    include: [
+                        {
+                            model: product_location,
+                        },
+                    ],
+                });
+
+                await Promise.all(
+                    transactions.map(async (trx) => {
+                        const { product_location: pl } = trx;
+                        await product_location.increment("qty", {
+                            by: trx.qty,
+                            where: {
+                                id: trx.product_location_id,
+                            },
+                        });
+                        await product.increment("stock", {
+                            by: trx.qty,
+                            where: { id: pl.product_id },
+                        });
+
+                        await stock_journal.create({
+                            journal_date: new Date(),
+                            type: "Canceled",
+                            increment_change: trx.qty,
+                            decrement_change: 0,
+                            total_qty_before: pl.qty,
+                            new_total_qty: pl.qty + trx.qty,
+                            description: "Canceled",
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            product_id: pl.product_id,
+                            warehouse_location_id: trx.warehouse_location_id,
+                        });
+                    })
+                );
+            }
+
             res.status(200).send({
                 message: "status updated!",
             });
+        } catch (error) {
+            console.log(error);
+            res.status(400).send(error);
+        }
+    },
+    fetchSelectedTransItem: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const items = await transactionItem.findAll({
+                where: { transaction_id: id },
+                include: [
+                    {
+                        model: productLocation,
+                        include: [
+                            {
+                                model: product,
+                                attributes: ["name"],
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            console.log(items);
+
+            res.status(200).send({ data: TransItems.collection(items) });
         } catch (error) {
             console.log(error);
             res.status(400).send(error);

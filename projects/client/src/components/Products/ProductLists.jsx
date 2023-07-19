@@ -38,7 +38,6 @@ export const ProductPage = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(productData);
-            console.log(response);
             setProducts(response.data.result);
             setTotalPages(response.data.totalPage);
         } catch (error) {
@@ -59,10 +58,10 @@ export const ProductPage = () => {
             <Select
                 placeholder="Ready Stock"
                 mb={5}
-                backgroundColor={"#3182CE"}
+                backgroundColor={"#48CAE4"}
                 fontWeight={"600"}
                 borderRadius={"lg"}
-                color={"white"}
+                color={"#023E8A"}
                 size={"sm"}
                 maxW="250px"
                 onChange={(e) => setSort(e.target.value)}

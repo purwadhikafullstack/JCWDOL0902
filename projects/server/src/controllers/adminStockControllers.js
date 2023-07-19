@@ -192,6 +192,7 @@ module.exports = {
                 message: "Product stock deleted successfully",
             });
         } catch (error) {
+            // console.log(error);
             res.status(400).send({
                 status: true,
                 message: error.message,
@@ -201,8 +202,26 @@ module.exports = {
     fetchProductStockList: async (req, res) => {
         //warehouse admin bisa access
         try {
-            const { search, sort, order, page } = req.query;
+            const { search, sort, order, page, warehouse } = req.query;
 
+            const warehouseWhere =
+                warehouse !== "All Warehouse"
+                    ? { "$warehouse_location_id$": warehouse }
+                    : {};
+            const searchWhere = {
+                [Op.or]: [
+                    {
+                        "$product.name$": {
+                            [Op.like]: `%${search}%`,
+                        },
+                    },
+                    {
+                        "$warehouse_location.warehouse_name$": {
+                            [Op.like]: `%${search}%`,
+                        },
+                    },
+                ],
+            };
             const { count, rows } = await product_location.findAndCountAll({
                 include: [
                     {
@@ -214,20 +233,7 @@ module.exports = {
                         attributes: ["id", "warehouse_name", "user_id"],
                     },
                 ],
-                where: {
-                    [Op.or]: [
-                        {
-                            "$product.name$": {
-                                [Op.like]: `%${search}%`,
-                            },
-                        },
-                        {
-                            "$warehouse_location.warehouse_name$": {
-                                [Op.like]: `%${search}%`,
-                            },
-                        },
-                    ],
-                },
+                where: Object.assign({}, searchWhere, warehouseWhere),
                 order: [[sort ? sort : "id", order ? order : "ASC"]],
                 limit: 10,
                 offset: page ? +page * 10 : 0,
@@ -236,13 +242,16 @@ module.exports = {
             const allProductStock = await product_location.findAll({
                 include: { model: warehouse_location },
             });
+            const allWarehouse = await warehouse_location.findAll();
+
             res.status(200).send({
                 pages: Math.ceil(count / 10),
                 result: rows,
                 allProductStock,
+                allWarehouse,
             });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             res.status(400).send(error);
         }
     },

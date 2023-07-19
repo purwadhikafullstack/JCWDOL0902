@@ -3,6 +3,8 @@ const { Op } = require("sequelize");
 //import model
 const db = require("../models");
 const user = db.user;
+const warehouse = db.warehouse_location;
+const transaction = db.transaction;
 
 //env
 const dotenv = require("dotenv");
@@ -84,9 +86,39 @@ module.exports = {
     },
     deleteUser: async (req, res) => {
         try {
+            const userExist = await user.findOne({
+                where: { id: req.params.id },
+            });
+
+            const warehouseExist = await warehouse.findAll({
+                where: { user_id: userExist.id },
+            });
+
+            const transactionExist = await transaction.findAll({
+                where: { user_id: userExist.id },
+            });
+
+            const invalidStatusExists = transactionExist.some(
+                (transaction) =>
+                    ![6, 5, 1].includes(transaction.order_status_id)
+            );
+
+            if (warehouseExist.length > 0) {
+                throw {
+                    message:
+                        "Cannot delete a user who is still assigned to a warehouse!",
+                };
+            }
+
+            if (invalidStatusExists) {
+                throw {
+                    message: "Cannot delete a user with on going transactions!",
+                };
+            }
+
             await user.destroy({
                 where: {
-                    id: req.params.id,
+                    id: userExist.id,
                 },
             });
             res.status(200).send({

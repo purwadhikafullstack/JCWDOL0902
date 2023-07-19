@@ -10,15 +10,15 @@ const product_location = db.product_location;
 const transaction = db.transaction;
 const transaction_item = db.transaction_item;
 const warehouse_location = db.warehouse_location;
+const stock_journal = db.stock_journal;
 
 module.exports = {
     fetchCart: async (req, res) => {
         try {
             // Fetch cart data
-            const userData = dataToken;
             let cartData = await cart.findAll({
                 include: [{ model: product }],
-                where: { user_id: userData.id },
+                where: { user_id: req.params.id },
             });
 
             // Check if cart qty exceed available product
@@ -40,7 +40,7 @@ module.exports = {
             // Refetch after update invalid cart qty
             cartData = await cart.findAll({
                 include: [{ model: product }],
-                where: { user_id: userData.id },
+                where: { user_id: req.params.id },
             });
 
             // Send response
@@ -65,6 +65,13 @@ module.exports = {
             if (!userVerified || userVerified.is_verified !== true) {
                 throw {
                     message: "Please Login or Verify Your Account First!",
+                };
+            }
+
+            if (userVerified.role > 1) {
+                throw {
+                    message:
+                        "Admin accounts cannot make transactions, please login using a user account!",
                 };
             }
 
@@ -162,7 +169,6 @@ module.exports = {
     removeProductFromCart: async (req, res) => {
         try {
             const { product_id } = req.body;
-
             await cart.destroy({
                 where: {
                     user_id: req.params.id,
@@ -281,7 +287,7 @@ module.exports = {
             });
 
             // Set expired at 1 hour
-            const expired = new Date(Date.now() + 10 * 60 * 60 * 1000);
+            const expired = new Date(Date.now() + 2 * 60 * 60 * 1000);
 
             // Create Transaction
             const createOrder = await transaction.create({
@@ -300,7 +306,6 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             });
-
             // Create transaction_item
             const quantity = Item.map((item) => item.qty);
             const price = Item.map((item) => item.product.price);
@@ -308,6 +313,39 @@ module.exports = {
             const product_locations = await product_location.findAll({
                 where: { warehouse_location_id: nearestWarehouse_id },
             });
+
+            // update stock
+            await Promise.all(
+                product_id.map(async (productId, i) => {
+                    const qtyBefore = product_locations.find(
+                        (item) => item.product_id === productId
+                    );
+                    await stock_journal.create({
+                        journal_date: new Date(),
+                        type: "Sold",
+                        increment_change: 0,
+                        decrement_change: quantity[i],
+                        total_qty_before: +qtyBefore.qty,
+                        new_total_qty: +qtyBefore.qty - quantity[i],
+                        description: "Sold",
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                        product_id: productId,
+                        warehouse_location_id: nearestWarehouse_id,
+                    });
+                    await product_location.decrement("qty", {
+                        by: quantity[i],
+                        where: {
+                            product_id: productId,
+                            warehouse_location_id: nearestWarehouse_id,
+                        },
+                    });
+                    await product.decrement("stock", {
+                        by: quantity[i],
+                        where: { id: productId },
+                    });
+                })
+            );
 
             for (let i = 0; i < product_id.length; i++) {
                 await transaction_item.create({
@@ -330,9 +368,10 @@ module.exports = {
                 });
             }
 
+            console.log("SUCCESS");
             res.status(200).send({ status: true });
         } catch (error) {
-            res.status(400).send(error);
+            res.status(400).send({ message: error.message });
         }
     },
 };

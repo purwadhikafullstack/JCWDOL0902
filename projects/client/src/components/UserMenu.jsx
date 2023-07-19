@@ -69,7 +69,6 @@ export const UserMenu = () => {
     const onOpen = () => {
         setIsOpen(true);
     };
-
     const onClose = () => {
         setIsOpen(false);
     };
@@ -140,28 +139,32 @@ export const UserMenu = () => {
                                     />{" "}
                                     Address
                                 </Button>
-                                <Button
-                                    as={Link}
-                                    to="/cart"
-                                    fontWeight="600"
-                                    colorScheme="linkedin"
-                                >
-                                    <FaShoppingCart
-                                        style={{ marginRight: "0.5rem" }}
-                                    />{" "}
-                                    Cart
-                                </Button>
-                                <Button
-                                    as={Link}
-                                    to="/order-list"
-                                    fontWeight="600"
-                                    colorScheme="linkedin"
-                                >
-                                    <FaHistory
-                                        style={{ marginRight: "0.5rem" }}
-                                    />{" "}
-                                    My Order History
-                                </Button>
+                                {role === 1 ? (
+                                    <Button
+                                        as={Link}
+                                        to="/cart"
+                                        fontWeight="600"
+                                        colorScheme="linkedin"
+                                    >
+                                        <FaShoppingCart
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
+                                        Cart
+                                    </Button>
+                                ) : null}
+                                {role === 1 ? (
+                                    <Button
+                                        as={Link}
+                                        to="/order-list"
+                                        fontWeight="600"
+                                        colorScheme="linkedin"
+                                    >
+                                        <FaHistory
+                                            style={{ marginRight: "0.5rem" }}
+                                        />{" "}
+                                        My Order History
+                                    </Button>
+                                ) : null}
                             </Stack>
                         ) : (
                             <Stack>

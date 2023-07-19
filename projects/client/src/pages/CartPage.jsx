@@ -4,13 +4,20 @@ import { Box, useMediaQuery } from "@chakra-ui/react";
 import divider from "../assets/divider_result.jpg";
 import { CartForm } from "../components/Cart/CartForm/CartForm";
 import { ErrorPage } from "./ErrorPage";
+import { useSelector } from "react-redux";
+import { BadRequestPage } from "./BadRequestPage";
 
 export const CartPage = () => {
     const [isSmallScreen] = useMediaQuery("(max-width: 666px)");
     const token = localStorage.getItem("token");
+    const { role } = useSelector((state) => state.userSlice.value);
 
     if (!token) {
         return <ErrorPage />;
+    }
+
+    if (role > 1) {
+        return <BadRequestPage />;
     }
 
     return (
