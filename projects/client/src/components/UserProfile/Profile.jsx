@@ -12,12 +12,30 @@ import {
     Text,
     Image,
     useToast,
+    FormHelperText,
+    FormErrorMessage,
 } from "@chakra-ui/react";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import { ChangeProfilePicture } from "./ProfilePict";
 import { ChangePassword } from "./ChangePassword";
 const baseApi = process.env.REACT_APP_API_BASE_URL;
 const serverApi = process.env.REACT_APP_SERVER;
+
+const profileSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(2, 'Too Short!')
+        .max(30, 'Too Long!')
+        .required('Required'),
+    phoneNumber: Yup.string()
+        .test('numonly', 'Only input numbers!', (val) => /^[0-9]+$/.test(val))
+        .min(9, 'Minimum 9 digit!')
+        .max(13, 'maximum 13 digit!')
+        .required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
+});
+
 
 export const Profile = () => {
     const [user, setUser] = useState([]);
@@ -30,6 +48,20 @@ export const Profile = () => {
     const decodedToken = decode(token);
     const toast = useToast();
     const navigate = useNavigate();
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            phoneNumber: '',
+            email: '',
+        },
+        onSubmit: values => {
+            handleSaveChanges()
+        },
+        validationSchema: profileSchema,
+        validateOnBlur: true,
+        validateOnChange: true
+    });
 
     const onLogout = async () => {
         localStorage.removeItem("token");
@@ -46,13 +78,18 @@ export const Profile = () => {
                     },
                 }
             );
-
+                console.log(response.data);
             setUser(response.data);
             setName(response.data.name);
             setImage(response.data.photo_profile);
             setPhoneNumber(response.data.phone_number);
             setEmail(response.data.email);
-        } catch (error) {}
+            formik.setValues({
+                name: response.data.name,
+                email: response.data.email,
+                phoneNumber: response.data.phone_number
+            })
+        } catch (error) { }
     }, [decodedToken.id]);
 
     const handleSaveChanges = async () => {
@@ -60,8 +97,8 @@ export const Profile = () => {
             await axios.patch(
                 `${baseApi}/users/profile-settings/${decodedToken.id}`,
                 {
-                    name: name,
-                    phone_number: phoneNumber,
+                    name: formik.values.name,
+                    phone_number: formik.values.phoneNumber,
                 },
                 {
                     headers: {
@@ -88,36 +125,48 @@ export const Profile = () => {
     return (
         <Center>
             <Box p={4} maxWidth="400px">
-                <FormControl mb={4}>
+                <FormControl mb={4} isInvalid={!!formik.errors.name}>
                     <FormLabel>Name</FormLabel>
                     <Input
                         variant="filled"
                         type="text"
                         name="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={formik.handleChange}
+                        value={formik.values.name}
                     />
+                    {formik.errors.name && formik.touched.name ? (
+                        <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                    ) : null}
+
                 </FormControl>
 
-                <FormControl mb={4}>
+                <FormControl mb={4} isInvalid={!!formik.errors.phoneNumber}>
                     <FormLabel>Phone Number</FormLabel>
                     <Input
                         variant="filled"
                         type="text"
                         name="phoneNumber"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        onChange={formik.handleChange}
+                        value={formik.values.phoneNumber}
                     />
+                    {formik.errors.phoneNumber && formik.touched.phoneNumber ? (
+                        <FormErrorMessage>{formik.errors.phoneNumber}</FormErrorMessage>
+                    ) : null}
                 </FormControl>
 
-                <FormControl mb={4}>
+                <FormControl mb={4} isInvalid={!!formik.errors.email}>
                     <FormLabel>Email</FormLabel>
                     <Input
                         type="text"
-                        value={email}
                         isDisabled
                         variant="filled"
+                        name="email"
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
                     />
+                    {formik.errors.email && formik.touched.email ? (
+                        <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                    ) : null}
                 </FormControl>
 
                 <FormLabel>Profile Picture</FormLabel>
@@ -154,7 +203,7 @@ export const Profile = () => {
                     colorScheme="green"
                     mb={4}
                     m={2}
-                    onClick={handleSaveChanges}
+                    onClick={formik.handleSubmit}
                 >
                     Save Changes
                 </Button>
