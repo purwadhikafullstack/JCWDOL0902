@@ -52,7 +52,7 @@ export const ProductListBySearch = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(productData);
-            console.log(response);
+            // console.log(response);
             setProducts(response.data.result);
             setTotalPages(response.data.totalPage);
         } catch (error) {
