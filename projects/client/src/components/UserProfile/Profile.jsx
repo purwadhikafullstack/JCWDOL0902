@@ -15,8 +15,8 @@ import {
     FormHelperText,
     FormErrorMessage,
 } from "@chakra-ui/react";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { ChangeProfilePicture } from "./ProfilePict";
 import { ChangePassword } from "./ChangePassword";
@@ -25,17 +25,16 @@ const serverApi = process.env.REACT_APP_SERVER;
 
 const profileSchema = Yup.object().shape({
     name: Yup.string()
-        .min(2, 'Too Short!')
-        .max(30, 'Too Long!')
-        .required('Required'),
+        .min(2, "Too Short!")
+        .max(30, "Too Long!")
+        .required("Required"),
     phoneNumber: Yup.string()
-        .test('numonly', 'Only input numbers!', (val) => /^[0-9]+$/.test(val))
-        .min(9, 'Minimum 9 digit!')
-        .max(13, 'maximum 13 digit!')
-        .required('Required'),
-    email: Yup.string().email('Invalid email').required('Required'),
+        .test("numonly", "Only input numbers!", (val) => /^[0-9]+$/.test(val))
+        .min(9, "Minimum 9 digit!")
+        .max(13, "maximum 13 digit!")
+        .required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
 });
-
 
 export const Profile = () => {
     const [user, setUser] = useState([]);
@@ -51,16 +50,16 @@ export const Profile = () => {
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            phoneNumber: '',
-            email: '',
+            name: "",
+            phoneNumber: "",
+            email: "",
         },
-        onSubmit: values => {
-            handleSaveChanges()
+        onSubmit: (values) => {
+            handleSaveChanges();
         },
         validationSchema: profileSchema,
         validateOnBlur: true,
-        validateOnChange: true
+        validateOnChange: true,
     });
 
     const onLogout = async () => {
@@ -78,7 +77,7 @@ export const Profile = () => {
                     },
                 }
             );
-                console.log(response.data);
+            // console.log(response.data);
             setUser(response.data);
             setName(response.data.name);
             setImage(response.data.photo_profile);
@@ -87,9 +86,9 @@ export const Profile = () => {
             formik.setValues({
                 name: response.data.name,
                 email: response.data.email,
-                phoneNumber: response.data.phone_number
-            })
-        } catch (error) { }
+                phoneNumber: response.data.phone_number,
+            });
+        } catch (error) {}
     }, [decodedToken.id]);
 
     const handleSaveChanges = async () => {
@@ -135,9 +134,10 @@ export const Profile = () => {
                         value={formik.values.name}
                     />
                     {formik.errors.name && formik.touched.name ? (
-                        <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                        <FormErrorMessage>
+                            {formik.errors.name}
+                        </FormErrorMessage>
                     ) : null}
-
                 </FormControl>
 
                 <FormControl mb={4} isInvalid={!!formik.errors.phoneNumber}>
@@ -150,7 +150,9 @@ export const Profile = () => {
                         value={formik.values.phoneNumber}
                     />
                     {formik.errors.phoneNumber && formik.touched.phoneNumber ? (
-                        <FormErrorMessage>{formik.errors.phoneNumber}</FormErrorMessage>
+                        <FormErrorMessage>
+                            {formik.errors.phoneNumber}
+                        </FormErrorMessage>
                     ) : null}
                 </FormControl>
 
@@ -165,7 +167,9 @@ export const Profile = () => {
                         value={formik.values.email}
                     />
                     {formik.errors.email && formik.touched.email ? (
-                        <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                        <FormErrorMessage>
+                            {formik.errors.email}
+                        </FormErrorMessage>
                     ) : null}
                 </FormControl>
 
