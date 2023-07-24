@@ -143,7 +143,7 @@ export const SalesList = () => {
                             ).getMonth() === i
                     )
                     .reduce(function (acc, obj) {
-                        return acc + obj.price;
+                        return acc + (obj.price*obj.qty);
                     }, 0);
                 dataSales.push(totalSales);
             }
@@ -185,6 +185,8 @@ export const SalesList = () => {
         { name: "warehouse", origin: "", width: "100px" },
         { name: "category", origin: "", width: "100px" },
         { name: "product", origin: "", width: "100px" },
+        { name: "Price", origin: "", width: "100px" },
+        { name: "Qty", origin: "", width: "100px" },
         { name: "Total price", origin: "", width: "100px" },
     ];
 
@@ -581,7 +583,19 @@ export const SalesList = () => {
                                             </Td>
                                             <Td textAlign={"center"}>
                                                 Rp
-                                                {item.price
+                                                {(item.price)
+                                                    .toString()
+                                                    .replace(
+                                                        /\B(?=(\d{3})+(?!\d))/g,
+                                                        "."
+                                                    )}
+                                            </Td>
+                                            <Td textAlign={"center"}>
+                                                {item.qty}
+                                            </Td>
+                                            <Td textAlign={"center"}>
+                                                Rp
+                                                {(item.price*item.qty)
                                                     .toString()
                                                     .replace(
                                                         /\B(?=(\d{3})+(?!\d))/g,
