@@ -1,6 +1,5 @@
 import { Flex, Button, useToast } from "@chakra-ui/react";
 
-import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
 
@@ -52,7 +51,7 @@ export const ApproveMutation = ({ mutationId, getMutation }) => {
     };
     const handleReject = (value) => {
         swal({
-            title: "Delete Address",
+            title: "Delete Request Mutation",
             text: "Are you sure?",
             icon: "error",
             buttons: ["Cancel", "Delete"],

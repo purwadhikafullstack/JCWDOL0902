@@ -94,18 +94,13 @@ export const LoginForm = () => {
             }, 2000);
         } catch (err) {
             console.log(err);
-            Swal.fire({
-                icon: "error",
-                title: "Failed Attempt",
-                text: err.response.data.message
-                    ? err.response.data.message
-                    : "Something Went Wrong !",
-
-                customClass: {
-                    container: "my-swal",
-                },
+            toast({
+                title: "Wrong Email/password",
+                status: "error",
+                position: "top",
+                duration: 2000,
+                isClosable: true,
             });
-            onCloseLogin();
         }
     };
 

@@ -31,37 +31,44 @@ export const SectionAddCart = ({
     const dispatch = useDispatch();
     const AddCart = async (product) => {
         try {
-            const token = localStorage.getItem("token");
-            const decodedToken = decode(token);
-
-            const data = {
-                product_id: product.id,
-                addedQty: parseInt(addedQty.current.defaultValue),
-            };
-            const url = process.env.REACT_APP_API_BASE_URL + "/users";
-            const fetchCartURL = url + `/fetch-cart`;
-            const addCartURL = url + `/add-to-cart`;
-            await axios.patch(`${addCartURL}/${decodedToken.id}`, data, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-
-            const cartData = await axios.get(
-                `${fetchCartURL}/${decodedToken.id}`,
-                {
+            if (addedQty.current.defaultValue==="") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Action Declined",
+                    text: "Quantity Can't be Null",
+                });
+            } else{
+                const token = localStorage.getItem("token");
+                const decodedToken = decode(token);
+                const data = {
+                    product_id: product.id,
+                    addedQty: parseInt(addedQty.current.defaultValue),
+                };
+                const url = process.env.REACT_APP_API_BASE_URL + "/users";
+                const fetchCartURL = url + `/fetch-cart`;
+                const addCartURL = url + `/add-to-cart`;
+                await axios.patch(`${addCartURL}/${decodedToken.id}`, data, {
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
-                }
-            );
-            dispatch(cartUser(cartData.data.cartData));
-
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: `Product Added to Cart Successfully!`,
-            });
+                });
+    
+                const cartData = await axios.get(
+                    `${fetchCartURL}/${decodedToken.id}`,
+                    {
+                        headers: {
+                            authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                dispatch(cartUser(cartData.data.cartData));
+    
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: `Product Added to Cart Successfully!`,
+                });
+            }
         } catch (err) {
             if (!err.response) {
                 Swal.fire({
