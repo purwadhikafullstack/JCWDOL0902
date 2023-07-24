@@ -114,7 +114,8 @@ module.exports = {
                             createdAt: new Date(),
                             updatedAt: new Date(),
                             product_id: pl.product_id,
-                            warehouse_location_id: item.warehouse_location_id,
+                            warehouse_location_id:
+                                item.product_location.warehouse_location_id,
                         });
                     })
                 );
