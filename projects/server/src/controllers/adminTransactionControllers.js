@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 //import model
 const db = require("../models");
 const transaction = db.transaction;
+const stock_journal = db.stock_journal;
 const transaction_item = db.transaction_item;
 const product_location = db.product_location;
 const product = db.product;
@@ -177,7 +178,8 @@ module.exports = {
                             createdAt: new Date(),
                             updatedAt: new Date(),
                             product_id: pl.product_id,
-                            warehouse_location_id: trx.warehouse_location_id,
+                            warehouse_location_id:
+                                trx.product_location.warehouse_location_id,
                         });
                     })
                 );
